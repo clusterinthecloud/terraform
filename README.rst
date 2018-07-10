@@ -1,7 +1,7 @@
 Terraform configuration for a compute cluster on Oracle Cloud
 =============================================================
 
-Uses [terraform-provider-oci](https://github.com/oracle/terraform-provider-oci).
+Uses `terraform-provider-oci <https://github.com/oracle/terraform-provider-oci>`_.
 
 Rename ``terraform.tfvars.example`` to ``terraform.tfvars`` and fill it with your information.
 
