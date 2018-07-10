@@ -10,7 +10,7 @@ resource "oci_core_instance" "ClusterCompute" {
     display_name = "primaryvnic"
     assign_public_ip = true
     hostname_label = "compute${count.index + 1}"
-  },
+  }
 
   source_details {
     source_type = "image"
@@ -30,6 +30,11 @@ resource "oci_core_instance" "ClusterCompute" {
   timeouts {
     create = "60m"
   }
+
+  freeform_tags = {
+    "cluster" = "${var.ClusterNameTag}"
+    "nodetype" = "compute"
+  }
 }
 
 resource "oci_core_instance" "ClusterManagement" {
@@ -43,7 +48,7 @@ resource "oci_core_instance" "ClusterManagement" {
     display_name = "primaryvnic"
     assign_public_ip = true
     hostname_label = "mgmt"
-  },
+  }
 
   source_details {
     source_type = "image"
@@ -57,5 +62,10 @@ resource "oci_core_instance" "ClusterManagement" {
 
   timeouts {
     create = "60m"
+  }
+
+  freeform_tags = {
+    "cluster" = "${var.ClusterNameTag}"
+    "nodetype" = "mgmt"
   }
 }

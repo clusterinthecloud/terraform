@@ -17,6 +17,8 @@ ssh-rsa UmFuZG9tIGtleSBjb250ZW50cy4gUHV0IHlvdXIgb3duIGtleSBpbiBoZXJlIG9idmlvdXNs
 ssh-rsa QW5vdGhlciByYW5kb20ga2V5IGNvbnRlbnRzLiBQdXQgeW91ciBvd24ga2V5IGluIGhlcmUgb2J2aW91c2x5Lg== user@anothercomputer
 EOF
 
+ClusterNameTag = "mycluster"
+
 NumComputeInstances = 2
 ManagementShape = "VM.Standard1.1"
 ComputeShape = "VM.Standard1.2"

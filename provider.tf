@@ -1,4 +1,6 @@
 provider "oci" {
+  version = ">= 2.1.13"
+
   tenancy_ocid = "${var.tenancy_ocid}"
   user_ocid = "${var.user_ocid}"
   fingerprint = "${var.fingerprint}"

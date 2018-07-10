@@ -51,6 +51,10 @@ variable "ExportPathFS" {
   default = "/shared"
 }
 
+variable "ClusterNameTag" {
+  default = "cluster"
+}
+
 locals {
   mount_target_1_ip_address = "${lookup(data.oci_core_private_ips.IPClusterFSMountTarget.private_ips[0], "ip_address")}"
 }
