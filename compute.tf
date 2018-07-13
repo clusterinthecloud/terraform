@@ -1,12 +1,12 @@
 resource "oci_core_instance" "ClusterCompute" {
-  count               = "${var.NumComputeInstances}"
-  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[var.AD - 1], "name")}"
+  count               = "${length(var.InstanceADIndex)}"
+  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[var.InstanceADIndex[count.index] - 1], "name")}"
   compartment_id      = "${var.compartment_ocid}"
   display_name        = "compute${count.index + 1}"
   shape               = "${var.ComputeShape}"
 
   create_vnic_details {
-    subnet_id        = "${oci_core_subnet.ClusterSubnet.id}"
+    subnet_id        = "${oci_core_subnet.ClusterSubnet.*.id[index(var.ADS, var.InstanceADIndex[count.index])]}"
     display_name     = "primaryvnic"
     assign_public_ip = true
     hostname_label   = "compute${count.index + 1}"
@@ -38,13 +38,16 @@ resource "oci_core_instance" "ClusterCompute" {
 }
 
 resource "oci_core_instance" "ClusterManagement" {
-  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[var.AD - 1], "name")}"
+  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[var.ManagementAD - 1], "name")}"
   compartment_id      = "${var.compartment_ocid}"
   display_name        = "mgmt"
   shape               = "${var.ManagementShape}"
 
   create_vnic_details {
-    subnet_id        = "${oci_core_subnet.ClusterSubnet.id}"
+    # ManagementAD
+    #subnet_id        = "${oci_core_subnet.ClusterSubnet.id}"
+    subnet_id = "${oci_core_subnet.ClusterSubnet.*.id[index(var.ADS, var.ManagementAD)]}"
+
     display_name     = "primaryvnic"
     assign_public_ip = true
     hostname_label   = "mgmt"

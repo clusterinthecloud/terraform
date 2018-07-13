@@ -30,7 +30,8 @@ output "ManagementPublicIPs" {
 }
 
 output "FSMountTargetIP" {
-  value = ["${lookup(data.oci_core_private_ips.IPClusterFSMountTarget.private_ips[0], "ip_address")}"]
+  #  value = ["${lookup(data.oci_core_private_ips.IPClusterFSMountTarget.*.private_ips[0], "ip_address")}"]
+  value = ["${data.oci_core_private_ips.IPClusterFSMountTarget.*.private_ips}"]
 }
 
 output "FSMountPoint" {

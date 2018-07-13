@@ -7,12 +7,21 @@ variable "region" {}
 variable "compartment_ocid" {}
 variable "ssh_public_key" {}
 
-variable "AD" {
+variable "ADS" {
+  default = ["1"]
+}
+
+variable "ManagementAD" {
   default = "1"
 }
 
-variable "NumComputeInstances" {
+variable "FilesystemAD" {
   default = "1"
+}
+
+variable "InstanceADIndex" {
+  type    = "list"
+  default = ["1", "3"]
 }
 
 variable "ManagementShape" {
@@ -57,8 +66,4 @@ variable "ExportPathFS" {
 
 variable "ClusterNameTag" {
   default = "cluster"
-}
-
-locals {
-  mount_target_1_ip_address = "${lookup(data.oci_core_private_ips.IPClusterFSMountTarget.private_ips[0], "ip_address")}"
 }
