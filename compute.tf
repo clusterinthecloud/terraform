@@ -1,20 +1,20 @@
 resource "oci_core_instance" "ClusterCompute" {
-  count = "${var.NumComputeInstances}"
+  count               = "${var.NumComputeInstances}"
   availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[var.AD - 1], "name")}"
-  compartment_id = "${var.compartment_ocid}"
-  display_name = "compute${count.index + 1}"
-  shape = "${var.ComputeShape}"
+  compartment_id      = "${var.compartment_ocid}"
+  display_name        = "compute${count.index + 1}"
+  shape               = "${var.ComputeShape}"
 
   create_vnic_details {
-    subnet_id = "${oci_core_subnet.ClusterSubnet.id}"
-    display_name = "primaryvnic"
+    subnet_id        = "${oci_core_subnet.ClusterSubnet.id}"
+    display_name     = "primaryvnic"
     assign_public_ip = true
-    hostname_label = "compute${count.index + 1}"
+    hostname_label   = "compute${count.index + 1}"
   }
 
   source_details {
     source_type = "image"
-    source_id = "${var.ComputeImageOCID[var.region]}"
+    source_id   = "${var.ComputeImageOCID[var.region]}"
 
     # Apply this to set the size of the boot volume that's created for this instance.
     # Otherwise, the default boot volume size of the image is used.
@@ -24,7 +24,7 @@ resource "oci_core_instance" "ClusterCompute" {
 
   metadata {
     ssh_authorized_keys = "${var.ssh_public_key}"
-    user_data = "${base64encode(file(var.BootStrapFile))}"
+    user_data           = "${base64encode(file(var.BootStrapFile))}"
   }
 
   timeouts {
@@ -32,32 +32,32 @@ resource "oci_core_instance" "ClusterCompute" {
   }
 
   freeform_tags = {
-    "cluster" = "${var.ClusterNameTag}"
+    "cluster"  = "${var.ClusterNameTag}"
     "nodetype" = "compute"
   }
 }
 
 resource "oci_core_instance" "ClusterManagement" {
   availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[var.AD - 1], "name")}"
-  compartment_id = "${var.compartment_ocid}"
-  display_name = "mgmt"
-  shape = "${var.ManagementShape}"
+  compartment_id      = "${var.compartment_ocid}"
+  display_name        = "mgmt"
+  shape               = "${var.ManagementShape}"
 
   create_vnic_details {
-    subnet_id = "${oci_core_subnet.ClusterSubnet.id}"
-    display_name = "primaryvnic"
+    subnet_id        = "${oci_core_subnet.ClusterSubnet.id}"
+    display_name     = "primaryvnic"
     assign_public_ip = true
-    hostname_label = "mgmt"
+    hostname_label   = "mgmt"
   }
 
   source_details {
     source_type = "image"
-    source_id = "${var.ManagementImageOCID[var.region]}"
+    source_id   = "${var.ManagementImageOCID[var.region]}"
   }
 
   metadata {
     ssh_authorized_keys = "${var.ssh_public_key}"
-    user_data = "${base64encode(file(var.BootStrapFile))}"
+    user_data           = "${base64encode(file(var.BootStrapFile))}"
   }
 
   timeouts {
@@ -65,7 +65,7 @@ resource "oci_core_instance" "ClusterManagement" {
   }
 
   freeform_tags = {
-    "cluster" = "${var.ClusterNameTag}"
+    "cluster"  = "${var.ClusterNameTag}"
     "nodetype" = "mgmt"
   }
 }
