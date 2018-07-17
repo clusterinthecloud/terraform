@@ -9,7 +9,7 @@ resource "oci_core_instance" "ClusterCompute" {
     subnet_id        = "${oci_core_subnet.ClusterSubnet.*.id[index(var.ADS, var.InstanceADIndex[count.index])]}"
     display_name     = "primaryvnic"
     assign_public_ip = true
-    hostname_label   = "compute${count.index + 1}"
+    hostname_label   = "compute${format("%03d", count.index+1)}"
   }
 
   source_details {
