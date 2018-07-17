@@ -2,7 +2,7 @@ resource "oci_core_instance" "ClusterCompute" {
   count               = "${length(var.InstanceADIndex)}"
   availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[var.InstanceADIndex[count.index] - 1], "name")}"
   compartment_id      = "${var.compartment_ocid}"
-  display_name        = "compute${count.index + 1}"
+  display_name        = "compute${format("%03d", count.index+1)}"
   shape               = "${var.ComputeShape}"
 
   create_vnic_details {
