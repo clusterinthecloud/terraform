@@ -43,44 +43,9 @@ resource "oci_core_security_list" "ClusterSecurityList" {
   // allow inbound ssh traffic from a specific port
   ingress_security_rules = [
     {
-      # Slurm
+      # Open all ports within the private network
       protocol = "6"
       source   = "10.0.0.0/8"
-
-      tcp_options {
-        min = 6817
-        max = 6818
-      }
-    },
-    {
-      # Next three are for file system
-      protocol = "6"
-      source   = "10.0.0.0/8"
-
-      tcp_options {
-        "min" = 2048
-        "max" = 2050
-      }
-    },
-    {
-      protocol = "6"
-      source   = "10.0.0.0/8"
-
-      tcp_options {
-        source_port_range {
-          "min" = 2048
-          "max" = 2050
-        }
-      }
-    },
-    {
-      protocol = "6"
-      source   = "10.0.0.0/8"
-
-      tcp_options {
-        "min" = 111
-        "max" = 111
-      }
     },
   ]
 }
