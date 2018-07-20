@@ -3,7 +3,7 @@ resource "oci_core_instance" "ClusterCompute" {
   availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[var.InstanceADIndex[count.index] - 1], "name")}"
   compartment_id      = "${var.compartment_ocid}"
   display_name        = "compute${format("%03d", count.index+1)}"
-  shape               = "${var.ComputeShape}"
+  shape               = "${var.ComputeShapes[count.index]}"
 
   create_vnic_details {
     subnet_id        = "${oci_core_subnet.ClusterSubnet.*.id[index(var.ADS, var.InstanceADIndex[count.index])]}"
@@ -14,7 +14,7 @@ resource "oci_core_instance" "ClusterCompute" {
 
   source_details {
     source_type = "image"
-    source_id   = "${var.ComputeImageOCID[var.region]}"
+    source_id   = "${lookup(var.ComputeImageOCID[var.ComputeShapes[count.index]], var.region)}"
 
     # Apply this to set the size of the boot volume that's created for this instance.
     # Otherwise, the default boot volume size of the image is used.
