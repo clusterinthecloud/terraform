@@ -9,7 +9,7 @@ resource "oci_core_subnet" "ClusterSubnet" {
   count               = "${length(var.ADS)}"
   availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[var.ADS[count.index] -1 ],"name")}"
   cidr_block          = "10.1.${count.index}.0/24"
-  display_name        = "Subnet-AD-${var.ADS[count.index]}"
+  display_name        = "SubnetAD${var.ADS[count.index]}"
   dns_label           = "subnetAD${var.ADS[count.index]}"
   security_list_ids   = ["${oci_core_virtual_network.ClusterVCN.default_security_list_id}", "${oci_core_security_list.ClusterSecurityList.id}"]
   compartment_id      = "${var.compartment_ocid}"
