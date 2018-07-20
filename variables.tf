@@ -29,15 +29,18 @@ variable "InstanceADIndex" {
 }
 
 variable "ManagementShape" {
+  description = "The shape to use for the management node"
   default = "VM.Standard1.2"
 }
 
 variable "ComputeShapes" {
+  description = "The list of shapes to use for the compute nodes. Maps to `InstanceADIndex`."
   type    = "list"
   default = ["VM.Standard1.2", "VM.Standard1.2"]
 }
 
 variable "ManagementImageOCID" {
+  description = "What image to use for the management node. A map of region name to image OCID."
   type = "map"
 
   default = {
@@ -49,6 +52,7 @@ variable "ManagementImageOCID" {
 }
 
 variable "ComputeImageOCID" {
+  description = "What images to use for the compute node shapes. A map of shape name to a map of region to image OCID."
   type = "map"
 
   default = {
