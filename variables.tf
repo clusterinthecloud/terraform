@@ -8,18 +8,22 @@ variable "compartment_ocid" {}
 variable "ssh_public_key" {}
 
 variable "ADS" {
+  description = "The list of ADs you want to create your cluster across."
   default = ["1"]
 }
 
 variable "ManagementAD" {
+  description = "The AD the management node should live in."
   default = "1"
 }
 
 variable "FilesystemAD" {
+  description = "The AD the filesystem should live in."
   default = "1"
 }
 
 variable "InstanceADIndex" {
+  description = "A list of AD numbers that the compute nodes shuold be mae in. Repeat an index to create multiple instances in an AD."
   type    = "list"
   default = ["1", "3"]
 }
