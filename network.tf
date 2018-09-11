@@ -47,5 +47,15 @@ resource "oci_core_security_list" "ClusterSecurityList" {
       protocol = "6"
       source   = "10.0.0.0/8"
     },
+    {
+      # Open port for Grafana
+      protocol = "6"
+      source   = "0.0.0.0/0"
+
+      tcp_options {
+        min = 3000
+        max = 3000
+      }
+    },
   ]
 }
