@@ -29,11 +29,10 @@ output "ManagementPublicIPs" {
   value = ["${oci_core_instance.ClusterManagement.*.public_ip}"]
 }
 
-output "FSMountTargetIP" {
-  #  value = ["${lookup(data.oci_core_private_ips.IPClusterFSMountTarget.*.private_ips[0], "ip_address")}"]
-  value = ["${data.oci_core_private_ips.IPClusterFSMountTarget.*.private_ips}"]
-}
+#output "FSMountTargetIP" {
+#  value = ["${data.oci_core_private_ips.IPClusterFSMountTarget.*.private_ips}"]
+#}
 
-output "FSMountPoint" {
-  value = ["${var.ExportPathFS}"]
-}
+#output "FSMountPoint" {
+#  value = ["${var.ExportPathFS}"]
+#}
