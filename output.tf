@@ -7,9 +7,9 @@ output "ComputeHostnames" {
   value = ["${oci_core_instance.ClusterCompute.*.display_name}"]
 }
 
-output "ComputePublicIPs" {
-  value = ["${oci_core_instance.ClusterCompute.*.public_ip}"]
-}
+#output "ComputePublicIPs" {
+#  value = ["${oci_core_instance.ClusterCompute.*.public_ip}"]
+#}
 
 # Output the boot volume IDs of the instance
 #output "BootVolumeIDs" {
@@ -21,9 +21,9 @@ output "ComputePublicIPs" {
 #  value = ["${oci_core_instance.ClusterManagement.*.private_ip}"]
 #}
 
-output "ManagementHostnames" {
-  value = ["${oci_core_instance.ClusterManagement.*.display_name}"]
-}
+#output "ManagementHostnames" {
+#  value = ["${oci_core_instance.ClusterManagement.*.display_name}"]
+#}
 
 output "ManagementPublicIPs" {
   value = ["${oci_core_instance.ClusterManagement.*.public_ip}"]
