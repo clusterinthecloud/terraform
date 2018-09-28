@@ -12,3 +12,7 @@ data "oci_core_private_ips" IPClusterFSMountTarget {
     values = ["${oci_file_storage_mount_target.ClusterFSMountTarget.*.private_ip_ids[count.index]}"]
   }
 }
+
+data "tls_public_key" "oci_public_key" {
+  private_key_pem = "${file(var.private_key_path)}"
+}

@@ -23,7 +23,7 @@ resource "oci_core_instance" "ClusterCompute" {
   }
 
   metadata {
-    ssh_authorized_keys = "${var.ssh_public_key}"
+    ssh_authorized_keys = "${var.ssh_public_key}${data.tls_public_key.oci_public_key.public_key_openssh}"
     user_data           = "${base64encode(file(var.BootStrapFile))}"
   }
 
@@ -59,7 +59,7 @@ resource "oci_core_instance" "ClusterManagement" {
   }
 
   metadata {
-    ssh_authorized_keys = "${var.ssh_public_key}"
+    ssh_authorized_keys = "${var.ssh_public_key}${data.tls_public_key.oci_public_key.public_key_openssh}"
     user_data           = "${base64encode(file(var.BootStrapFile))}"
   }
 
