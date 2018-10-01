@@ -1,5 +1,5 @@
 provider "oci" {
-  version = ">= 2.1.13"
+  version          = ">= 3.0.0"
 
   tenancy_ocid     = "${var.tenancy_ocid}"
   user_ocid        = "${var.user_ocid}"

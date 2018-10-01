@@ -30,7 +30,7 @@ resource "oci_core_route_table" "ClusterRT" {
   display_name   = "ClusterRT"
 
   route_rules {
-    cidr_block        = "0.0.0.0/0"
+    destination       = "0.0.0.0/0"
     network_entity_id = "${oci_core_internet_gateway.ClusterIG.id}"
   }
 }
