@@ -9,7 +9,7 @@ region = "eu-frankfurt-1"
 ADS = ["3"]
 
 ### Compartment
-compartment_ocid = "ocid1.tenancy.oc1..."
+compartment_ocid = "ocid1.compartment.oc1..."
 
 ### Public/private keys used on the instance
 ssh_public_key = <<EOF
