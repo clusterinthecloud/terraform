@@ -1,0 +1,104 @@
+---
+
+# VMs
+
+VM.Standard1.1:
+  memory: 6900
+  cores_per_socket: 1
+  threads_per_core: 2
+VM.Standard1.2:
+  memory: 13800
+  cores_per_socket: 2
+  threads_per_core: 2
+VM.Standard1.4:
+  memory: 27600
+  cores_per_socket: 4
+  threads_per_core: 2
+VM.Standard1.8:
+  memory: 55200
+  cores_per_socket: 8
+  threads_per_core: 2
+VM.Standard1.16:
+  memory: 110400
+  cores_per_socket: 16
+  threads_per_core: 2
+
+VM.DenseIO1.4:
+  memory: 59100
+  cores_per_socket: 4
+  threads_per_core: 2
+VM.DenseIO1.8:
+  memory: 118200
+  cores_per_socket: 8
+  threads_per_core: 2
+VM.DenseIO1.16:
+  memory: 236400
+  cores_per_socket: 8
+  threads_per_core: 2
+
+VM.Standard2.1:
+  memory: 14700
+  cores_per_socket: 1
+  threads_per_core: 2
+VM.Standard2.2:
+  memory: 29400
+  cores_per_socket: 2
+  threads_per_core: 2
+VM.Standard2.4:
+  memory: 58800
+  cores_per_socket: 4
+  threads_per_core: 2
+VM.Standard2.8:
+  memory: 117600
+  cores_per_socket: 8
+  threads_per_core: 2
+VM.Standard2.16:
+  memory: 235200
+  cores_per_socket: 16
+  threads_per_core: 2
+VM.Standard2.24:
+  memory: 315000
+  cores_per_socket: 24
+  threads_per_core: 2
+
+VM.DenseIO2.8:
+  memory: 117600
+  cores_per_socket: 8
+  threads_per_core: 2
+VM.DenseIO2.16:
+  memory: 235200
+  cores_per_socket: 16
+  threads_per_core: 2
+VM.DenseIO2.24:
+  memory: 315000
+  cores_per_socket: 24
+  threads_per_core: 2
+
+# Bare metal
+
+BM.Standard1.36:
+  memory: 252000
+  sockets: 2
+  cores_per_socket: 18
+  threads_per_core: 2
+BM.DenseIO1.36:
+  memory: 504000
+  sockets: 2
+  cores_per_socket: 18
+  threads_per_core: 2
+BM.Standard2.52:
+  memory: 772000
+  sockets: 2
+  cores_per_socket: 26
+  threads_per_core: 2
+BM.DenseO2.52:
+  memory: 772000
+  sockets: 2
+  cores_per_socket: 26
+  threads_per_core: 2
+
+BM.GPU2.2:
+  memory: 191800
+  sockets: 2
+  cores_per_socket: 14
+  threads_per_core: 2

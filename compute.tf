@@ -72,3 +72,151 @@ resource "oci_core_instance" "ClusterManagement" {
     "nodetype" = "mgmt"
   }
 }
+
+resource "null_resource" "copy_in_setup_data_mgmt" {
+  depends_on = ["oci_core_instance.ClusterManagement"]
+
+  triggers {
+     cluster_instance = "${oci_core_instance.ClusterManagement.id}"
+  }
+
+  provisioner "file" {
+    destination = "/home/opc/config"
+    content = <<EOF
+[DEFAULT]
+user=${var.user_ocid}
+fingerprint=${var.fingerprint}
+key_file=/home/slurm/.oci/oci_api_key.pem
+tenancy=${var.tenancy_ocid}
+region=${var.region}
+EOF
+
+    connection {
+      timeout = "15m"
+      host = "${oci_core_instance.ClusterManagement.*.public_ip}"
+      user = "opc"
+      private_key = "${file(var.private_key_path)}"
+      agent = false
+    }
+  }
+
+  provisioner "file" {
+    destination = "/home/opc/oci_api_key.pem"
+    source = "${var.private_key_path}"
+
+    connection {
+      timeout = "15m"
+      host = "${oci_core_instance.ClusterManagement.*.public_ip}"
+      user = "opc"
+      private_key = "${file(var.private_key_path)}"
+      agent = false
+    }
+  }
+
+  provisioner "file" {
+    destination = "/home/opc/nodes.yaml"
+    content = <<EOF
+---
+names: ["${join("\", \"", oci_core_instance.ClusterCompute.*.display_name)}"]
+shapes: ["${join("\", \"", var.ComputeShapes)}"]
+EOF
+
+    connection {
+      timeout = "15m"
+      host = "${oci_core_instance.ClusterManagement.*.public_ip}"
+      user = "opc"
+      private_key = "${file(var.private_key_path)}"
+      agent = false
+    }
+  }
+
+  provisioner "file" {
+    destination = "/home/opc/shapes.yaml"
+    source = "files/shapes.yaml"
+
+    connection {
+      timeout = "15m"
+      host = "${oci_core_instance.ClusterManagement.*.public_ip}"
+      user = "opc"
+      private_key = "${file(var.private_key_path)}"
+      agent = false
+    }
+  }
+
+  provisioner "file" {
+    destination = "/home/opc/hosts"
+    content = <<EOF
+[management]
+${oci_core_instance.ClusterManagement.display_name}
+[compute]
+${join("\n", oci_core_instance.ClusterCompute.*.display_name)}
+EOF
+
+    connection {
+      timeout = "15m"
+      host = "${oci_core_instance.ClusterManagement.*.public_ip}"
+      user = "opc"
+      private_key = "${file(var.private_key_path)}"
+      agent = false
+    }
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo yum install -y ansible git",
+      "nohup sudo python -u /usr/bin/ansible-pull --url=https://github.com/ACRC/slurm-ansible-playbook.git --checkout=master --inventory=/home/opc/hosts --extra-vars=\"compartment_ocid=${var.compartment_ocid}\" site.yml &>> ansible-pull.log &",
+      "sleep 10"
+    ]
+
+    connection {
+        timeout = "15m"
+        host = "${oci_core_instance.ClusterManagement.*.public_ip}"
+        user = "opc"
+        private_key = "${file(var.private_key_path)}"
+        agent = false
+    }
+  }
+}
+
+resource "null_resource" "copy_in_setup_data_compute" {
+  count = "${length(var.InstanceADIndex)}"
+  depends_on = ["oci_core_instance.ClusterCompute"]
+
+  triggers {
+     cluster_instance = "${oci_core_instance.ClusterCompute.*.id[count.index]}"
+  }
+
+  provisioner "file" {
+    destination = "/home/opc/hosts"
+    content = <<EOF
+[management]
+${oci_core_instance.ClusterManagement.display_name}
+[compute]
+${join("\n", oci_core_instance.ClusterCompute.*.display_name)}
+EOF
+
+    connection {
+      timeout = "15m"
+      host = "${oci_core_instance.ClusterCompute.*.public_ip[count.index]}"
+      user = "opc"
+      private_key = "${file(var.private_key_path)}"
+      agent = false
+    }
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo yum install -y ansible git",
+      "nohup sudo python -u /usr/bin/ansible-pull --url=https://github.com/ACRC/slurm-ansible-playbook.git --checkout=master --inventory=/home/opc/hosts site.yml &>> ansible-pull.log &",
+      "sleep 10"
+    ]
+
+    connection {
+        timeout = "15m"
+        host = "${oci_core_instance.ClusterCompute.*.public_ip[count.index]}"
+        user = "opc"
+        private_key = "${file(var.private_key_path)}"
+        agent = false
+    }
+  }
+}
