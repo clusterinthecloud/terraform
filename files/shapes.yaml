@@ -102,3 +102,9 @@ BM.GPU2.2:
   sockets: 2
   cores_per_socket: 14
   threads_per_core: 2
+
+BM.Standard.E2.64:
+  memory: 512000
+  sockets: 2
+  cores_per_socket: 32
+  threads_per_core: 2
