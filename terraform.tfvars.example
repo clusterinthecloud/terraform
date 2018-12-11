@@ -24,15 +24,15 @@ ManagementShape = "VM.Standard1.1"
 ComputeShapes = ["VM.Standard1.2"]
 ComputeImageOCID = {
   VM.Standard1.2 = {
-    // See https://docs.us-phoenix-1.oraclecloud.com/images/
-    // Oracle-Linux-7.5-2018.06.14-0
-    eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaa7qdjjqlvryzxx4i2zs5si53edgmwr2ldn22whv5wv34fc3sdsova"
-    uk-london-1 = "ocid1.image.oc1.uk-london-1.aaaaaaaas5vonrmseff5fljdmpffffqotcqdrxkbsctotrmqfrnbjd6wwsfq"
+    // See https://docs.cloud.oracle.com/iaas/images/
+    // Oracle-Linux-7.6-2018.11.19-0
+    eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaa2rvnnmdz6ewn4pozatb2l6sjtpqpbgiqrilfh3b4ee7salrwy3kq"
+    uk-london-1 = "ocid1.image.oc1.uk-london-1.aaaaaaaaikjrglbnzkvlkiltzobfvtxmqctoho3tmdcwopnqnoolmwbsk3za"
   }
 }
 ManagementImageOCID = {
-  // See https://docs.us-phoenix-1.oraclecloud.com/images/
-  // Oracle-Linux-7.5-2018.06.14-0
-  eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaa7qdjjqlvryzxx4i2zs5si53edgmwr2ldn22whv5wv34fc3sdsova"
-  uk-london-1 = "ocid1.image.oc1.uk-london-1.aaaaaaaas5vonrmseff5fljdmpffffqotcqdrxkbsctotrmqfrnbjd6wwsfq"
+  // See https://docs.cloud.oracle.com/iaas/images/
+  // Oracle-Linux-7.6-2018.11.19-0
+  eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaa2rvnnmdz6ewn4pozatb2l6sjtpqpbgiqrilfh3b4ee7salrwy3kq"
+  uk-london-1 = "ocid1.image.oc1.uk-london-1.aaaaaaaaikjrglbnzkvlkiltzobfvtxmqctoho3tmdcwopnqnoolmwbsk3za"
 }
