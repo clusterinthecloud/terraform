@@ -22,6 +22,30 @@ VM.Standard1.16:
   memory: 110400
   cores_per_socket: 16
   threads_per_core: 2
+VM.Standard2.1:
+  memory: 14775
+  cores_per_socket: 1
+  threads_per_core: 2
+VM.Standard2.2:
+  memory: 29550
+  cores_per_socket: 2
+  threads_per_core: 2
+VM.Standard2.4:
+  memory: 59100
+  cores_per_socket: 4
+  threads_per_core: 2
+VM.Standard2.8:
+  memory: 118200
+  cores_per_socket: 8
+  threads_per_core: 2
+VM.Standard2.16:
+  memory: 236400
+  cores_per_socket: 16
+  threads_per_core: 2
+VM.Standard2.24:
+  memory: 315200
+  cores_per_socket: 24
+  threads_per_core: 2
 
 VM.DenseIO1.4:
   memory: 59100
