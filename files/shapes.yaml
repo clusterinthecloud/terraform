@@ -117,3 +117,9 @@ BM.Standard.E2.64:
   sockets: 2
   cores_per_socket: 32
   threads_per_core: 2
+  
+BM.HPC2.36:
+  memory: 380000
+  sockets: 2
+  cores_per_socket: 18
+  threads_per_core: 2
