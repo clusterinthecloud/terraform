@@ -86,4 +86,20 @@ EOF
       agent = false
     }
   }
+
+  provisioner "file" {
+    destination = "/home/opc/mgmt_shape.yaml"
+    content = <<EOF
+mgmt_ad: ${var.ManagementAD}
+mgmt_shape: ${var.ManagementShape}
+EOF
+
+    connection {
+      timeout = "15m"
+      host = "${oci_core_instance.ClusterManagement.*.public_ip}"
+      user = "opc"
+      private_key = "${file(var.private_key_path)}"
+      agent = false
+    }
+  }
 }
