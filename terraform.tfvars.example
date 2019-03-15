@@ -6,7 +6,6 @@ private_key_path = "/home/user/.oci/oci_api_key.pem"
 
 ### Region
 region = "eu-frankfurt-1"
-ADS = ["1", "2", "3"]
 
 ### Compartment
 compartment_ocid = "ocid1.compartment.oc1..."
