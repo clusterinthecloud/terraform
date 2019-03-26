@@ -94,4 +94,20 @@ EOF
       agent = false
     }
   }
+
+  provisioner "remote-exec" {
+    when = "destroy"
+    inline = [
+      "sudo -u slurm /usr/local/bin/stopnode \"$(sinfo --noheader --Format=nodelist:10000 | tr -d '[:space:]')\"",
+      "sleep 10"
+    ]
+
+    connection {
+        timeout = "15m"
+        host = "${oci_core_instance.ClusterManagement.public_ip}"
+        user = "opc"
+        private_key = "${file(var.private_key_path)}"
+        agent = false
+    }
+  }
 }
