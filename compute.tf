@@ -31,14 +31,6 @@ resource "oci_core_instance" "ClusterManagement" {
     "cluster"  = "${var.ClusterNameTag}"
     "nodetype" = "mgmt"
   }
-}
-
-resource "null_resource" "copy_in_setup_data_mgmt" {
-  depends_on = ["oci_core_instance.ClusterManagement"]
-
-  triggers {
-     cluster_instance = "${oci_core_instance.ClusterManagement.id}"
-  }
 
   provisioner "file" {
     destination = "/home/opc/config"
@@ -53,11 +45,12 @@ EOF
 
     connection {
       timeout = "15m"
-      host = "${oci_core_instance.ClusterManagement.*.public_ip}"
+      host = "${oci_core_instance.ClusterManagement.public_ip}"
       user = "opc"
       private_key = "${file(var.private_key_path)}"
       agent = false
     }
+
   }
 
   provisioner "file" {
@@ -66,7 +59,7 @@ EOF
 
     connection {
       timeout = "15m"
-      host = "${oci_core_instance.ClusterManagement.*.public_ip}"
+      host = "${oci_core_instance.ClusterManagement.public_ip}"
       user = "opc"
       private_key = "${file(var.private_key_path)}"
       agent = false
@@ -79,7 +72,7 @@ EOF
 
     connection {
       timeout = "15m"
-      host = "${oci_core_instance.ClusterManagement.*.public_ip}"
+      host = "${oci_core_instance.ClusterManagement.public_ip}"
       user = "opc"
       private_key = "${file(var.private_key_path)}"
       agent = false
@@ -95,7 +88,7 @@ EOF
 
     connection {
       timeout = "15m"
-      host = "${oci_core_instance.ClusterManagement.*.public_ip}"
+      host = "${oci_core_instance.ClusterManagement.public_ip}"
       user = "opc"
       private_key = "${file(var.private_key_path)}"
       agent = false
