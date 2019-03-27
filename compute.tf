@@ -98,8 +98,10 @@ EOF
   provisioner "remote-exec" {
     when = "destroy"
     inline = [
-      "sudo -u slurm /usr/local/bin/stopnode \"$(sinfo --noheader --Format=nodelist:10000 | tr -d '[:space:]')\"",
-      "sleep 10"
+      "echo Terminating any remaining compute nodes",
+      "sudo -u slurm /usr/local/bin/stopnode \"$(sinfo --noheader --Format=nodelist:10000 | tr -d '[:space:]')\" || true",
+      "sleep 5",
+      "echo Node termination requested",
     ]
 
     connection {
