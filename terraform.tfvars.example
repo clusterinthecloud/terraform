@@ -20,7 +20,6 @@ ClusterNameTag = "mycluster"
 
 ManagementAD = "3"
 FilesystemAD = "3"
-InstanceADIndex = ["3"]
 ManagementShape = "VM.Standard1.1"
 
 ManagementImageOCID = {
