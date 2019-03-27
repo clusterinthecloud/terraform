@@ -83,6 +83,13 @@ VM.DenseIO2.24:
   cores_per_socket: 24
   threads_per_core: 2
 
+# VM GPU
+
+VM.GPU2.1: 
+  memory: 71000
+  cores_per_socket: 12 
+  threads_per_core: 2
+
 # Bare metal
 
 BM.Standard1.36:
