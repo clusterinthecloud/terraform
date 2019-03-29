@@ -95,6 +95,24 @@ EOF
     }
   }
 
+  provisioner "file" {
+    destination = "/home/opc/startnode.yaml"
+    content = <<EOF
+region: ${var.region}
+compartment_id: ${var.compartment_ocid}
+vcn_id: ${oci_core_virtual_network.ClusterVCN.id}
+ad_root: ${substr(oci_core_instance.ClusterManagement.availability_domain, 0, length(oci_core_instance.ClusterManagement.availability_domain)-1)}
+EOF
+
+    connection {
+      timeout = "15m"
+      host = "${oci_core_instance.ClusterManagement.public_ip}"
+      user = "opc"
+      private_key = "${file(var.private_key_path)}"
+      agent = false
+    }
+  }
+
   provisioner "remote-exec" {
     when = "destroy"
     inline = [
