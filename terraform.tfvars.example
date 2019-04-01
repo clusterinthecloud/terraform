@@ -21,5 +21,3 @@ ClusterNameTag = "mycluster"
 ManagementShape = "VM.Standard1.1"
 ManagementAD = "1"
 FilesystemAD = "1"
-
-ansible_branch = "citc2"
