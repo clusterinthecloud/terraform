@@ -10,7 +10,7 @@ region = "eu-frankfurt-1"
 ### Compartment
 compartment_ocid = "ocid1.compartment.oc1..."
 
-### Public/private keys used on the instance
+### Public keys used for the "oci" user on the instance
 ssh_public_key = <<EOF
 ssh-rsa UmFuZG9tIGtleSBjb250ZW50cy4gUHV0IHlvdXIgb3duIGtleSBpbiBoZXJlIG9idmlvdXNseS4= user@computer
 ssh-rsa QW5vdGhlciByYW5kb20ga2V5IGNvbnRlbnRzLiBQdXQgeW91ciBvd24ga2V5IGluIGhlcmUgb2J2aW91c2x5Lg== user@anothercomputer
