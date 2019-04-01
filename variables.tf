@@ -9,7 +9,7 @@ variable "ssh_public_key" {}
 
 variable "ADS" {
   description = "The list of ADs you want to create your cluster across."
-  default = ["1"]
+  default = ["1", "2", "3"]
 }
 
 variable "ManagementAD" {
@@ -22,21 +22,9 @@ variable "FilesystemAD" {
   default = "1"
 }
 
-variable "InstanceADIndex" {
-  description = "A list of AD numbers that the compute nodes shuold be mae in. Repeat an index to create multiple instances in an AD."
-  type    = "list"
-  default = ["1", "3"]
-}
-
 variable "ManagementShape" {
   description = "The shape to use for the management node"
   default = "VM.Standard1.2"
-}
-
-variable "ComputeShapes" {
-  description = "The list of shapes to use for the compute nodes. Maps to `InstanceADIndex`."
-  type    = "list"
-  default = ["VM.Standard1.2", "VM.Standard1.2"]
 }
 
 variable "ManagementImageOCID" {
@@ -44,24 +32,13 @@ variable "ManagementImageOCID" {
   type = "map"
 
   default = {
-    // See https://docs.us-phoenix-1.oraclecloud.com/images/
-    // CentOS-7.5-2018.05.11-0
-    eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaabsyrkaz5dwyd2szcgo6fnxi5btvoizpnbpdxpxtl7bpqckqpo4cq"
-    uk-london-1 = "ocid1.image.oc1.uk-london-1.aaaaaaaavlnwnzmzsezk7gae3ncxmy67fkmks5cw7indrymrv3phic2ddlzq"
-  }
-}
-
-variable "ComputeImageOCID" {
-  description = "What images to use for the compute node shapes. A map of shape name to a map of region to image OCID."
-  type = "map"
-
-  default = {
-    VM.Standard1.2 = {
-      // See https://docs.us-phoenix-1.oraclecloud.com/images/
-      // CentOS-7.5-2018.05.11-0
-      eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaabsyrkaz5dwyd2szcgo6fnxi5btvoizpnbpdxpxtl7bpqckqpo4cq"
-      uk-london-1 = "ocid1.image.oc1.uk-london-1.aaaaaaaavlnwnzmzsezk7gae3ncxmy67fkmks5cw7indrymrv3phic2ddlzq"
-    }
+    // See https://docs.cloud.oracle.com/iaas/images/
+    // Oracle-Linux-7.6-2019.02.20-0
+    eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaa527xpybx2azyhcz2oyk6f4lsvokyujajo73zuxnnhcnp7p24pgva"
+    uk-london-1 = "ocid1.image.oc1.uk-london-1.aaaaaaaarruepdlahln5fah4lvm7tsf4was3wdx75vfs6vljdke65imbqnhq"
+    ca-toronto-1 = "ocid1.image.oc1.ca-toronto-1.aaaaaaaa7ac57wwwhputaufcbf633ojir6scqa4yv6iaqtn3u64wisqd3jjq"
+    us-ashburn-1 = "ocid1.image.oc1.iad.aaaaaaaannaquxy7rrbrbngpaqp427mv426rlalgihxwdjrz3fr2iiaxah5a"
+    us-phoenix-1 = "ocid1.image.oc1.phx.aaaaaaaacss7qgb6vhojblgcklnmcbchhei6wgqisqmdciu3l4spmroipghq"
   }
 }
 
@@ -75,4 +52,8 @@ variable "ExportPathFS" {
 
 variable "ClusterNameTag" {
   default = "cluster"
+}
+
+variable "ansible_branch" {
+  default = "master"
 }

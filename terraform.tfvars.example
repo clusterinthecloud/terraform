@@ -6,12 +6,11 @@ private_key_path = "/home/user/.oci/oci_api_key.pem"
 
 ### Region
 region = "eu-frankfurt-1"
-ADS = ["3"]
 
 ### Compartment
 compartment_ocid = "ocid1.compartment.oc1..."
 
-### Public/private keys used on the instance
+### Public keys used for the "oci" user on the instance
 ssh_public_key = <<EOF
 ssh-rsa UmFuZG9tIGtleSBjb250ZW50cy4gUHV0IHlvdXIgb3duIGtleSBpbiBoZXJlIG9idmlvdXNseS4= user@computer
 ssh-rsa QW5vdGhlciByYW5kb20ga2V5IGNvbnRlbnRzLiBQdXQgeW91ciBvd24ga2V5IGluIGhlcmUgb2J2aW91c2x5Lg== user@anothercomputer
@@ -19,22 +18,6 @@ EOF
 
 ClusterNameTag = "mycluster"
 
-ManagementAD = "3"
-FilesystemAD = "3"
-InstanceADIndex = ["3"]
 ManagementShape = "VM.Standard1.1"
-ComputeShapes = ["VM.Standard1.2"]
-ComputeImageOCID = {
-  VM.Standard1.2 = {
-    // See https://docs.cloud.oracle.com/iaas/images/
-    // Oracle-Linux-7.6-2018.11.19-0
-    eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaa2rvnnmdz6ewn4pozatb2l6sjtpqpbgiqrilfh3b4ee7salrwy3kq"
-    uk-london-1 = "ocid1.image.oc1.uk-london-1.aaaaaaaaikjrglbnzkvlkiltzobfvtxmqctoho3tmdcwopnqnoolmwbsk3za"
-  }
-}
-ManagementImageOCID = {
-  // See https://docs.cloud.oracle.com/iaas/images/
-  // Oracle-Linux-7.6-2018.11.19-0
-  eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaa2rvnnmdz6ewn4pozatb2l6sjtpqpbgiqrilfh3b4ee7salrwy3kq"
-  uk-london-1 = "ocid1.image.oc1.uk-london-1.aaaaaaaaikjrglbnzkvlkiltzobfvtxmqctoho3tmdcwopnqnoolmwbsk3za"
-}
+ManagementAD = "1"
+FilesystemAD = "1"
