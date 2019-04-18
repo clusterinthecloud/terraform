@@ -1,12 +1,12 @@
 resource "oci_core_virtual_network" "ClusterVCN" {
-  cidr_block     = "10.0.0.0/8"
+  cidr_block     = "10.1.0.0/16"
   compartment_id = "${var.compartment_ocid}"
   display_name   = "ClusterVCN"
   dns_label      = "clustervcn"
 }
 
 resource "oci_core_subnet" "ClusterSubnet" {
-  cidr_block          = "10.0.0.0/8"
+  cidr_block          = "10.1.0.0/16"
   display_name        = "Subnet"
   dns_label           = "subnet"
   security_list_ids   = ["${oci_core_virtual_network.ClusterVCN.default_security_list_id}", "${oci_core_security_list.ClusterSecurityList.id}"]
