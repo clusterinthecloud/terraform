@@ -50,5 +50,5 @@ variable "ClusterNameTag" {
 }
 
 variable "ansible_branch" {
-  default = "master"
+  default = "3"
 }
