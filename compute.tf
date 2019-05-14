@@ -1,4 +1,5 @@
 resource "oci_core_instance" "ClusterManagement" {
+  depends_on          = ["oci_file_storage_export.ClusterFSExport"]
   availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[var.ManagementAD - 1], "name")}"
   compartment_id      = "${var.compartment_ocid}"
   display_name        = "mgmt"
