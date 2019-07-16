@@ -5,11 +5,11 @@ resource "google_filestore_instance" "instance" {
 
   file_shares {
     capacity_gb = "${var.fs_capacity}"
-    name        = "${var.ExportPathFS}"
+    name        = "${var.export_path_fs}"
   }
 
   networks {
-    network = "${var.slurm_network}"
+    network = "${var.network}"
     modes   = ["MODE_IPV4"]
   }
 }
