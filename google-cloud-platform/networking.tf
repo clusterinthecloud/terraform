@@ -22,10 +22,21 @@ resource "google_compute_firewall" "slurm-nodes" {
 resource "google_compute_firewall" "grafana" {
   name              = "grafana-to-slurm-master"
   network           = "${google_compute_network.vpc_network.name}"
-  source_ranges     = ["${var.network_ipv4_cidr}"]
+  source_ranges     = ["0.0.0.0/0"]
   target_tags       = ["slurm-master"]
   allow {
     protocol        = "tcp"
     ports           = ["3000"]
+  }
+}
+
+resource "google_compute_firewall" "ssh" {
+  name              = "ssh-to-slurm-master"
+  network           = "${google_compute_network.vpc_network.name}"
+  source_ranges     = ["0.0.0.0/0"]
+  target_tags       = ["slurm-master"]
+  allow {
+    protocol        = "tcp"
+    ports           = ["22"]
   }
 }

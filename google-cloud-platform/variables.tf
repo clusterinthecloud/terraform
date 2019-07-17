@@ -13,14 +13,11 @@ variable "storage_size_mb"                    {default = 1024}
 # Slurm Cluster
 variable "cluster_name_tag"                   {}
 variable "management_compute_instance_config" {
-  type = "map"
   default = {
     type            = "n1-standard-1",
-    image           = "debian-cloud/debian-9"
+    image           = "centos-cloud/centos-7"
     ansible_branch  = 3
   }
 }
-
-variable "BootStrapFile" {
-  default = "./userdata/bootstrap"
-}
+variable "private_key_path"                     {}
+variable "public_key_path"                      {}

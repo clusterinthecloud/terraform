@@ -11,7 +11,8 @@ data "template_file" "user_data" {
   template = "${file(var.BootStrapFile)}"
 
   vars {
-    ansible_branch = "${var.ansible_branch}"
-    compartment_ocid = "${var.compartment_ocid}"
+    ansible_branch = "${var.ansible_branch}",
+    cloud-platform = "oci",
+    fileserver-ip  = "" # the file server is determined via a static name on OCI
   }
 }
