@@ -18,6 +18,6 @@ EOF
 
 ClusterNameTag = "mycluster"
 
-ManagementShape = "VM.Standard1.1"
+ManagementShape = "VM.Standard2.1"
 ManagementAD = "1"
 FilesystemAD = "1"
