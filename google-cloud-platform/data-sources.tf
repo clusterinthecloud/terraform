@@ -9,7 +9,7 @@ data "template_file" "bootstrap-script"{
     template    = "${file("${path.module}/../common-files/bootstrap.sh.tpl")}"
     vars {
         ansible_branch  = "${var.management_compute_instance_config["ansible_branch"]}"
-        cloud-platform  = "google-cloud"
+        cloud-platform  = "google"
         fileserver-ip   = "${module.filestore_shared_storage.fileserver-ip}"
     }
 }

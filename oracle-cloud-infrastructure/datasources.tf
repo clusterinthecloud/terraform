@@ -11,7 +11,7 @@ data "template_file" "user_data" {
   template = "${file("${path.module}/../common-files/bootstrap.sh.tpl")}"
   vars {
     ansible_branch = "${var.ansible_branch}",
-    cloud-platform = "oci",
+    cloud-platform = "oracle",
     fileserver-ip  = "" # the file server is determined via a static name on OCI
   }
 }
