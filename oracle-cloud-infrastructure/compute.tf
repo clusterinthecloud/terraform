@@ -75,7 +75,7 @@ EOF
 
   provisioner "file" {
     destination = "/home/opc/shapes.yaml"
-    source = "files/shapes.yaml"
+    source = "${path.module}/../common-files/shapes.yaml"
 
     connection {
       timeout = "15m"
