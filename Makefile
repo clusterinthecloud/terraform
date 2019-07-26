@@ -21,7 +21,7 @@ azure-test.pub:
 	ssh-keygen -N "" -f azure-test
 
 test: azure-test.pub
-	cp terraform.tfvars.example $(TF_VARS)
+	cp oracle-cloud-infrastructure/terraform.tfvars.example $(TF_VARS)
 	sed -i -e '/private_key_path/ s/\/home\/user\/.oci/./' $(TF_VARS)
 	sed -i -e "/tenancy_ocid/ s/ocid1.tenancy.oc1.../$(TENANCY_OCID)/" $(TF_VARS)
 	sed -i -e "/user_ocid/ s/ocid1.user.oc1.../$(USER_OCID)/" $(TF_VARS)
@@ -31,10 +31,10 @@ test: azure-test.pub
 	sed -i -e "/FilesystemAD/ s/1/2/" $(TF_VARS)
 	if [ "${ANSIBLE_BRANCH}" ]; then echo 'ansible_branch = "'$(ANSIBLE_BRANCH)'"' >> $(TF_VARS); fi
 	cat $(TF_VARS)
-	./terraform init
-	./terraform validate -var-file=$(TF_VARS)
-	./terraform plan -var-file=$(TF_VARS) -state=$(TF_STATE)
-	./terraform apply -var-file=$(TF_VARS) -state=$(TF_STATE) -auto-approve
+	./terraform init oracle-cloud-infrastructure
+	./terraform validate -var-file=$(TF_VARS) oracle-cloud-infrastructure
+	./terraform plan -var-file=$(TF_VARS) -state=$(TF_STATE) oracle-cloud-infrastructure
+	./terraform apply -var-file=$(TF_VARS) -state=$(TF_STATE) -auto-approve oracle-cloud-infrastructure
 	# we need to ignore errors between here and the destroy, so make commands start with a minus
 	-echo -ne "Host mgmt\n\tIdentityFile azure-test\n\tStrictHostKeyChecking no\n\tHostname " > ssh-config
 	-terraform show -no-color $(TF_STATE) | grep 'PublicIP' | awk '{print $$3}' >> ssh-config
@@ -49,7 +49,7 @@ test: azure-test.pub
 	-sleep 5  # Make sure that the filesystem has synchronised
 	-scp -F ssh-config opc@mgmt:expected .
 	-scp -F ssh-config opc@mgmt:/mnt/shared/test/slurm-2.out .
-	./terraform destroy -var-file=$(TF_VARS) -state=$(TF_STATE) -auto-approve
+	./terraform destroy -var-file=$(TF_VARS) -state=$(TF_STATE) -auto-approve oracle-cloud-infrastructure
 	diff -u slurm-2.out expected
 
 clean:
