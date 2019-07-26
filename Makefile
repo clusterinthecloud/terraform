@@ -53,6 +53,6 @@ test: azure-test.pub
 	diff -u slurm-2.out expected
 
 clean:
-	rm -f $(TF_VARS) $(TF_STATE) ssh-config slurm-2.out expected terraform terraform_${TF_VERSION}_linux_amd64.zip azure-test azure-test.pub
+	rm -f $(TF_VARS) $(TF_STATE) $(TF_STATE).backup ssh-config slurm-2.out expected terraform terraform_${TF_VERSION}_linux_amd64.zip azure-test azure-test.pub
 
 .PHONY: test clean
