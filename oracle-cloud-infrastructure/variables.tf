@@ -38,7 +38,7 @@ variable "ManagementImageOCID" {
 }
 
 variable "BootStrapFile" {
-  default = "./userdata/bootstrap"
+  default = "${path.module}/../common-files/bootstrap"
 }
 
 variable "ExportPathFS" {
