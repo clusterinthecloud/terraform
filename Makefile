@@ -41,7 +41,7 @@ test: azure-test.pub
 	-cat ssh-config
 	-mkdir --mode=700 ~/.ssh
 	-ssh -F ssh-config opc@mgmt "while [ ! -f /mnt/shared/finalised/mgmt ] ; do sleep 2; done" ## wait for ansible
-	-ssh -F ssh-config opc@mgmt "echo -ne 'VM.Standard2.1:\n  1: 1\n  2: 1\n  3: 1\n' > limits.yaml && ./finish"
+	-ssh -F ssh-config opc@mgmt "echo -ne 'VM.Standard2.1:\n  1: 1\n  2: 1\n  3: 1\n' > limits.yaml && finish"
 	-ssh -F ssh-config opc@mgmt "sudo mkdir -p /mnt/shared/test && sudo chown opc /mnt/shared/test"
 	-ssh -F ssh-config opc@mgmt 'echo -ne "#!/bin/bash\n\nsrun hostname\n" > test.slm'
 	-ssh -F ssh-config opc@mgmt "sbatch --chdir=/mnt/shared/test --wait test.slm"
