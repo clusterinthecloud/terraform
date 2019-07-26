@@ -19,7 +19,7 @@ variable "FilesystemAD" {
 
 variable "ManagementShape" {
   description = "The shape to use for the management node"
-  default = "VM.Standard1.2"
+  default = "VM.Standard2.1"
 }
 
 variable "ManagementImageOCID" {

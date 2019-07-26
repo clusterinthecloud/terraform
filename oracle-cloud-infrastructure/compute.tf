@@ -4,6 +4,13 @@ resource "oci_core_instance" "ClusterManagement" {
   display_name        = "mgmt"
   shape               = "${var.ManagementShape}"
 
+  # Make sure that the manangement node depands on the filesystem so that when
+  # destroying, the filesystem is still running in order to perform cleanup of
+  # any compute nodes.
+  depends_on = [
+    "oci_file_storage_export.ClusterFSExport",
+  ]
+
   create_vnic_details {
     # ManagementAD
     subnet_id = "${oci_core_subnet.ClusterSubnet.id}"
