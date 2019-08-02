@@ -1,8 +1,8 @@
-# Slurm Master Compute Instance
-resource "google_compute_instance" "slurm-master" {
-  name         = "slurm-master"
+# Management node instance
+resource "google_compute_instance" "mgmt" {
+  name         = "mgmt"
   machine_type = "${var.management_compute_instance_config["type"]}"
-  tags = ["slurm-master"]
+  tags = ["mgmt"]
   metadata_startup_script = "${data.template_file.bootstrap-script.rendered}"
 
   # add an ssh key that ca be used to provisiont the instance once it's started  
@@ -24,7 +24,7 @@ resource "google_compute_instance" "slurm-master" {
 
   # use the service account created to run the instance. This allows granular control over what the instance can access on GCP
   service_account {
-    email = "${google_service_account.slurm-master-sa.email}"
+    email = "${google_service_account.mgmt-sa.email}"
     scopes = ["compute-rw"]
   }
   
@@ -39,7 +39,7 @@ resource "google_compute_instance" "slurm-master" {
     type          = "ssh"
     user          = "provisioner"
     private_key   = "${file("${var.private_key_path}")}"
-    host          = "${google_compute_instance.slurm-master.network_interface.0.access_config.0.nat_ip}"
+    host          = "${google_compute_instance.mgmt.network_interface.0.access_config.0.nat_ip}"
   }
 
   provisioner "file" {

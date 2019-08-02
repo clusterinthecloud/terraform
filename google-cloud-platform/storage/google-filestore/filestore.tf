@@ -1,5 +1,5 @@
 resource "google_filestore_instance" "instance" {
-  name = "slurm-filer"
+  name = "citc-filer"
   zone = "${var.zone}"
   tier = "${var.tier}"
 

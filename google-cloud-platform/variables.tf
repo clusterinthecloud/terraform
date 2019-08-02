@@ -12,7 +12,7 @@ variable "network_ipv4_cidr"                  {default = "10.1.0.0/16"}
 variable "export_path_fs"                     {default = "shared"}
 variable "storage_size_mb"                    {default = 1024}
 
-# Slurm Cluster
+# Cluster
 variable "cluster_name_tag"                   {}
 variable "management_compute_instance_config" {
   default = {
