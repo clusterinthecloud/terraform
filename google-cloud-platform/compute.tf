@@ -58,28 +58,15 @@ ansible_branch: ${var.management_compute_instance_config["ansible_branch"]}
 EOF
   }
 
-
-# #keep
-#   provisioner "remote-exec" {
-#     when = "destroy"
-#     inline = [
-#       "echo Terminating any remaining compute nodes",
-#       "if systemctl status slurmctld >> /dev/null; then",
-#       "sudo -u slurm /usr/local/bin/stopnode \"$(sinfo --noheader --Format=nodelist:10000 | tr -d '[:space:]')\" || true",
-#       "fi",
-#       "sleep 5",
-#       "echo Node termination request completed",
-#     ]
-
-#     connection {
-#         timeout = "15m"
-#         host = "${oci_core_instance.ClusterManagement.public_ip}"
-#         user = "opc"
-#         private_key = "${file(var.private_key_path)}"
-#         agent = false
-#     }
-#   }
-
-
-
+  provisioner "remote-exec" {
+    when = "destroy"
+    inline = [
+      "echo Terminating any remaining compute nodes",
+      "if systemctl status slurmctld >> /dev/null; then",
+      "sudo -u slurm /usr/local/bin/stopnode \"$(sinfo --noheader --Format=nodelist:10000 | tr -d '[:space:]')\" || true",
+      "fi",
+      "sleep 5",
+      "echo Node termination request completed",
+    ]
+  }
 }
