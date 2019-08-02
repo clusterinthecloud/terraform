@@ -6,7 +6,7 @@ variable "gcp_zone"                           {}
 variable "credentials"                        {}
 
 # Networking
-variable "network_ipv4_cidr"                  {}
+variable "network_ipv4_cidr"                  {default = "10.1.0.0/16"}
 
 # Storage
 variable "export_path_fs"                     {default = "shared"}
