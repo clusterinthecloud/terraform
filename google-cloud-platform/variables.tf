@@ -3,6 +3,8 @@ variable "gcp_region"                         {}
 variable "gcp_project"                        {}
 variable "gcp_zone"                           {}
 
+variable "credentials"                        {}
+
 # Networking
 variable "network_ipv4_cidr"                  {}
 
