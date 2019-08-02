@@ -74,7 +74,7 @@ EOF
   }
 
   provisioner "file" {
-    destination = "/home/opc/shapes.yaml"
+    destination = "/tmp/shapes.yaml"
     source = "${path.module}/files/shapes.yaml"
 
     connection {
@@ -103,7 +103,7 @@ EOF
   }
 
   provisioner "file" {
-    destination = "/home/opc/startnode.yaml"
+    destination = "/tmp/startnode.yaml"
     content = <<EOF
 region: ${var.region}
 compartment_id: ${var.compartment_ocid}

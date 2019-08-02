@@ -47,26 +47,17 @@ resource "google_compute_instance" "slurm-master" {
     source = "${path.module}/files/shapes.yaml"
   }
 
+  #TODO use file template?
+  provisioner "file" {
+    destination = "/tmp/startnode.yaml"
+    content = <<EOF
+compartment_id: ${var.gcp_project}
+zone: ${var.gcp_zone}
+subnet: 'default'
+ansible_branch: ${var.management_compute_instance_config["ansible_branch"]}
+EOF
+  }
 
-# #keep - speak to DY about file structure
-#   provisioner "file" {
-#     destination = "/home/opc/startnode.yaml"
-#     content = <<EOF
-# region: ${var.region}
-# compartment_id: ${var.compartment_ocid}
-# vcn_id: ${oci_core_virtual_network.ClusterVCN.id}
-# ad_root: ${substr(oci_core_instance.ClusterManagement.availability_domain, 0, length(oci_core_instance.ClusterManagement.availability_domain)-1)}
-# ansible_branch: ${var.ansible_branch}
-# EOF
-
-#     connection {
-#       timeout = "15m"
-#       host = "${oci_core_instance.ClusterManagement.public_ip}"
-#       user = "opc"
-#       private_key = "${file(var.private_key_path)}"
-#       agent = false
-#     }
-#   }
 
 # #keep
 #   provisioner "remote-exec" {
