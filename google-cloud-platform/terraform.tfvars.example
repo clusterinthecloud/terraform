@@ -3,7 +3,7 @@ gcp_region                          = "europe-west4"
 gcp_project                         = "myproj-123456"
 gcp_zone                            = "europe-west4-a"
 
-credentials                         = "${file("myproj-123456-01234567890a.json")}"
+credentials                         = "myproj-123456-01234567890a.json"
 
 cluster_name_tag                    = "mycluster"
 private_key_path                    = "/home/user/.ssh/citc-google"
