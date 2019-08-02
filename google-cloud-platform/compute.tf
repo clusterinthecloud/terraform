@@ -44,7 +44,7 @@ resource "google_compute_instance" "slurm-master" {
 
   provisioner "file" {
     destination = "/tmp/shapes.yaml"
-    source = "${path.module}/../common-files/shapes.yaml"
+    source = "${path.module}/files/shapes.yaml"
   }
 
 
