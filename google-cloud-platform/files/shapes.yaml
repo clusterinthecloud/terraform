@@ -1,6 +1,6 @@
 # TODO should be able to use the API to fetch this information
 
 n1-standard-1:
-  memory: 3700
+  memory: 3500
   cores_per_socket: 1
   threads_per_core: 1
