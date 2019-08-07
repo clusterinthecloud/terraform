@@ -10,15 +10,16 @@ resource "google_compute_subnetwork" "vpc_subnetwork" {
 }
 
 # Add some firewall rules
-resource "google_compute_firewall" "slurm-nodes" {
-  name              = "slurm-nodes-to-master"
+resource "google_compute_firewall" "open-internal" {
+  name              = "open-internal"
   network           = "${google_compute_network.vpc_network.name}"
-  source_ranges     = ["${var.network_ipv4_cidr}"]
-  target_tags       = ["mgmt"]
+  source_tags       = ["mgmt", "compute"]
+  target_tags       = ["mgmt", "compute"]
   allow {
     protocol        = "tcp"
   }
 }
+
 resource "google_compute_firewall" "grafana" {
   name              = "grafana-to-mgmt"
   network           = "${google_compute_network.vpc_network.name}"
