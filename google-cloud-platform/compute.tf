@@ -53,7 +53,7 @@ resource "google_compute_instance" "mgmt" {
     content = <<EOF
 compartment_id: ${var.gcp_project}
 zone: ${var.gcp_zone}
-subnet: 'default'
+subnet: regions/${google_compute_subnetwork.vpc_subnetwork.region}/subnetworks/${google_compute_subnetwork.vpc_subnetwork.name}
 ansible_branch: ${var.management_compute_instance_config["ansible_branch"]}
 EOF
   }
