@@ -82,7 +82,7 @@ google-test: check-tf-version azure-test.pub $(CREDENTIALS)
 	-ssh -F ssh-config mgmt "echo -ne 'n1-standard-1: 1\n' > limits.yaml && finish"
 	-ssh -F ssh-config mgmt "sudo mkdir -p --mode=777 /mnt/shared/test"
 	-ssh -F ssh-config mgmt 'echo -ne "#!/bin/bash\n\nsrun hostname\n" > test.slm'
-	-ssh -F ssh-config mgmt "sbatch --chdir=/mnt/shared/test --wait test.slm"
+	-ssh -F ssh-config mgmt "sudo sbatch --chdir=/mnt/shared/test --wait test.slm"  # Run as root as it exists on all nodes
 	-ssh -F ssh-config mgmt "sacct -j 2 --format=NodeList%-100 -X --noheader | tr -d ' ' > expected"  # Get the node the job ran on
 	-sleep 5  # Make sure that the filesystem has synchronised
 	-scp -F ssh-config mgmt:expected .
