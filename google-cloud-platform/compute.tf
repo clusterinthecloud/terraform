@@ -55,8 +55,8 @@ resource "google_compute_instance" "mgmt" {
   provisioner "file" {
     destination = "/tmp/startnode.yaml"
     content = <<EOF
-compartment_id: ${var.gcp_project}
-zone: ${var.gcp_zone}
+compartment_id: ${var.project}
+zone: ${var.zone}
 subnet: regions/${google_compute_subnetwork.vpc_subnetwork.region}/subnetworks/${google_compute_subnetwork.vpc_subnetwork.name}
 ansible_branch: ${var.management_compute_instance_config["ansible_branch"]}
 EOF

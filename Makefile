@@ -60,9 +60,9 @@ oracle-test: check-tf-version azure-test.pub oci_api_key.pem
 
 google-test: check-tf-version azure-test.pub $(CREDENTIALS)
 	cp google-cloud-platform/terraform.tfvars.example $(TF_VARS)
-	sed -i -e '/gcp_region/ s/europe-west4/$(REGION)/' $(TF_VARS)
-	sed -i -e "/gcp_project/ s/myproj-123456/$(PROJECT)/" $(TF_VARS)
-	sed -i -e "/gcp_zone/ s/europe-west4-a/$(ZONE)/" $(TF_VARS)
+	sed -i -e '/region/ s/europe-west4/$(REGION)/' $(TF_VARS)
+	sed -i -e "/project/ s/myproj-123456/$(PROJECT)/" $(TF_VARS)
+	sed -i -e "/zone/ s/europe-west4-a/$(ZONE)/" $(TF_VARS)
 	sed -i -e "/credentials/ s/myproj-123456-01234567890a.json/$(CREDENTIALS)/" $(TF_VARS)
 	sed -i -e "/private_key_path/ s/\/home\/user\/.ssh\/citc-google/azure-test/" $(TF_VARS)
 	sed -i -e "/public_key_path/ s/\/home\/user\/.ssh\/citc-google/azure-test/" $(TF_VARS)

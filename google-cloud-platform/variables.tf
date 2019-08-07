@@ -1,7 +1,7 @@
 # Google Cloud Platform Information
-variable "gcp_region"                         {}
-variable "gcp_project"                        {}
-variable "gcp_zone"                           {}
+variable "region"                             {}
+variable "project"                            {}
+variable "zone"                               {}
 
 variable "credentials"                        {}
 
@@ -13,7 +13,7 @@ variable "export_path_fs"                     {default = "shared"}
 variable "storage_size_mb"                    {default = 1024}
 
 # Cluster
-variable "cluster_name_tag"                   {}
+variable "cluster_name_tag"                   {default = "citc"}
 variable "management_compute_instance_config" {
   default = {
     type            = "n1-standard-1",

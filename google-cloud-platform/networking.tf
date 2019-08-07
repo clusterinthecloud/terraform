@@ -3,6 +3,7 @@ resource "google_compute_network" "vpc_network" {
   name                          = "citc-net"
   auto_create_subnetworks       = "false"
 }
+
 resource "google_compute_subnetwork" "vpc_subnetwork" {
   name              = "citc-subnet"
   ip_cidr_range     = "${var.network_ipv4_cidr}"

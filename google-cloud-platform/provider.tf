@@ -8,7 +8,7 @@ provider "local"      {version = "1.3"}
 provider "google" {
   version = "2.10"
   credentials = "${file(var.credentials)}"
-  region  = "${var.gcp_region}"
-  zone    = "${var.gcp_zone}"
-  project = "${var.gcp_project}"
+  region  = "${var.region}"
+  zone    = "${var.zone}"
+  project = "${var.project}"
 }
