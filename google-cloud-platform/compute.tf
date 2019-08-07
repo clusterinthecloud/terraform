@@ -5,6 +5,10 @@ resource "google_compute_instance" "mgmt" {
   tags = ["mgmt"]
   metadata_startup_script = "${data.template_file.bootstrap-script.rendered}"
 
+  depends_on = [
+    "module.filestore_shared_storage",
+  ]
+
   # add an ssh key that ca be used to provisiont the instance once it's started  
   metadata = {
    ssh-keys = "provisioner:${data.local_file.ssh_public_key.content}"
