@@ -45,15 +45,9 @@ resource "google_compute_instance" "mgmt" {
     source = "${path.module}/files/shapes.yaml"
   }
 
-  #TODO use file template?
   provisioner "file" {
     destination = "/tmp/startnode.yaml"
-    content = <<EOF
-compartment_id: ${var.project}
-zone: ${var.zone}
-subnet: regions/${google_compute_subnetwork.vpc_subnetwork.region}/subnetworks/${google_compute_subnetwork.vpc_subnetwork.name}
-ansible_branch: ${var.management_compute_instance_config["ansible_branch"]}
-EOF
+    content = "${data.template_file.startnode-yaml.rendered}"
   }
 
   provisioner "file" {

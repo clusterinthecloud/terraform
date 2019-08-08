@@ -14,8 +14,12 @@ data "template_file" "bootstrap-script"{
     }
 }
 
-# data "template_file" "startnode-yaml" {
-#   template      = "${file("${path.module}/../files/startnode.yaml.tpl")}"
-#   vars {
-#   }
-# }
+data "template_file" "startnode-yaml" {
+    template      = "${file("${path.module}/files/startnode.yaml.tpl")}"
+    vars {
+        project        = "${var.project}"
+        zone           = "${var.zone}"
+        subnet         = "regions/${var.region}/subnetworks/${google_compute_subnetwork.vpc_subnetwork.name}"
+        ansible_branch = "${var.management_compute_instance_config["ansible_branch"]}"
+    }
+}
