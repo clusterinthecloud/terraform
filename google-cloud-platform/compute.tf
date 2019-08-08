@@ -26,12 +26,6 @@ resource "google_compute_instance" "mgmt" {
     access_config {}
   }
 
-  # use the service account created to run the instance. This allows granular control over what the instance can access on GCP
-  service_account {
-    email = "${google_service_account.mgmt-sa.email}"
-    scopes = ["compute-rw"]
-  }
-  
   # Ignore changes to the disk image, as if a family is specified it != the image name on the instance, and continually
   # rebuild when terraform is reapplied
   lifecycle {
@@ -60,6 +54,11 @@ zone: ${var.zone}
 subnet: regions/${google_compute_subnetwork.vpc_subnetwork.region}/subnetworks/${google_compute_subnetwork.vpc_subnetwork.name}
 ansible_branch: ${var.management_compute_instance_config["ansible_branch"]}
 EOF
+  }
+
+  provisioner "file" {
+    destination = "/tmp/mgmt-sa-credentials.json"
+    content = "${base64decode(google_service_account_key.mgmt-sa-key.private_key)}"
   }
 
   provisioner "remote-exec" {

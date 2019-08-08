@@ -13,3 +13,7 @@ resource "google_project_iam_member" "mgmt-sa-computeadmin" {
   role               = "roles/compute.instanceAdmin.v1"
   member             = "serviceAccount:${google_service_account.mgmt-sa.email}"
 }
+
+resource "google_service_account_key" "mgmt-sa-key" {
+  service_account_id = "${google_service_account.mgmt-sa.name}"
+}
