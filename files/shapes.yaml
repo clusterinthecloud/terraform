@@ -3,11 +3,11 @@
 # VMs
 
 VM.Standard1.1:
-  memory: 6900
+  memory: 6600
   cores_per_socket: 1
   threads_per_core: 2
 VM.Standard1.2:
-  memory: 13800
+  memory: 13600
   cores_per_socket: 2
   threads_per_core: 2
 VM.Standard1.4:
