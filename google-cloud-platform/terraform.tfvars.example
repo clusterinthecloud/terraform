@@ -8,6 +8,4 @@ credentials                         = "myproj-123456-01234567890a.json"
 private_key_path                    = "/home/user/.ssh/citc-google"
 public_key_path                     = "/home/user/.ssh/citc-google.pub"
 
-management_compute_instance_config = {
-    type  = "n1-standard-1",
-}
+management_shape                    = "n1-standard-1"
