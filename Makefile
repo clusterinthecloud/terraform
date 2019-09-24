@@ -6,7 +6,7 @@
 #	env REGION=europe-west4 PROJECT=myproj-123456 ZONE=europe-west4-a CREDENTIALS=myproj....json make google-test
 # Can also set ANSIBLE_BRANCH if wantedf
 
-TF_VERSION := 0.11.13
+TF_VERSION := 0.12.9
 TF_VARS := terraform.test.tfvars
 TF_STATE := terraform.test.tfstate
 
@@ -43,7 +43,7 @@ oracle-test: check-tf-version azure-test.pub oci_api_key.pem
 	./terraform apply -var-file=$(TF_VARS) -state=$(TF_STATE) -auto-approve oracle-cloud-infrastructure
 	# we need to ignore errors between here and the destroy, so make commands start with a minus
 	-echo -ne "Host mgmt\n\tIdentityFile azure-test\n\tStrictHostKeyChecking no\n\tUser opc\n\tHostname " > ssh-config
-	-terraform output -no-color -state=$(TF_STATE) ManagementPublicIP >> ssh-config
+	-./terraform output -no-color -state=$(TF_STATE) ManagementPublicIP >> ssh-config
 	-cat ssh-config
 	-mkdir --mode=700 ~/.ssh
 	-ssh -F ssh-config mgmt "while [ ! -f /mnt/shared/finalised/mgmt ] ; do sleep 2; done" ## wait for ansible
@@ -75,7 +75,7 @@ google-test: check-tf-version azure-test.pub $(CREDENTIALS)
 	./terraform apply -var-file=$(TF_VARS) -state=$(TF_STATE) -auto-approve google-cloud-platform
 
 	-echo -ne "Host mgmt\n\tIdentityFile azure-test\n\tStrictHostKeyChecking no\n\tUser provisioner\n\tHostname " > ssh-config
-	-terraform output -no-color -state=$(TF_STATE) ManagementPublicIP >> ssh-config
+	-./terraform output -no-color -state=$(TF_STATE) ManagementPublicIP >> ssh-config
 	-cat ssh-config
 	-mkdir --mode=700 ~/.ssh
 	-ssh -F ssh-config mgmt "while [ ! -f /mnt/shared/finalised/mgmt ] ; do sleep 2; done" ## wait for ansible
