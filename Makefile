@@ -2,7 +2,7 @@
 # env TENANCY_OCID=ocid1.tenancy.oc1... USER_OCID=ocid1.user.oc1... FINGERPRINT=... COMPARTMENT_OCID=ocid1.compartment.oc1... make
 # Can also set ANSIBLE_BRANCH if wanted
 
-TF_VERSION := 0.11.13
+TF_VERSION := 0.12.9
 TF_VARS := terraform.test.tfvars
 TF_STATE := terraform.test.tfstate
 
@@ -37,7 +37,7 @@ test: azure-test.pub
 	./terraform apply -var-file=$(TF_VARS) -state=$(TF_STATE) -auto-approve
 	# we need to ignore errors between here and the destroy, so make commands start with a minus
 	-echo -ne "Host mgmt\n\tIdentityFile azure-test\n\tStrictHostKeyChecking no\n\tHostname " > ssh-config
-	-terraform show -no-color $(TF_STATE) | grep 'PublicIP' | awk '{print $$3}' >> ssh-config
+	-./terraform show -no-color $(TF_STATE) | grep 'PublicIP' | awk '{print $$3}' >> ssh-config
 	-cat ssh-config
 	-mkdir --mode=700 ~/.ssh
 	-ssh -F ssh-config opc@mgmt "while [ ! -f /mnt/shared/finalised/mgmt ] ; do sleep 2; done" ## wait for ansible
