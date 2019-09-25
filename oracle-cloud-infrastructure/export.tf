@@ -9,4 +9,3 @@ resource "oci_file_storage_export" "ClusterFSExport" {
     identity_squash = "NONE"
   }
 }
-

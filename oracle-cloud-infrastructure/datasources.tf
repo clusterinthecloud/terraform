@@ -8,11 +8,10 @@ data "tls_public_key" "oci_public_key" {
 }
 
 data "template_file" "user_data" {
-  template = file(var.BootStrapFile)
-
+  template = file("${path.module}/../common-files/bootstrap.sh.tpl")
   vars = {
-    ansible_branch   = var.ansible_branch
-    compartment_ocid = var.compartment_ocid
+    ansible_branch = var.ansible_branch
+    cloud-platform = "oracle"
+    fileserver-ip  = "" # the file server is determined via a static name on OCI
   }
 }
-

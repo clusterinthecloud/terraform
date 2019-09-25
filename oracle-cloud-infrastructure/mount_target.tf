@@ -5,4 +5,3 @@ resource "oci_file_storage_mount_target" "ClusterFSMountTarget" {
   display_name        = "fileserver"
   hostname_label      = "fileserver"
 }
-

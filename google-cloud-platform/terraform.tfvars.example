@@ -1,0 +1,11 @@
+# Google Cloud Platform Information
+region                              = "europe-west4"
+zone                                = "europe-west4-a"
+project                             = "myproj-123456"
+
+management_shape                    = "n1-standard-1"
+
+credentials                         = "citc-terraform-credentials.json"
+
+private_key_path                    = "~/.ssh/citc-google"
+public_key_path                     = "~/.ssh/citc-google.pub"

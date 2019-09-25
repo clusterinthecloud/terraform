@@ -55,4 +55,3 @@ resource "oci_core_security_list" "ClusterSecurityList" {
     }
   }
 }
-

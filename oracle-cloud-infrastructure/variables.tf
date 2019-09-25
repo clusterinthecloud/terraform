@@ -49,10 +49,6 @@ variable "ManagementImageOCID" {
   }
 }
 
-variable "BootStrapFile" {
-  default = "./userdata/bootstrap"
-}
-
 variable "ExportPathFS" {
   default = "/shared"
 }
@@ -64,4 +60,3 @@ variable "ClusterNameTag" {
 variable "ansible_branch" {
   default = "3"
 }
-

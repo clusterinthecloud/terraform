@@ -72,8 +72,8 @@ EOF
   }
 
   provisioner "file" {
-    destination = "/home/opc/shapes.yaml"
-    source      = "files/shapes.yaml"
+    destination = "/tmp/shapes.yaml"
+    source      = "${path.module}/files/shapes.yaml"
 
     connection {
       timeout     = "15m"
@@ -102,7 +102,7 @@ EOF
   }
 
   provisioner "file" {
-    destination = "/home/opc/startnode.yaml"
+    destination = "/tmp/startnode.yaml"
     content = <<EOF
 region: ${var.region}
 compartment_id: ${var.compartment_ocid}
@@ -145,4 +145,3 @@ provisioner "remote-exec" {
   }
 }
 }
-
