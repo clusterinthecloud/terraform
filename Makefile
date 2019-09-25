@@ -4,7 +4,7 @@
 # For Google:
 #   Download your service account credentials JSON file and place it in this directory and run like:
 #	env REGION=europe-west4 PROJECT=myproj-123456 ZONE=europe-west4-a CREDENTIALS=myproj....json make google-test
-# Can also set ANSIBLE_BRANCH if wantedf
+# Can also set ANSIBLE_BRANCH if wanted
 
 TF_VERSION := 0.12.9
 TF_VARS := terraform.test.tfvars
@@ -26,7 +26,11 @@ azure-test.pub:
 
 test: oracle-test google-test
 
-oracle-test: check-tf-version azure-test.pub oci_api_key.pem
+validate-oracle: check-tf-version
+	./terraform init oracle-cloud-infrastructure
+	./terraform validate oracle-cloud-infrastructure
+
+oracle-test: check-tf-version azure-test.pub oci_api_key.pem validate-oracle
 	cp oracle-cloud-infrastructure/terraform.tfvars.example $(TF_VARS)
 	sed -i -e '/private_key_path/ s/\/home\/user\/.oci/./' $(TF_VARS)
 	sed -i -e "/tenancy_ocid/ s/ocid1.tenancy.oc1.../$(TENANCY_OCID)/" $(TF_VARS)
@@ -37,8 +41,6 @@ oracle-test: check-tf-version azure-test.pub oci_api_key.pem
 	sed -i -e "/FilesystemAD/ s/1/2/" $(TF_VARS)
 	if [ "${ANSIBLE_BRANCH}" ]; then echo 'ansible_branch = "'$(ANSIBLE_BRANCH)'"' >> $(TF_VARS); fi
 	cat $(TF_VARS)
-	./terraform init oracle-cloud-infrastructure
-	./terraform validate -var-file=$(TF_VARS) oracle-cloud-infrastructure
 	./terraform plan -var-file=$(TF_VARS) -state=$(TF_STATE) oracle-cloud-infrastructure
 	./terraform apply -var-file=$(TF_VARS) -state=$(TF_STATE) -auto-approve oracle-cloud-infrastructure
 	# we need to ignore errors between here and the destroy, so make commands start with a minus
@@ -58,7 +60,11 @@ oracle-test: check-tf-version azure-test.pub oci_api_key.pem
 	./terraform destroy -var-file=$(TF_VARS) -state=$(TF_STATE) -auto-approve oracle-cloud-infrastructure
 	diff -u slurm-2.out expected
 
-google-test: check-tf-version azure-test.pub $(CREDENTIALS)
+validate-google: check-tf-version
+	./terraform init google-cloud-platform
+	./terraform validate google-cloud-platform
+
+google-test: check-tf-version azure-test.pub $(CREDENTIALS) validate-google
 	cp google-cloud-platform/terraform.tfvars.example $(TF_VARS)
 	sed -i -e '/region/ s/europe-west4/$(REGION)/' $(TF_VARS)
 	sed -i -e "/project/ s/myproj-123456/$(PROJECT)/" $(TF_VARS)
@@ -69,8 +75,6 @@ google-test: check-tf-version azure-test.pub $(CREDENTIALS)
 	sed -i -e "/management_shape/ s/n1-standard-1/n1-standard-1/" $(TF_VARS)
 	if [ "${ANSIBLE_BRANCH}" ]; then echo 'ansible_branch = "'$(ANSIBLE_BRANCH)'"' >> $(TF_VARS); fi
 	cat $(TF_VARS)
-	./terraform init google-cloud-platform
-	./terraform validate -var-file=$(TF_VARS) google-cloud-platform
 	./terraform plan -var-file=$(TF_VARS) -state=$(TF_STATE) google-cloud-platform
 	./terraform apply -var-file=$(TF_VARS) -state=$(TF_STATE) -auto-approve google-cloud-platform
 
@@ -94,4 +98,4 @@ google-test: check-tf-version azure-test.pub $(CREDENTIALS)
 clean:
 	rm -f $(TF_VARS) $(TF_STATE) $(TF_STATE).backup ssh-config slurm-2.out expected terraform terraform_${TF_VERSION}_linux_amd64.zip azure-test azure-test.pub
 
-.PHONY: test oracle-test google-test clean check-tf-version
+.PHONY: test validate-oracle oracle-test validate-google google-test clean check-tf-version
