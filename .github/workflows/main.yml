@@ -9,3 +9,9 @@ jobs:
     - uses: actions/checkout@v1
     - name: Test running make
       run: make check-tf-version
+    - name: Validate Terraform files
+      run: |
+        ./terraform init oracle-cloud-infrastructure
+        ./terraform validate oracle-cloud-infrastructure
+        ./terraform init google-cloud-platform
+        ./terraform validate google-cloud-platform
