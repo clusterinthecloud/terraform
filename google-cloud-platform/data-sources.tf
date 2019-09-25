@@ -1,9 +1,9 @@
 data "local_file" "ssh_private_key" {
-  filename = var.private_key_path
+  filename = pathexpand(var.private_key_path)
 }
 
 data "local_file" "ssh_public_key" {
-  filename = var.public_key_path
+  filename = pathexpand(var.public_key_path)
 }
 
 data "template_file" "bootstrap-script" {
