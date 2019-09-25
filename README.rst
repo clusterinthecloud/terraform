@@ -1,8 +1,4 @@
-Terraform configuration for a compute cluster on Oracle Cloud
-=============================================================
+Terraform configuration for Cluster in the Cloud
+================================================
 
-Uses `terraform-provider-oci <https://github.com/oracle/terraform-provider-oci>`_.
-
-Rename ``terraform.tfvars.example`` to ``terraform.tfvars`` and fill it with your information.
-
-After a ``terraform apply`` it will output the compute and management public IPs which can be used to SSH into the machine as ``opc`` or used by Ansible to set up the cluster.
+https://cluster-in-the-cloud.readthedocs.io
