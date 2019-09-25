@@ -30,7 +30,7 @@ validate-oracle: check-tf-version
 	./terraform init oracle-cloud-infrastructure
 	./terraform validate oracle-cloud-infrastructure
 
-oracle-test: check-tf-version azure-test.pub oci_api_key.pem validate-oracle
+oracle-config: validate-oracle
 	cp oracle-cloud-infrastructure/terraform.tfvars.example $(TF_VARS)
 	sed -i -e '/private_key_path/ s/\/home\/user\/.oci/./' $(TF_VARS)
 	sed -i -e "/tenancy_ocid/ s/ocid1.tenancy.oc1.../$(TENANCY_OCID)/" $(TF_VARS)
@@ -41,6 +41,8 @@ oracle-test: check-tf-version azure-test.pub oci_api_key.pem validate-oracle
 	sed -i -e "/FilesystemAD/ s/1/2/" $(TF_VARS)
 	if [ "${ANSIBLE_BRANCH}" ]; then echo 'ansible_branch = "'$(ANSIBLE_BRANCH)'"' >> $(TF_VARS); fi
 	cat $(TF_VARS)
+
+oracle-test: check-tf-version azure-test.pub oci_api_key.pem oracle-config
 	./terraform plan -var-file=$(TF_VARS) -state=$(TF_STATE) oracle-cloud-infrastructure
 	./terraform apply -var-file=$(TF_VARS) -state=$(TF_STATE) -auto-approve oracle-cloud-infrastructure
 	# we need to ignore errors between here and the destroy, so make commands start with a minus
@@ -64,7 +66,7 @@ validate-google: check-tf-version
 	./terraform init google-cloud-platform
 	./terraform validate google-cloud-platform
 
-google-test: check-tf-version azure-test.pub $(CREDENTIALS) validate-google
+google-config: validate-google
 	cp google-cloud-platform/terraform.tfvars.example $(TF_VARS)
 	sed -i -e '/region/ s/europe-west4/$(REGION)/' $(TF_VARS)
 	sed -i -e "/project/ s/myproj-123456/$(PROJECT)/" $(TF_VARS)
@@ -75,6 +77,8 @@ google-test: check-tf-version azure-test.pub $(CREDENTIALS) validate-google
 	sed -i -e "/management_shape/ s/n1-standard-1/n1-standard-1/" $(TF_VARS)
 	if [ "${ANSIBLE_BRANCH}" ]; then echo 'ansible_branch = "'$(ANSIBLE_BRANCH)'"' >> $(TF_VARS); fi
 	cat $(TF_VARS)
+
+google-test: check-tf-version azure-test.pub $(CREDENTIALS) google-config
 	./terraform plan -var-file=$(TF_VARS) -state=$(TF_STATE) google-cloud-platform
 	./terraform apply -var-file=$(TF_VARS) -state=$(TF_STATE) -auto-approve google-cloud-platform
 
@@ -98,4 +102,4 @@ google-test: check-tf-version azure-test.pub $(CREDENTIALS) validate-google
 clean:
 	rm -f $(TF_VARS) $(TF_STATE) $(TF_STATE).backup ssh-config slurm-2.out expected terraform terraform_${TF_VERSION}_linux_amd64.zip azure-test azure-test.pub
 
-.PHONY: test validate-oracle oracle-test validate-google google-test clean check-tf-version
+.PHONY: test validate-oracle oracle-config oracle-test validate-google google-config google-test clean check-tf-version
