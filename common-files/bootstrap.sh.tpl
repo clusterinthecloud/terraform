@@ -2,8 +2,6 @@
 
 date
 
-echo milliams
-
 yum install -y ansible git
 cat > /root/hosts <<EOF
 [management]
