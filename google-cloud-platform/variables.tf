@@ -39,7 +39,7 @@ variable "management_image" {
 }
 
 variable "ansible_branch" {
-  default = "3"
+  default = "4"
 }
 
 variable "private_key_path" {
