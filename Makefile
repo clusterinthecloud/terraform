@@ -57,6 +57,7 @@ oracle-test: check-tf-version azure-test.pub oci_api_key.pem oracle-config
 	-ssh -F ssh-config mgmt "sbatch --chdir=/mnt/shared/test --wait test.slm"
 	-ssh -F ssh-config mgmt "sacct -j 2 --format=NodeList%-100 -X --noheader | tr -d ' ' > expected"  # Get the node the job ran on
 	-sleep 5  # Make sure that the filesystem has synchronised
+	-rm expected slurm-2.out
 	-scp -F ssh-config mgmt:expected .
 	-scp -F ssh-config mgmt:/mnt/shared/test/slurm-2.out .
 	./terraform destroy -var-file=$(TF_VARS) -state=$(TF_STATE) -auto-approve oracle-cloud-infrastructure
@@ -93,6 +94,7 @@ google-test: check-tf-version azure-test.pub $(CREDENTIALS) google-config
 	-ssh -F ssh-config mgmt "sudo sbatch --chdir=/mnt/shared/test --wait test.slm"  # Run as root as it exists on all nodes
 	-ssh -F ssh-config mgmt "sacct -j 2 --format=NodeList%-100 -X --noheader | tr -d ' ' > expected"  # Get the node the job ran on
 	-sleep 5  # Make sure that the filesystem has synchronised
+	-rm expected slurm-2.out
 	-scp -F ssh-config mgmt:expected .
 	-scp -F ssh-config mgmt:/mnt/shared/test/slurm-2.out .
 
