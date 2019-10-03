@@ -11,13 +11,23 @@ resource "google_compute_subnetwork" "vpc_subnetwork" {
 }
 
 # Add some firewall rules
-resource "google_compute_firewall" "open-internal" {
-  name        = "open-internal"
+resource "google_compute_firewall" "open-internal-tcp" {
+  name        = "open-internal-tcp"
   network     = google_compute_network.vpc_network.name
   source_tags = ["mgmt", "compute"]
   target_tags = ["mgmt", "compute"]
   allow {
     protocol = "tcp"
+  }
+}
+
+resource "google_compute_firewall" "open-internal-udp" {
+  name        = "open-internal-udp"
+  network     = google_compute_network.vpc_network.name
+  source_tags = ["mgmt", "compute"]
+  target_tags = ["mgmt", "compute"]
+  allow {
+    protocol = "udp"
   }
 }
 
