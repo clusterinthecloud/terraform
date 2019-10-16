@@ -9,7 +9,8 @@ resource "google_compute_instance" "mgmt" {
 
   # add an ssh key that can be used to provision the instance once it's started
   metadata = {
-    ssh-keys = "provisioner:${data.local_file.ssh_public_key.content}"
+    ssh-keys = "provisioner:${data.local_file.ssh_public_key.content}",
+    enable-oslogin = "FALSE",
   }
 
   boot_disk {
