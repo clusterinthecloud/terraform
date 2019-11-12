@@ -3,8 +3,23 @@ variable "region" {
   default = "eu-west-1"
 }
 
+variable "efs_performance_mode" {
+  default = "generalPurpose"
+}
+
+variable "efs_encrypted" {
+  default = "false"
+}
+
+variable "management_shape" {
+  default = "t3.micro"
+}
+
 variable "profile" {
   default = "default"
+}
+
+variable "public_key_path" {
 }
 
 variable "ansible_branch" {
