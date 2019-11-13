@@ -2,6 +2,11 @@
 
 date
 
+if [[ ${cloud-platform} == aws ]]
+then
+  amazon-linux-extras install -y ansible2
+fi
+
 yum install -y ansible git
 cat > /root/hosts <<EOF
 [management]

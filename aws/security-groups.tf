@@ -60,3 +60,27 @@ resource "aws_security_group" "compute" {
   }
 }
 
+resource "aws_security_group" "storage" {
+  name        = "citc-storage-${var.ClusterNameTag}"
+  description = "Storage system"
+  vpc_id      = "${aws_vpc.vpc_network.id}"
+
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["10.0.0.0/16"]
+  }
+
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "citc-storage-${var.ClusterNameTag}"
+  }
+}
+

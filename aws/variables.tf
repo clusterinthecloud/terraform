@@ -1,4 +1,4 @@
-# Google Cloud Platform Information
+# AWS Information
 variable "region" {
   default = "eu-west-1"
 }
@@ -20,6 +20,9 @@ variable "profile" {
 }
 
 variable "public_key_path" {
+}
+
+variable "private_key_path" {
 }
 
 variable "ansible_branch" {
