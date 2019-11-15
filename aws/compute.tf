@@ -20,6 +20,7 @@ resource "aws_instance" "mgmt" {
   vpc_security_group_ids = [aws_security_group.mgmt.id]
   subnet_id = aws_subnet.vpc_subnetwork.id
   associate_public_ip_address = "true"
+  iam_instance_profile = aws_iam_instance_profile.describe_tags.id
 
   user_data = data.template_file.bootstrap-script.rendered
   key_name = aws_key_pair.ec2-user.key_name
@@ -77,4 +78,3 @@ resource "aws_route53_record" "mgmt" {
   ttl     = "300"
   records = [aws_instance.mgmt.private_ip]
 }
-
