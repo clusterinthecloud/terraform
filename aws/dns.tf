@@ -1,5 +1,5 @@
 resource "aws_route53_zone" "cluster" {
-  name = "${var.ClusterNameTag}.citc.local"
+  name = "${var.ClusterNameTag}.citc.local."
 
   vpc {
     vpc_id = "${aws_vpc.vpc_network.id}"
