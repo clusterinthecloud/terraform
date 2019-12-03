@@ -3,6 +3,7 @@ data "template_file" "bootstrap-script" {
   vars = {
     ansible_branch = var.ansible_branch
     cloud-platform = "aws"
+    dns_zone = aws_route53_zone.cluster.name
     fileserver-ip  = aws_efs_mount_target.shared.dns_name
   }
 }
