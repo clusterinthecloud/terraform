@@ -12,7 +12,7 @@ variable "efs_encrypted" {
 }
 
 variable "management_shape" {
-  default = "t3.micro"
+  default = "t3a.medium"
 }
 
 variable "profile" {
