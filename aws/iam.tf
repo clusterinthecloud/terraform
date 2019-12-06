@@ -1,10 +1,10 @@
 resource "aws_iam_instance_profile" "describe_tags" {
-  name = "describe_tags"
+  name = "describe_tags-${local.cluster_id}"
   role = aws_iam_role.describe_tags.name
 }
 
 resource "aws_iam_role" "describe_tags" {
-  name = "describe_tags"
+  name = "describe_tags-${local.cluster_id}"
   path = "/"
 
   assume_role_policy = <<EOF
@@ -22,10 +22,15 @@ resource "aws_iam_role" "describe_tags" {
   ]
 }
 EOF
+
+  tags = {
+    Name = "citc-describe_tags-${local.cluster_id}"
+    cluster = local.cluster_id
+  }
 }
 
 resource "aws_iam_role_policy" "describe_tags" {
-  name = "describe_tags"
+  name = "describe_tags-${local.cluster_id}"
   role = aws_iam_role.describe_tags.id
 
   policy = <<EOF

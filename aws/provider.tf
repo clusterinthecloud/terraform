@@ -16,6 +16,10 @@ provider "local" {
   version = "1.3"
 }
 
+provider "random" {
+  version = "~> 2.2"
+}
+
 provider "aws" {
   version     = "2.16.0"
   profile     = var.profile  # refer to ~/.aws/credentials

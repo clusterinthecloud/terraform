@@ -3,23 +3,26 @@ resource "aws_vpc" "vpc_network" {
   cidr_block = "10.0.0.0/16"
   enable_dns_hostnames = "true"
   tags = {
-    Name = "citc-net-${var.ClusterNameTag}"
+    Name = "citc-net-${local.cluster_id}"
+    cluster = local.cluster_id
   }
 }
 
 resource "aws_subnet" "vpc_subnetwork" {
-  vpc_id     = "${aws_vpc.vpc_network.id}"
+  vpc_id     = aws_vpc.vpc_network.id
   cidr_block = "10.0.1.0/24"
   tags = {
-    Name = "citc-subnet-${var.ClusterNameTag}"
+    Name = "citc-subnet-${local.cluster_id}"
+    cluster = local.cluster_id
   }
 }
 
 resource "aws_internet_gateway" "gw" {
-  vpc_id = "${aws_vpc.vpc_network.id}"
+  vpc_id = aws_vpc.vpc_network.id
 
   tags = {
-    Name = "citc-gw-${var.ClusterNameTag}"
+    Name = "citc-gw-${local.cluster_id}"
+    cluster = local.cluster_id
   }
 }
 

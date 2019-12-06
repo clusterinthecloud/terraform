@@ -17,6 +17,7 @@ data "template_file" "startnode-yaml" {
     compute_security_group = aws_security_group.mgmt.id
     dns_zone = aws_route53_zone.cluster.name
     dns_zone_id = aws_route53_zone.cluster.zone_id
+    cluster_id: local.cluster_id
   }
 }
 

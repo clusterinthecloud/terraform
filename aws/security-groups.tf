@@ -1,7 +1,7 @@
 resource "aws_security_group" "mgmt" {
-  name        = "citc-mgmt-${var.ClusterNameTag}"
+  name        = "citc-mgmt-${local.cluster_id}"
   description = "Management node"
-  vpc_id      = "${aws_vpc.vpc_network.id}"
+  vpc_id      = aws_vpc.vpc_network.id
 
   ingress {
     from_port   = 22
@@ -32,14 +32,15 @@ resource "aws_security_group" "mgmt" {
   }
 
   tags = {
-    Name = "citc-mgmt-${var.ClusterNameTag}"
+    Name = "citc-mgmt-${local.cluster_id}"
+    cluster = local.cluster_id
   }
 }
 
 resource "aws_security_group" "compute" {
-  name        = "citc-compute-${var.ClusterNameTag}"
+  name        = "citc-compute-${local.cluster_id}"
   description = "Compute node"
-  vpc_id      = "${aws_vpc.vpc_network.id}"
+  vpc_id      = aws_vpc.vpc_network.id
 
   ingress {
     from_port   = 0
@@ -56,14 +57,15 @@ resource "aws_security_group" "compute" {
   }
 
   tags = {
-    Name = "citc-compute-${var.ClusterNameTag}"
+    Name = "citc-compute-${local.cluster_id}"
+    cluster = local.cluster_id
   }
 }
 
 resource "aws_security_group" "storage" {
-  name        = "citc-storage-${var.ClusterNameTag}"
+  name        = "citc-storage-${local.cluster_id}"
   description = "Storage system"
-  vpc_id      = "${aws_vpc.vpc_network.id}"
+  vpc_id      = aws_vpc.vpc_network.id
 
   ingress {
     from_port   = 0
@@ -80,7 +82,8 @@ resource "aws_security_group" "storage" {
   }
 
   tags = {
-    Name = "citc-storage-${var.ClusterNameTag}"
+    Name = "citc-storage-${local.cluster_id}"
+    cluster = local.cluster_id
   }
 }
 

@@ -3,7 +3,8 @@ resource "aws_efs_file_system" "shared" {
   encrypted = var.efs_encrypted
 
   tags = {
-    Name = "citc-shared-${var.ClusterNameTag}"
+    Name = "citc-shared-${local.cluster_id}"
+    cluster = local.cluster_id
   }
 }
 

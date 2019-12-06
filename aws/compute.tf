@@ -62,12 +62,13 @@ resource "aws_instance" "mgmt" {
 #  }
 
   tags = {
-    Name = "mgmt"
+    Name = "mgmt-${local.cluster_id}"
+    cluster = local.cluster_id
   }
 }
 
 resource "aws_key_pair" "ec2-user" {
-  key_name   = "ec2-user"
+  key_name   = "ec2-user-${local.cluster_id}"
   public_key = data.local_file.ssh_public_key.content
 }
 
