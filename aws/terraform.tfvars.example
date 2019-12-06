@@ -1,0 +1,2 @@
+private_key_path                    = "~/.ssh/aws-key"
+public_key_path                     = "~/.ssh/aws-key.pub"

@@ -22,7 +22,7 @@ def ssh_key() -> str:
 
 @pytest.fixture(scope="module")
 def terraform() -> str:
-    terraform_version = "0.12.9"
+    terraform_version = "0.12.17"
     if not Path("terraform").exists():
         subprocess.run(["wget", f"--no-verbose https://releases.hashicorp.com/terraform/{terraform_version}/terraform_{terraform_version}_linux_amd64.zip"], check=True)
         subprocess.run(["unzip", "-u", f"terraform_{terraform_version}_linux_amd64.zip"], check=True)
@@ -75,6 +75,22 @@ def google_config_file(ssh_key) -> str:
     return config_filename
 
 
+def aws_config_file(ssh_key) -> str:
+    config_filename = "terraform.aws.tfvars"
+    with open("aws/terraform.tfvars.example") as f:
+        config = f.read()
+
+    config = config.replace("~/.ssh/aws-key", ssh_key)
+    if "ANSIBLE_BRANCH" in os.environ:
+        config += f'\nansible_branch = "{os.environ["ANSIBLE_BRANCH"]}"'
+
+    config += "\n"
+    with open(config_filename, "w") as f:
+        f.write(config)
+
+    return config_filename
+
+
 def create_cluster(terraform: str, provider: str, tf_vars: str, ssh_username: str, limits: str, ssh_key: str):
     tf_state = f"terraform.{provider}.tfstate"
     subprocess.run([terraform, "init", provider], check=True)
@@ -98,7 +114,7 @@ def create_cluster(terraform: str, provider: str, tf_vars: str, ssh_username: st
         yield c
 
 
-@pytest.fixture(scope="module", params=["oracle", "google"])
+@pytest.fixture(scope="module", params=["oracle", "google", "aws"])
 def cluster(request, ssh_key, terraform):
     if request.param == "oracle":
         yield from create_cluster(
@@ -116,6 +132,15 @@ def cluster(request, ssh_key, terraform):
             tf_vars=google_config_file(ssh_key),
             ssh_username="provisioner",
             limits="n1-standard-1: 1\n",
+            ssh_key=ssh_key,
+        )
+    elif request.param == "aws":
+        yield from create_cluster(
+            terraform,
+            provider="aws",
+            tf_vars=aws_config_file(ssh_key),
+            ssh_username="ec2-user",
+            limits="t3.micro: 1\n",
             ssh_key=ssh_key,
         )
 
@@ -149,6 +174,7 @@ def read_file(connection: Connection, file: str) -> str:
 @pytest.mark.parametrize("provider", [
     "oracle-cloud-infrastructure",
     "google-cloud-platform",
+    "aws",
 ])
 def test_validate(terraform, provider):
     subprocess.run([terraform, "init", provider], check=True)
