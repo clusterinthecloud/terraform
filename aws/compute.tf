@@ -25,7 +25,7 @@ resource "aws_instance" "mgmt" {
   user_data = data.template_file.bootstrap-script.rendered
   key_name = aws_key_pair.ec2-user.key_name
 
-  depends_on = [aws_efs_mount_target.shared, aws_key_pair.ec2-user, aws_route53_record.shared]
+  depends_on = [aws_efs_mount_target.shared, aws_key_pair.ec2-user, aws_route53_record.shared, aws_internet_gateway.gw]
 
   connection {
     type        = "ssh"
