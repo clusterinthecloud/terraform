@@ -45,7 +45,7 @@ resource "aws_instance" "mgmt" {
   }
 
   provisioner "file" {
-   destination = "/tmp/aws-credentials.csv"
+    destination = "/tmp/aws-credentials.csv"
     source      = "/home/matt/.aws/credentials"
   }
 
