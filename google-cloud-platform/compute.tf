@@ -34,7 +34,7 @@ resource "google_compute_instance" "mgmt" {
   # ssh connection information for provisioning
   connection {
     type        = "ssh"
-    user        = "ec2-user"
+    user        = "provisioner"
     private_key = data.local_file.ssh_private_key.content
     host        = google_compute_instance.mgmt.network_interface[0].access_config[0].nat_ip
   }
