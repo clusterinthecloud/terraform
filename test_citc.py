@@ -182,6 +182,10 @@ def test_validate(terraform, provider):
     pass
 
 
+def test_login(cluster):
+    cluster.run("sleep 1", timeout=5, in_stream=False)
+
+
 def test_job(cluster):
     job_id = submit_job(cluster, """
     #!/bin/bash

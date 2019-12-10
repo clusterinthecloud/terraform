@@ -25,7 +25,7 @@ resource "aws_instance" "mgmt" {
   user_data = data.template_file.bootstrap-script.rendered
   key_name = aws_key_pair.ec2-user.key_name
 
-  depends_on = [aws_efs_mount_target.shared, aws_key_pair.ec2-user, aws_route53_record.shared, aws_internet_gateway.gw]
+  depends_on = [aws_efs_mount_target.shared, aws_key_pair.ec2-user, aws_route53_record.shared, aws_route.internet_route]
 
   connection {
     type        = "ssh"
@@ -49,17 +49,17 @@ resource "aws_instance" "mgmt" {
     source      = "/home/matt/.aws/credentials"
   }
 
-#  provisioner "remote-exec" {
-#    when = destroy
-#    inline = [
-#      "echo Terminating any remaining compute nodes",
-#      "if systemctl status slurmctld >> /dev/null; then",
-#      "sudo -u slurm /usr/local/bin/stopnode \"$(sinfo --noheader --Format=nodelist:10000 | tr -d '[:space:]')\" || true",
-#      "fi",
-#      "sleep 5",
-#      "echo Node termination request completed",
-#    ]
-#  }
+  provisioner "remote-exec" {
+    when = destroy
+    inline = [
+      "echo Terminating any remaining compute nodes",
+      "if systemctl status slurmctld >> /dev/null; then",
+      "sudo -u slurm /usr/local/bin/stopnode \"$(sinfo --noheader --Format=nodelist:10000 | tr -d '[:space:]')\" || true",
+      "fi",
+      "sleep 5",
+      "echo Node termination request completed",
+    ]
+  }
 
   tags = {
     Name = "mgmt-${local.cluster_id}"

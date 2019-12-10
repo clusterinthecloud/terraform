@@ -2,12 +2,7 @@
 
 date
 
-if [[ ${cloud-platform} == aws ]]
-then
-  amazon-linux-extras install -y ansible2
-  amazon-linux-extras install -y epel
-  hostnamectl set-hostname mgmt.${dns_zone}
-fi
+${custom_block}
 
 yum install -y ansible git
 cat > /root/hosts <<EOF
