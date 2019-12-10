@@ -1,21 +1,27 @@
-data "aws_ami" "amazonlinux2" {
+data "aws_ami" "centos7" {
+  # See http://cavaliercoder.com/blog/finding-the-latest-centos-ami.html
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["amzn2-ami-hvm-2.0.*x86_64*"]
+    values = ["CentOS Linux 7 x86_64 HVM EBS *"]
   }
 
   filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
+    name = "architecture"
+    values = ["x86_64"]
   }
 
-  owners = ["amazon"]
+  filter {
+    name = "root-device-type"
+    values = ["ebs"]
+  }
+
+  owners = ["679593333241"]
 }
 
 resource "aws_instance" "mgmt" {
-  ami           = data.aws_ami.amazonlinux2.id
+  ami           = data.aws_ami.centos7.id
   instance_type = var.management_shape
   vpc_security_group_ids = [aws_security_group.mgmt.id]
   subnet_id = aws_subnet.vpc_subnetwork.id
@@ -29,7 +35,7 @@ resource "aws_instance" "mgmt" {
 
   connection {
     type        = "ssh"
-    user        = "ec2-user"
+    user        = "centos"
     private_key = data.local_file.ssh_private_key.content
     host        = aws_instance.mgmt.public_ip
   }

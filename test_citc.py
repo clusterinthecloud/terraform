@@ -139,7 +139,7 @@ def cluster(request, ssh_key, terraform):
             terraform,
             provider="aws",
             tf_vars=aws_config_file(ssh_key),
-            ssh_username="ec2-user",
+            ssh_username="centos",
             limits="t3.micro: 1\n",
             ssh_key=ssh_key,
         )
