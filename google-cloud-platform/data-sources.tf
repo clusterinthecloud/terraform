@@ -22,5 +22,6 @@ data "template_file" "startnode-yaml" {
     zone           = var.zone
     subnet         = "regions/${var.region}/subnetworks/${google_compute_subnetwork.vpc_subnetwork.name}"
     ansible_branch = var.ansible_branch
+    custom_block = ""
   }
 }

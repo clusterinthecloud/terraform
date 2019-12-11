@@ -2,3 +2,12 @@
 .terraform/
 terraform.tfstate
 terraform.tfstate.backup
+.idea
+.pytest_cache
+.mypy_cache
+__pycache__
+terraform.*.tfstate
+terraform.*.tfstate.backup
+terraform.*.tfvars
+venv
+test_ssh_key*

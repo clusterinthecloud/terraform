@@ -13,5 +13,6 @@ data "template_file" "user_data" {
     ansible_branch = var.ansible_branch
     cloud-platform = "oracle"
     fileserver-ip  = "" # the file server is determined via a static name on OCI
+    custom_block = ""
   }
 }
