@@ -21,7 +21,7 @@ resource "aws_security_group" "mgmt" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["10.0.0.0/16"]
+    cidr_blocks = [aws_vpc.vpc_network.cidr_block]
   }
 
   egress {
@@ -46,7 +46,7 @@ resource "aws_security_group" "compute" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["10.0.0.0/16"]
+    cidr_blocks = [aws_vpc.vpc_network.cidr_block]
   }
 
   egress {
@@ -71,7 +71,7 @@ resource "aws_security_group" "storage" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["10.0.0.0/16"]
+    cidr_blocks = [aws_vpc.vpc_network.cidr_block]
   }
 
   egress {
