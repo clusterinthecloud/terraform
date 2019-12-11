@@ -32,3 +32,7 @@ variable "ansible_branch" {
 variable "ClusterNameTag" {
   default = "cluster"
 }
+
+variable "aws_shared_credentials" {
+  default = "~/.aws/credentials"
+}

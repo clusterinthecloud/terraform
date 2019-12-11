@@ -52,7 +52,7 @@ resource "aws_instance" "mgmt" {
 
   provisioner "file" {
     destination = "/tmp/aws-credentials.csv"
-    source      = "/home/matt/.aws/credentials"
+    source      = pathexpand(var.aws_shared_credentials)
   }
 
   provisioner "remote-exec" {
