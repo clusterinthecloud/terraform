@@ -1,5 +1,3 @@
-# Pin the terraform and provider versions to avoid issues if the 
-
 terraform {
   required_version = "~> 0.12"
 }
