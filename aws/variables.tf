@@ -8,7 +8,7 @@ variable "efs_performance_mode" {
 }
 
 variable "efs_encrypted" {
-  default = "false"
+  default = false
 }
 
 variable "management_shape" {
