@@ -1,7 +1,7 @@
 # Create the network to host Slurm
 resource "aws_vpc" "vpc_network" {
   cidr_block = "10.0.0.0/16"
-  enable_dns_hostnames = "true"
+  enable_dns_hostnames = true
   tags = {
     Name = "citc-net-${local.cluster_id}"
     cluster = local.cluster_id

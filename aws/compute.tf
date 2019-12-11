@@ -25,7 +25,7 @@ resource "aws_instance" "mgmt" {
   instance_type = var.management_shape
   vpc_security_group_ids = [aws_security_group.mgmt.id]
   subnet_id = aws_subnet.vpc_subnetwork.id
-  associate_public_ip_address = "true"
+  associate_public_ip_address = true
   iam_instance_profile = aws_iam_instance_profile.describe_tags.id
 
   user_data = data.template_file.bootstrap-script.rendered
