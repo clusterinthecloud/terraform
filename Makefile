@@ -27,8 +27,8 @@ azure-test.pub:
 test: oracle-test google-test
 
 validate-oracle: check-tf-version
-	./terraform init oracle-cloud-infrastructure
-	./terraform validate oracle-cloud-infrastructure
+	./terraform init oracle
+	./terraform validate oracle
 
 oracle-config: validate-oracle
 
@@ -37,8 +37,8 @@ oracle-test: check-tf-version azure-test.pub oci_api_key.pem oracle-config
 
 
 validate-google: check-tf-version
-	./terraform init google-cloud-platform
-	./terraform validate google-cloud-platform
+	./terraform init google
+	./terraform validate google
 
 google-config: validate-google
 

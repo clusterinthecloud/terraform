@@ -31,7 +31,7 @@ def terraform() -> str:
 
 def oracle_config_file(ssh_key) -> str:
     config_filename = "terraform.oracle.tfvars"
-    with open("oracle-cloud-infrastructure/terraform.tfvars.example") as f:
+    with open("oracle/terraform.tfvars.example") as f:
         config = f.read()
 
     config = config.replace("/home/user/.oci", ".")
@@ -54,7 +54,7 @@ def oracle_config_file(ssh_key) -> str:
 
 def google_config_file(ssh_key) -> str:
     config_filename = "terraform.google.tfvars"
-    with open("google-cloud-platform/terraform.tfvars.example") as f:
+    with open("google/terraform.tfvars.example") as f:
         config = f.read()
 
     config = config.replace("europe-west4", os.environ["REGION"])
@@ -119,7 +119,7 @@ def cluster(request, ssh_key, terraform):
     if request.param == "oracle":
         yield from create_cluster(
             terraform,
-            provider="oracle-cloud-infrastructure",
+            provider="oracle",
             tf_vars=oracle_config_file(ssh_key),
             ssh_username="opc",
             limits="VM.Standard2.1:\n  1: 1\n  2: 1\n  3: 1\n",
@@ -128,7 +128,7 @@ def cluster(request, ssh_key, terraform):
     elif request.param == "google":
         yield from create_cluster(
             terraform,
-            provider="google-cloud-platform",
+            provider="google",
             tf_vars=google_config_file(ssh_key),
             ssh_username="provisioner",
             limits="n1-standard-1: 1\n",
@@ -172,8 +172,8 @@ def read_file(connection: Connection, file: str) -> str:
 
 
 @pytest.mark.parametrize("provider", [
-    "oracle-cloud-infrastructure",
-    "google-cloud-platform",
+    "oracle",
+    "google",
     "aws",
 ])
 def test_validate(terraform, provider):
