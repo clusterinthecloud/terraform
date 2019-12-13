@@ -1,17 +1,17 @@
-from contextlib import contextmanager
-import io
 import os
-from pathlib import Path
 import re
+import stat
 import subprocess
 import textwrap
+from contextlib import contextmanager
 from io import BytesIO
-from zipfile import ZipFile
+from pathlib import Path
 from urllib.request import urlopen
+from zipfile import ZipFile
 
-from fabric import Connection
 import paramiko
 import pytest
+from fabric import Connection
 
 
 @pytest.fixture(scope="module")
