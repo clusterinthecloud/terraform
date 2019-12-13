@@ -29,11 +29,27 @@ def terraform() -> str:
     return "./terraform"
 
 
-def oracle_config_file(ssh_key) -> str:
-    config_filename = "terraform.oracle.tfvars"
-    with open("oracle/terraform.tfvars.example") as f:
+def config_file(provider, ssh_key) -> str:
+    config_filename = f"terraform.{provider}.tfvars"
+    with open(f"{provider}/terraform.tfvars.example") as f:
         config = f.read()
 
+    {
+        "oracle": oracle_config_file,
+        "google": google_config_file,
+        "aws": aws_config_file,
+    }[provider](config, ssh_key)
+
+    if "ANSIBLE_BRANCH" in os.environ:
+        config = config + f'\nansible_branch = "{os.environ["ANSIBLE_BRANCH"]}"'
+
+    with open(config_filename, "w") as f:
+        f.write(config)
+
+    return config_filename
+
+
+def oracle_config_file(config, ssh_key) -> str:
     config = config.replace("/home/user/.oci", ".")
     config = config.replace("ocid1.tenancy.oc1...", os.environ["TENANCY_OCID"])
     config = config.replace("ocid1.user.oc1...", os.environ["USER_OCID"])
@@ -43,20 +59,11 @@ def oracle_config_file(ssh_key) -> str:
         pub_key_text = pub_key.read().strip()
     config = config.replace("ssh_public_key = <<EOF", "ssh_public_key = <<EOF\n" + pub_key_text)
     config = config.replace('FilesystemAD = "1"', 'FilesystemAD = "2"')
-    if "ANSIBLE_BRANCH" in os.environ:
-        config = config + f'\nansible_branch = "{os.environ["ANSIBLE_BRANCH"]}"'
 
-    with open(config_filename, "w") as f:
-        f.write(config)
-
-    return config_filename
+    return config
 
 
-def google_config_file(ssh_key) -> str:
-    config_filename = "terraform.google.tfvars"
-    with open("google/terraform.tfvars.example") as f:
-        config = f.read()
-
+def google_config_file(config, ssh_key) -> str:
     config = config.replace("europe-west4", os.environ["REGION"])
     config = config.replace("myproj-123456", os.environ["PROJECT"])
     config = config.replace("europe-west4-a", os.environ["ZONE"])
@@ -66,29 +73,13 @@ def google_config_file(ssh_key) -> str:
     with open(f"{ssh_key}.pub") as pub_key:
         pub_key_text = pub_key.read().strip()
     config = config.replace("ssh_public_key = <<EOF", "ssh_public_key = <<EOF\n" + pub_key_text)
-    if "ANSIBLE_BRANCH" in os.environ:
-        config = config + f'\nansible_branch = "{os.environ["ANSIBLE_BRANCH"]}"'
 
-    with open(config_filename, "w") as f:
-        f.write(config)
-
-    return config_filename
+    return config
 
 
-def aws_config_file(ssh_key) -> str:
-    config_filename = "terraform.aws.tfvars"
-    with open("aws/terraform.tfvars.example") as f:
-        config = f.read()
-
+def aws_config_file(config, ssh_key) -> str:
     config = config.replace("~/.ssh/aws-key", ssh_key)
-    if "ANSIBLE_BRANCH" in os.environ:
-        config += f'\nansible_branch = "{os.environ["ANSIBLE_BRANCH"]}"'
-
-    config += "\n"
-    with open(config_filename, "w") as f:
-        f.write(config)
-
-    return config_filename
+    return config
 
 
 def create_cluster(terraform: str, provider: str, tf_vars: str, ssh_username: str, limits: str, ssh_key: str):
@@ -116,11 +107,12 @@ def create_cluster(terraform: str, provider: str, tf_vars: str, ssh_username: st
 
 @pytest.fixture(scope="module", params=["oracle", "google", "aws"])
 def cluster(request, ssh_key, terraform):
+    tfvars = config_file(request.param, ssh_key)
     if request.param == "oracle":
         yield from create_cluster(
             terraform,
             provider="oracle",
-            tf_vars=oracle_config_file(ssh_key),
+            tf_vars=tfvars,
             ssh_username="opc",
             limits="VM.Standard2.1:\n  1: 1\n  2: 1\n  3: 1\n",
             ssh_key=ssh_key,
@@ -129,7 +121,7 @@ def cluster(request, ssh_key, terraform):
         yield from create_cluster(
             terraform,
             provider="google",
-            tf_vars=google_config_file(ssh_key),
+            tf_vars=tfvars,
             ssh_username="provisioner",
             limits="n1-standard-1: 1\n",
             ssh_key=ssh_key,
@@ -138,7 +130,7 @@ def cluster(request, ssh_key, terraform):
         yield from create_cluster(
             terraform,
             provider="aws",
-            tf_vars=aws_config_file(ssh_key),
+            tf_vars=tfvars,
             ssh_username="centos",
             limits="t3.micro: 1\n",
             ssh_key=ssh_key,
