@@ -18,8 +18,7 @@ import pytest
 def ssh_key() -> str:
     key_filename = "test_ssh_key"
     if not Path(key_filename).exists():
-        # We must set ``-m PEM`` here until https://github.com/paramiko/paramiko/pull/1343 is merged
-        subprocess.run(["ssh-keygen", "-N", "", "-b", "4096", "-t", "rsa", "-m", "PEM", "-f", key_filename], check=True)
+        subprocess.run(["ssh-keygen", "-N", "", "-b", "4096", "-t", "rsa", "-f", key_filename], check=True)
     return key_filename
 
 
@@ -100,9 +99,9 @@ def create_cluster(terraform: str, provider: str, tf_vars: str, ssh_username: st
             print(terraform_output.stderr.decode())
             raise
         pkey = paramiko.RSAKey.from_private_key_file(ssh_key)
-        c = Connection(mgmt_ip, user=ssh_username, connect_kwargs={"pkey": pkey, "look_for_keys": False, "allow_agent": False})
+        c = Connection(mgmt_ip, user=ssh_username, connect_kwargs={"pkey": pkey})
         c.run("while [[ ! -f /mnt/shared/finalised/mgmt ]] ; do sleep 2; done", timeout=10 * 60, in_stream=False)
-        c = Connection(mgmt_ip, user="citc", connect_kwargs={"pkey": pkey, "look_for_keys": False, "allow_agent": False})
+        c = Connection(mgmt_ip, user="citc", connect_kwargs={"pkey": pkey})
         c.run(f"echo -ne '{limits}' > limits.yaml", in_stream=False)
         c.run("finish", timeout=10, in_stream=False)
         yield c
