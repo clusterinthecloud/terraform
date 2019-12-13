@@ -5,6 +5,9 @@ from pathlib import Path
 import re
 import subprocess
 import textwrap
+from io import BytesIO
+from zipfile import ZipFile
+from urllib.request import urlopen
 
 from fabric import Connection
 import paramiko
@@ -24,8 +27,8 @@ def ssh_key() -> str:
 def terraform() -> str:
     terraform_version = "0.12.17"
     if not Path("terraform").exists():
-        subprocess.run(["wget", f"--no-verbose https://releases.hashicorp.com/terraform/{terraform_version}/terraform_{terraform_version}_linux_amd64.zip"], check=True)
-        subprocess.run(["unzip", "-u", f"terraform_{terraform_version}_linux_amd64.zip"], check=True)
+        resp = urlopen(f"https://releases.hashicorp.com/terraform/{terraform_version}/terraform_{terraform_version}_linux_amd64.zip")
+        ZipFile(BytesIO(resp.read())).extract("terraform")
     return "./terraform"
 
 
