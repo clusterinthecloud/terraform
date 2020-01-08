@@ -13,6 +13,7 @@ data "template_file" "bootstrap-script" {
 data "template_file" "startnode-yaml" {
   template = file("${path.module}/files/startnode.yaml.tpl")
   vars = {
+    cloud-platform = "aws"
     ansible_branch = var.ansible_branch
     region = var.region
     subnet = aws_subnet.vpc_subnetwork.id

@@ -104,6 +104,7 @@ EOF
   provisioner "file" {
     destination = "/tmp/startnode.yaml"
     content = <<EOF
+csp: oracle
 region: ${var.region}
 compartment_id: ${var.compartment_ocid}
 vcn_id: ${oci_core_virtual_network.ClusterVCN.id}

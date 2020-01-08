@@ -1,3 +1,4 @@
+csp: ${cloud-platform}
 ansible_branch: ${ansible_branch}
 region: ${region}
 subnet: ${subnet}
