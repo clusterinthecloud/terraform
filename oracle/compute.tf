@@ -139,7 +139,7 @@ provisioner "remote-exec" {
 
   connection {
     timeout     = "15m"
-    host        = oci_core_instance.ClusterManagement.public_ip
+    host        = self.public_ip
     user        = "opc"
     private_key = file(var.private_key_path)
     agent       = false

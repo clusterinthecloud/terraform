@@ -28,7 +28,7 @@ resource "google_compute_instance" "mgmt" {
   # Ignore changes to the disk image, as if a family is specified it != the image name on the instance, and continually
   # rebuild when terraform is reapplied
   lifecycle {
-    ignore_changes = ["boot_disk[0].initialize_params[0].image"]
+    ignore_changes = [boot_disk[0].initialize_params[0].image]
   }
 
   # ssh connection information for provisioning
