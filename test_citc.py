@@ -37,7 +37,7 @@ def config_file(provider, ssh_key) -> str:
     with open(f"{provider}/terraform.tfvars.example") as f:
         config = f.read()
 
-    {
+    config = {
         "oracle": oracle_config_file,
         "google": google_config_file,
         "aws": aws_config_file,
@@ -102,6 +102,7 @@ def create_cluster(terraform: str, provider: str, tf_vars: str, ssh_username: st
         pkey = paramiko.RSAKey.from_private_key_file(ssh_key)
         c = Connection(mgmt_ip, user=ssh_username, connect_kwargs={"pkey": pkey})
         c.run("while [[ ! -f /mnt/shared/finalised/mgmt ]] ; do sleep 2; done", timeout=10 * 60, in_stream=False)
+        c.run("until host mgmt &> /dev/null ; do sleep 2; done", timeout=10 * 60, in_stream=False)
         c = Connection(mgmt_ip, user="citc", connect_kwargs={"pkey": pkey})
         c.run(f"echo -ne '{limits}' > limits.yaml", in_stream=False)
         c.run("finish", timeout=10, in_stream=False)
