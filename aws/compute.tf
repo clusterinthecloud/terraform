@@ -1,10 +1,11 @@
 data "aws_ami" "centos7" {
   # See http://cavaliercoder.com/blog/finding-the-latest-centos-ami.html
+  # https://wiki.centos.org/Cloud/AWS
   most_recent = true
 
   filter {
-    name   = "name"
-    values = ["CentOS Linux 7 x86_64 HVM EBS *"]
+    name   = "product-code"
+    values = ["aw0evgkw8e5c1q413zgy5pjce"]
   }
 
   filter {
@@ -17,7 +18,7 @@ data "aws_ami" "centos7" {
     values = ["ebs"]
   }
 
-  owners = ["679593333241"]
+  owners = ["aws-marketplace"]
 }
 
 resource "aws_instance" "mgmt" {
