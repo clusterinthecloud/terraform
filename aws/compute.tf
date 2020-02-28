@@ -56,6 +56,22 @@ resource "aws_instance" "mgmt" {
     source      = pathexpand(var.aws_shared_credentials)
   }
 
+  tags = {
+    Name = "mgmt-${local.cluster_id}"
+    cluster = local.cluster_id
+  }
+}
+
+resource "null_resource" "tear_down" {
+  depends_on = [aws_route53_record.mgmt]
+
+  connection {
+    type        = "ssh"
+    user        = "centos"
+    private_key = data.local_file.ssh_private_key.content
+    host        = aws_instance.mgmt.public_ip
+  }
+
   provisioner "remote-exec" {
     when = destroy
     inline = [
@@ -66,11 +82,6 @@ resource "aws_instance" "mgmt" {
       "sleep 5",
       "echo Node termination request completed",
     ]
-  }
-
-  tags = {
-    Name = "mgmt-${local.cluster_id}"
-    cluster = local.cluster_id
   }
 }
 
