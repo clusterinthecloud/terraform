@@ -12,6 +12,7 @@ data "template_file" "bootstrap-script" {
     ansible_branch = var.ansible_branch
     cloud-platform = "google"
     fileserver-ip  = module.filestore_shared_storage.fileserver-ip
+    custom_block = ""
   }
 }
 
