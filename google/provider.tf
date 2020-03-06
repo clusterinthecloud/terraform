@@ -16,6 +16,10 @@ provider "local" {
   version = "1.3"
 }
 
+provider "random" {
+  version = "~> 2.2"
+}
+
 provider "google" {
   version     = "2.10"
   credentials = file(var.credentials)

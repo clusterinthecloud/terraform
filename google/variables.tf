@@ -25,9 +25,8 @@ variable "storage_size_mb" {
   default = 1024
 }
 
-# Cluster
-variable "cluster_name_tag" {
-  default = "citc"
+variable "cluster_id" {
+  default = null
 }
 
 variable "management_shape" {

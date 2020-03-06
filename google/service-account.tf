@@ -1,6 +1,6 @@
 # Service account identity for the mgmt node
 resource "google_service_account" "mgmt-sa" {
-  account_id   = "${var.cluster_name_tag}-mgmt-sa"
+  account_id   = "mgmt-sa-${local.cluster_id}"
   display_name = "Management node service account"
 }
 

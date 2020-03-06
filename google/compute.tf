@@ -1,8 +1,8 @@
 # Management node instance
 resource "google_compute_instance" "mgmt" {
-  name                    = "mgmt"
+  name                    = "mgmt-${local.cluster_id}"
   machine_type            = var.management_shape
-  tags                    = ["mgmt"]
+  tags                    = ["mgmt-${local.cluster_id}"]
   metadata_startup_script = data.template_file.bootstrap-script.rendered
 
   depends_on = [module.filestore_shared_storage]
@@ -29,6 +29,10 @@ resource "google_compute_instance" "mgmt" {
   # rebuild when terraform is reapplied
   lifecycle {
     ignore_changes = [boot_disk[0].initialize_params[0].image]
+  }
+
+  labels = {
+    cluster = local.cluster_id
   }
 
   # ssh connection information for provisioning
