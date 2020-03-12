@@ -13,6 +13,7 @@ data "template_file" "bootstrap-script" {
     cloud-platform = "google"
     fileserver-ip  = module.filestore_shared_storage.fileserver-ip
     custom_block = ""
+    cluster_id: local.cluster_id
   }
 }
 
