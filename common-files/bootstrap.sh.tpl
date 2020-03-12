@@ -8,6 +8,9 @@ yum install -y ansible git
 cat > /root/hosts <<EOF
 [management]
 $(hostname -f)
+
+[all:vars]
+cluster_id=${cluster_id}
 EOF
 
 mkdir /etc/ansible/facts.d/
