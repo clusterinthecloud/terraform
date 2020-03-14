@@ -14,8 +14,8 @@ resource "google_compute_subnetwork" "vpc_subnetwork" {
 resource "google_compute_firewall" "open-internal" {
   name        = "open-internal-${local.cluster_id}"
   network     = google_compute_network.vpc_network.name
-  source_tags = ["mgmt-${local.cluster_id}", "compute-${local.cluster_id}"]
-  target_tags = ["mgmt-${local.cluster_id}", "compute-${local.cluster_id}"]
+  source_tags = ["mgmt-${local.cluster_id}", "compute-${local.cluster_id}", "nfs-${local.cluster_id}"]
+  target_tags = ["mgmt-${local.cluster_id}", "compute-${local.cluster_id}", "nfs-${local.cluster_id}"]
   allow {
     protocol = "tcp"
   }
