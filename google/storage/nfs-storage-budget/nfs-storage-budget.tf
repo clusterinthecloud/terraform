@@ -1,5 +1,5 @@
 resource "google_compute_disk" "nfsshare" {
-  name = "nfsshare"
+  name = "nfsshare-${var.cluster_id}"
   type = var.nfs_disk_type
 
   labels = {
@@ -46,7 +46,7 @@ resource "google_compute_instance" "nfs_server_budget" {
   # Keep the primary NFS volume separate from the boot disk so it can be backed up
   # and snapshots taken independently from the boot disk
   attached_disk {
-    source = "nfsshare"
+    source = "nfsshare-${var.cluster_id}"
   }
 
   network_interface {
