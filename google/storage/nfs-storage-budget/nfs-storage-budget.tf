@@ -6,15 +6,13 @@ resource "google_compute_disk" "nfsshare" {
     cluster = var.cluster_id
   }
 
-  size = var.fs_capacity 
-} 
+  size = var.fs_capacity
+}
 
 data "template_file" "nfs-script" {
   template = file("${path.module}/files/nfsconfig.sh.tpl")
   vars = {
     ansible_branch = var.ansible_branch
-    cloud-platform = "google"
-    custom_block = ""
     cluster_id = var.cluster_id
   }
 }
@@ -51,7 +49,7 @@ resource "google_compute_instance" "nfs_server_budget" {
 
   network_interface {
     subnetwork = var.vpc_subnetwork
-    
+
     # add an empty access_config block. We only need a public address which is a default part of this block
     access_config {
     }

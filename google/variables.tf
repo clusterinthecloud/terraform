@@ -11,7 +11,7 @@ variable "zone" {
 variable "credentials" {
 }
 
-# NFS - Budget Filer section. 
+# NFS - Budget Filer section.
 
 # 100GB as a minimum for the Budget NFS filer option.  Filestore is 1TB minimum
 variable "fs_capacity" {

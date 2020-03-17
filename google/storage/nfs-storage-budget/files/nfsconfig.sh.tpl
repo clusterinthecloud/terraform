@@ -2,8 +2,6 @@
 
 date
 
-${custom_block}
-
 yum install -y ansible git
 cat > /root/hosts <<EOF
 [nfsserver]

@@ -23,4 +23,3 @@ module "budget_filer_shared_storage" {
   nfs_budget_image = var.nfs_budget_image
   nfs_disk_type = var.nfs_disk_type
 }
-

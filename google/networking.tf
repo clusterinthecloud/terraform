@@ -44,10 +44,10 @@ resource "google_compute_firewall" "ssh" {
 }
 
 resource "google_compute_firewall" "http" {
-  name          = "http-to-mgmt"
+  name          = "http-to-mgmt-${local.cluster_id}"
   network       = google_compute_network.vpc_network.name
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["mgmt"]
+  target_tags   = ["mgmt-${local.cluster_id}"]
   allow {
     protocol = "tcp"
     ports    = ["80"]
