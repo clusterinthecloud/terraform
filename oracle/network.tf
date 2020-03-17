@@ -54,4 +54,14 @@ resource "oci_core_security_list" "ClusterSecurityList" {
       max = 3000
     }
   }
+  ingress_security_rules {
+    # Open port for HTTP
+    protocol = "6"
+    source   = "0.0.0.0/0"
+
+    tcp_options {
+      min = 80
+      max = 80
+    }
+  }
 }
