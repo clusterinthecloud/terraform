@@ -13,12 +13,7 @@ data "aws_ami" "centos7" {
     values = ["x86_64"]
   }
 
-  filter {
-    name = "root-device-type"
-    values = ["ebs"]
-  }
-
-  owners = ["aws-marketplace"]
+  owners = ["679593333241"]
 }
 
 resource "aws_instance" "mgmt" {

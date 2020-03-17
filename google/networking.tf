@@ -42,3 +42,14 @@ resource "google_compute_firewall" "ssh" {
     ports    = ["22"]
   }
 }
+
+resource "google_compute_firewall" "http" {
+  name          = "http-to-mgmt"
+  network       = google_compute_network.vpc_network.name
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["mgmt"]
+  allow {
+    protocol = "tcp"
+    ports    = ["80"]
+  }
+}
