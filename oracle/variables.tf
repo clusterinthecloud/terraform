@@ -38,10 +38,6 @@ variable "ExportPathFS" {
   default = "/shared"
 }
 
-variable "ClusterNameTag" {
-  default = "cluster"
-}
-
 variable "ansible_branch" {
   default = "4"
 }

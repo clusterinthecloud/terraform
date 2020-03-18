@@ -33,7 +33,7 @@ resource "oci_core_instance" "ClusterManagement" {
 
     display_name     = "primaryvnic"
     assign_public_ip = true
-    hostname_label   = "mgmt"
+    hostname_label   = local.mgmt_hostname
   }
 
   source_details {
@@ -51,7 +51,7 @@ resource "oci_core_instance" "ClusterManagement" {
   }
 
   freeform_tags = {
-    "cluster"  = var.ClusterNameTag
+    "cluster" = local.cluster_id
     "nodetype" = "mgmt"
   }
 

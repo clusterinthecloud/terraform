@@ -4,4 +4,8 @@ resource "oci_file_storage_mount_target" "ClusterFSMountTarget" {
   subnet_id           = oci_core_subnet.ClusterSubnet.id
   display_name        = "fileserver"
   hostname_label      = "fileserver"
+
+  freeform_tags = {
+    "cluster" = local.cluster_id
+  }
 }

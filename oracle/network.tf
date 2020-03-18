@@ -3,6 +3,10 @@ resource "oci_core_virtual_network" "ClusterVCN" {
   compartment_id = var.compartment_ocid
   display_name   = "ClusterVCN"
   dns_label      = "clustervcn"
+
+  freeform_tags = {
+    "cluster" = local.cluster_id
+  }
 }
 
 resource "oci_core_subnet" "ClusterSubnet" {
@@ -14,12 +18,20 @@ resource "oci_core_subnet" "ClusterSubnet" {
   vcn_id            = oci_core_virtual_network.ClusterVCN.id
   route_table_id    = oci_core_route_table.ClusterRT.id
   dhcp_options_id   = oci_core_virtual_network.ClusterVCN.default_dhcp_options_id
+
+  freeform_tags = {
+    "cluster" = local.cluster_id
+  }
 }
 
 resource "oci_core_internet_gateway" "ClusterIG" {
   compartment_id = var.compartment_ocid
   display_name   = "ClusterIG"
   vcn_id         = oci_core_virtual_network.ClusterVCN.id
+
+  freeform_tags = {
+    "cluster" = local.cluster_id
+  }
 }
 
 resource "oci_core_route_table" "ClusterRT" {
@@ -30,6 +42,10 @@ resource "oci_core_route_table" "ClusterRT" {
   route_rules {
     destination       = "0.0.0.0/0"
     network_entity_id = oci_core_internet_gateway.ClusterIG.id
+  }
+
+  freeform_tags = {
+    "cluster" = local.cluster_id
   }
 }
 
@@ -63,5 +79,9 @@ resource "oci_core_security_list" "ClusterSecurityList" {
       min = 80
       max = 80
     }
+  }
+
+  freeform_tags = {
+    "cluster" = local.cluster_id
   }
 }

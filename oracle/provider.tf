@@ -10,6 +10,10 @@ provider "tls" {
   version = "~> 2.0"
 }
 
+provider "random" {
+  version = "~> 2.2"
+}
+
 provider "oci" {
   version          = ">= 3.23.0"
 

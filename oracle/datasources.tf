@@ -1,6 +1,6 @@
 # Gets a list of Availability Domains
 data "oci_identity_availability_domains" "ADs" {
-  compartment_id = var.tenancy_ocid
+  compartment_id = var.compartment_ocid
 }
 
 data "tls_public_key" "oci_public_key" {
@@ -15,5 +15,6 @@ data "template_file" "user_data" {
     fileserver-ip  = "" # the file server is determined via a static name on OCI
     custom_block = ""
     mgmt_hostname: local.mgmt_hostname
+    cluster_id: local.cluster_id
   }
 }
