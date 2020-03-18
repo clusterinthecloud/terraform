@@ -1,3 +1,17 @@
+data "oci_core_images" "ol7" {
+    compartment_id = var.compartment_ocid
+
+    operating_system = "Oracle Linux"
+    operating_system_version = "7.7"
+
+    # exclude GPU specific images
+    filter {
+        name   = "display_name"
+        values = ["^([a-zA-z]+)-([a-zA-z]+)-([\\.0-9]+)-([\\.0-9-]+)$"]
+        regex  = true
+    }
+}
+
 locals {
   mgmt_hostname = "mgmt"
 }
@@ -24,7 +38,7 @@ resource "oci_core_instance" "ClusterManagement" {
 
   source_details {
     source_type = "image"
-    source_id   = var.ManagementImageOCID[var.region]
+    source_id   = data.oci_core_images.ol7.images.0.id
   }
 
   metadata = {
