@@ -6,6 +6,6 @@ resource "random_pet" "cluster-suffix" {
 }
 
 locals {
-  cluster_id = "${var.ClusterNameTag}-${random_pet.cluster-suffix.id}"
+  cluster_id = random_pet.cluster-suffix.id
 }
 
