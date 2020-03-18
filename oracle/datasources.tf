@@ -12,7 +12,7 @@ data "template_file" "user_data" {
   vars = {
     ansible_branch = var.ansible_branch
     cloud-platform = "oracle"
-    fileserver-ip  = "" # the file server is determined via a static name on OCI
+    fileserver-ip  = oci_file_storage_mount_target.ClusterFSMountTarget.hostname_label
     custom_block = ""
     mgmt_hostname: local.mgmt_hostname
     cluster_id: local.cluster_id
