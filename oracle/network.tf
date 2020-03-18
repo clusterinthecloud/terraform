@@ -1,8 +1,8 @@
 resource "oci_core_virtual_network" "ClusterVCN" {
   cidr_block     = "10.1.0.0/16"
   compartment_id = var.compartment_ocid
-  display_name   = "ClusterVCN"
-  dns_label      = "clustervcn"
+  display_name   = "ClusterVCN-${local.cluster_id}"
+  dns_label      = replace(local.cluster_id, "-", "")
 
   freeform_tags = {
     "cluster" = local.cluster_id
@@ -11,7 +11,7 @@ resource "oci_core_virtual_network" "ClusterVCN" {
 
 resource "oci_core_subnet" "ClusterSubnet" {
   cidr_block        = "10.1.0.0/16"
-  display_name      = "Subnet"
+  display_name      = "Subnet-${local.cluster_id}"
   dns_label         = "subnet"
   security_list_ids = [oci_core_virtual_network.ClusterVCN.default_security_list_id, oci_core_security_list.ClusterSecurityList.id]
   compartment_id    = var.compartment_ocid
@@ -26,7 +26,7 @@ resource "oci_core_subnet" "ClusterSubnet" {
 
 resource "oci_core_internet_gateway" "ClusterIG" {
   compartment_id = var.compartment_ocid
-  display_name   = "ClusterIG"
+  display_name   = "ClusterIG-${local.cluster_id}"
   vcn_id         = oci_core_virtual_network.ClusterVCN.id
 
   freeform_tags = {
@@ -37,7 +37,7 @@ resource "oci_core_internet_gateway" "ClusterIG" {
 resource "oci_core_route_table" "ClusterRT" {
   compartment_id = var.compartment_ocid
   vcn_id         = oci_core_virtual_network.ClusterVCN.id
-  display_name   = "ClusterRT"
+  display_name   = "ClusterRT-${local.cluster_id}"
 
   route_rules {
     destination       = "0.0.0.0/0"
@@ -52,7 +52,7 @@ resource "oci_core_route_table" "ClusterRT" {
 resource "oci_core_security_list" "ClusterSecurityList" {
   compartment_id = var.compartment_ocid
   vcn_id         = oci_core_virtual_network.ClusterVCN.id
-  display_name   = "ClusterSecurityList"
+  display_name   = "ClusterSecurityList-${local.cluster_id}"
 
   // allow inbound ssh traffic from a specific port
   ingress_security_rules {

@@ -132,6 +132,7 @@ ad_root: ${substr(
     length(oci_core_instance.ClusterManagement.availability_domain) - 1,
 )}
 ansible_branch: ${var.ansible_branch}
+cluster_id: ${local.cluster_id}
 EOF
 
 
