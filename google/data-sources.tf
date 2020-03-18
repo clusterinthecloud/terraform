@@ -15,6 +15,7 @@ data "template_file" "bootstrap-script" {
     #fileserver-ip  = module.filestore_shared_storage.fileserver-ip
     custom_block = ""
     cluster_id: local.cluster_id
+    mgmt_hostname: local.mgmt_hostname
   }
 }
 

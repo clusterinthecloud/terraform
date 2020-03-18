@@ -14,5 +14,6 @@ data "template_file" "user_data" {
     cloud-platform = "oracle"
     fileserver-ip  = "" # the file server is determined via a static name on OCI
     custom_block = ""
+    mgmt_hostname: local.mgmt_hostname
   }
 }

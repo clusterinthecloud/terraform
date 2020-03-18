@@ -1,7 +1,11 @@
+locals {
+  mgmt_hostname = "mgmt"
+}
+
 resource "oci_core_instance" "ClusterManagement" {
   availability_domain = data.oci_identity_availability_domains.ADs.availability_domains[var.ManagementAD - 1]["name"]
   compartment_id      = var.compartment_ocid
-  display_name        = "mgmt"
+  display_name        = local.mgmt_hostname
   shape               = var.ManagementShape
 
   # Make sure that the manangement node depands on the filesystem so that when

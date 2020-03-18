@@ -21,6 +21,7 @@ data "template_file" "startnode-yaml" {
     dns_zone = aws_route53_zone.cluster.name
     dns_zone_id = aws_route53_zone.cluster.zone_id
     cluster_id: local.cluster_id
+    mgmt_hostname: local.mgmt_hostname
   }
 }
 

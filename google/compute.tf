@@ -1,6 +1,10 @@
+locals {
+  mgmt_hostname = "mgmt-${local.cluster_id}"
+}
+
 # Management node instance
 resource "google_compute_instance" "mgmt" {
-  name                    = "mgmt-${local.cluster_id}"
+  name                    = local.mgmt_hostname
   machine_type            = var.management_shape
   tags                    = ["mgmt-${local.cluster_id}"]
   metadata_startup_script = data.template_file.bootstrap-script.rendered

@@ -16,6 +16,10 @@ data "aws_ami" "centos7" {
   owners = ["679593333241"]
 }
 
+locals {
+  mgmt_hostname = "mgmt-${local.cluster_id}"
+}
+
 resource "aws_instance" "mgmt" {
   ami           = data.aws_ami.centos7.id
   instance_type = var.management_shape
@@ -52,7 +56,7 @@ resource "aws_instance" "mgmt" {
   }
 
   tags = {
-    Name = "mgmt-${local.cluster_id}"
+    Name = local.mgmt_hostname
     cluster = local.cluster_id
   }
 }
