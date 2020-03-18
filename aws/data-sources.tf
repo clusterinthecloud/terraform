@@ -7,6 +7,8 @@ data "template_file" "bootstrap-script" {
     custom_block = templatefile("${path.module}/files/bootstrap_custom.sh.tpl", {
       dns_zone = aws_route53_zone.cluster.name
     })
+    mgmt_hostname: local.mgmt_hostname
+    cluster_id: local.cluster_id
   }
 }
 
@@ -21,7 +23,6 @@ data "template_file" "startnode-yaml" {
     dns_zone = aws_route53_zone.cluster.name
     dns_zone_id = aws_route53_zone.cluster.zone_id
     cluster_id: local.cluster_id
-    mgmt_hostname: local.mgmt_hostname
   }
 }
 

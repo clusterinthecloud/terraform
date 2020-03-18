@@ -17,7 +17,7 @@ data "aws_ami" "centos7" {
 }
 
 locals {
-  mgmt_hostname = "mgmt-${local.cluster_id}"
+  mgmt_hostname = "mgmt"
 }
 
 resource "aws_instance" "mgmt" {
@@ -91,7 +91,7 @@ resource "aws_key_pair" "ec2-user" {
 
 resource "aws_route53_record" "mgmt" {
   zone_id = aws_route53_zone.cluster.zone_id
-  name    = "mgmt.${aws_route53_zone.cluster.name}"
+  name    = "${local.mgmt_hostname}.${aws_route53_zone.cluster.name}"
   type    = "A"
   ttl     = "300"
   records = [aws_instance.mgmt.private_ip]
