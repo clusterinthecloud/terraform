@@ -147,7 +147,7 @@ def terraform_apply(tf_vars, tf_state, provider, terraform):
         subprocess.run([terraform, "apply", f"-var-file={tf_vars}", f"-state={tf_state}", "-auto-approve", provider], check=True)
         yield
     finally:
-        pass#subprocess.run([terraform, "destroy", f"-var-file={tf_vars}", f"-state={tf_state}", "-auto-approve", provider], check=True)
+        subprocess.run([terraform, "destroy", f"-var-file={tf_vars}", f"-state={tf_state}", "-auto-approve", provider], check=True)
 
 
 def submit_job(connection: Connection, job_script: str) -> str:
