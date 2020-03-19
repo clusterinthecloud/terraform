@@ -126,6 +126,7 @@ csp: oracle
 region: ${var.region}
 compartment_id: ${var.compartment_ocid}
 vcn_id: ${oci_core_virtual_network.ClusterVCN.id}
+subnet_id: ${oci_core_subnet.ClusterSubnet.id}
 ad_root: ${substr(
     oci_core_instance.ClusterManagement.availability_domain,
     0,
