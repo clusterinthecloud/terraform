@@ -101,7 +101,7 @@ def create_cluster(terraform: str, provider: str, tf_vars: str, ssh_username: st
             raise
         pkey = paramiko.RSAKey.from_private_key_file(ssh_key)
         c = Connection(mgmt_ip, user=ssh_username, connect_kwargs={"pkey": pkey})
-        c.run("while [[ ! -f /mnt/shared/finalised/mgmt ]] ; do sleep 2; done", timeout=10 * 60, in_stream=False)
+        c.run("while [[ ! -f /mnt/shared/finalised/mgmt ]] ; do sleep 2; done", timeout=20 * 60, in_stream=False)
         c.run("until host mgmt &> /dev/null ; do sleep 2; done", timeout=10 * 60, in_stream=False)
         c = Connection(mgmt_ip, user="citc", connect_kwargs={"pkey": pkey})
         c.run(f"echo -ne '{limits}' > limits.yaml", in_stream=False)
