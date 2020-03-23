@@ -63,7 +63,7 @@ variable "management_image" {
 }
 
 variable "ansible_branch" {
-  default = "google_packer"
+  default = "5"
 }
 
 variable "private_key_path" {
