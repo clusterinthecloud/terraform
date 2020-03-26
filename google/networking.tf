@@ -21,14 +21,15 @@ resource "google_compute_firewall" "open-internal" {
   }
 }
 
-resource "google_compute_firewall" "grafana" {
-  name          = "grafana-to-mgmt-${local.cluster_id}"
+# Open high ports for applications
+resource "google_compute_firewall" "high-range" {
+  name          = "high-range-to-mgmt-${local.cluster_id}"
   network       = google_compute_network.vpc_network.name
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["mgmt-${local.cluster_id}"]
   allow {
     protocol = "tcp"
-    ports    = ["3000"]
+    ports    = ["1024-65535"]
   }
 }
 

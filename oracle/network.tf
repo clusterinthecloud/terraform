@@ -61,13 +61,13 @@ resource "oci_core_security_list" "ClusterSecurityList" {
     source   = "10.0.0.0/8"
   }
   ingress_security_rules {
-    # Open port for Grafana
+    # Open high ports for applications
     protocol = "6"
     source   = "0.0.0.0/0"
 
     tcp_options {
-      min = 3000
-      max = 3000
+      min = 1024
+      max = 65535
     }
   }
   ingress_security_rules {
