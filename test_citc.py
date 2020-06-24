@@ -4,6 +4,7 @@ import stat
 import subprocess
 import textwrap
 from contextlib import contextmanager
+from datetime import timedelta
 from io import BytesIO
 from pathlib import Path
 from urllib.request import urlopen
@@ -101,11 +102,11 @@ def create_cluster(terraform: str, provider: str, tf_vars: str, ssh_username: st
             raise
         pkey = paramiko.RSAKey.from_private_key_file(ssh_key)
         c = Connection(mgmt_ip, user=ssh_username, connect_kwargs={"pkey": pkey})
-        c.run("until ls /mnt/shared/finalised/mgmt* &> /dev/null ; do sleep 2; done", timeout=20 * 60, in_stream=False)
-        c.run("until host $(basename /mnt/shared/finalised/mgmt*) &> /dev/null ; do sleep 2; done", timeout=10 * 60, in_stream=False)
+        c.run("until ls /mnt/shared/finalised/mgmt* &> /dev/null ; do sleep 2; done", timeout=timedelta(minutes=20).seconds, in_stream=False)
+        c.run("until host $(basename /mnt/shared/finalised/mgmt*) &> /dev/null ; do sleep 2; done", timeout=timedelta(minutes=10).seconds, in_stream=False)
         c = Connection(mgmt_ip, user="citc", connect_kwargs={"pkey": pkey})
         c.run(f"echo -ne '{limits}' > limits.yaml", in_stream=False)
-        c.run("finish", timeout=10, in_stream=False)
+        c.run("finish", timeout=timedelta(seconds=10).seconds, in_stream=False)
         yield c
 
 
@@ -154,7 +155,7 @@ def submit_job(connection: Connection, job_script: str) -> str:
     job_script = textwrap.dedent(job_script.lstrip())
     connection.run(f'echo -ne "{job_script}" > test.slm', in_stream=False)
     connection.run("sudo mkdir -p --mode=777 /mnt/shared/test", in_stream=False)
-    res = connection.run("sbatch --chdir=/mnt/shared/test --wait test.slm", timeout=10 * 60, in_stream=False)
+    res = connection.run("sbatch --chdir=/mnt/shared/test --wait test.slm", timeout=timedelta(minutes=10).seconds, in_stream=False)
     job_id = res.stdout.split()[-1]
     return job_id
 
@@ -179,7 +180,7 @@ def test_validate(terraform, provider):
 
 
 def test_login(cluster):
-    cluster.run("sleep 1", timeout=5, in_stream=False)
+    cluster.run("sleep 1", timeout=timedelta(seconds=5).seconds, in_stream=False)
 
 
 def test_job(cluster):
@@ -195,7 +196,7 @@ def test_job(cluster):
 
 
 def test_ansible_finished(cluster):
-    cluster.run("until sudo grep 'PLAY RECAP' /root/ansible-pull.log ; do sleep 2; done", timeout=10 * 60, in_stream=False)
+    cluster.run("until sudo grep 'PLAY RECAP' /root/ansible-pull.log ; do sleep 2; done", timeout=timedelta(minutes=10).seconds, in_stream=False)
     output = read_file(cluster, "/root/ansible-pull.log")
     results = re.search(r"PLAY RECAP \**\n.*:\s*(.*)\n", output).groups()[0].split()
     results = {k: int(v) for k, v in (e.split("=") for e in results)}
