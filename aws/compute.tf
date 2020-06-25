@@ -13,7 +13,7 @@ data "aws_ami" "centos7" {
     values = ["x86_64"]
   }
 
-  owners = ["679593333241"]
+  owners = ["aws-marketplace"]
 }
 
 locals {
