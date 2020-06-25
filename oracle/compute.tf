@@ -1,7 +1,25 @@
+data "oci_core_images" "ol7" {
+    compartment_id = var.compartment_ocid
+
+    operating_system = "Oracle Linux"
+    operating_system_version = "7.7"
+
+    # exclude GPU specific images
+    filter {
+        name   = "display_name"
+        values = ["^([a-zA-z]+)-([a-zA-z]+)-([\\.0-9]+)-([\\.0-9-]+)$"]
+        regex  = true
+    }
+}
+
+locals {
+  mgmt_hostname = "mgmt"
+}
+
 resource "oci_core_instance" "ClusterManagement" {
   availability_domain = data.oci_identity_availability_domains.ADs.availability_domains[var.ManagementAD - 1]["name"]
   compartment_id      = var.compartment_ocid
-  display_name        = "mgmt"
+  display_name        = local.mgmt_hostname
   shape               = var.ManagementShape
 
   # Make sure that the manangement node depands on the filesystem so that when
@@ -15,12 +33,12 @@ resource "oci_core_instance" "ClusterManagement" {
 
     display_name     = "primaryvnic"
     assign_public_ip = true
-    hostname_label   = "mgmt"
+    hostname_label   = local.mgmt_hostname
   }
 
   source_details {
     source_type = "image"
-    source_id   = var.ManagementImageOCID[var.region]
+    source_id   = data.oci_core_images.ol7.images.0.id
   }
 
   metadata = {
@@ -33,7 +51,7 @@ resource "oci_core_instance" "ClusterManagement" {
   }
 
   freeform_tags = {
-    "cluster"  = var.ClusterNameTag
+    "cluster" = local.cluster_id
     "nodetype" = "mgmt"
   }
 
@@ -108,12 +126,14 @@ csp: oracle
 region: ${var.region}
 compartment_id: ${var.compartment_ocid}
 vcn_id: ${oci_core_virtual_network.ClusterVCN.id}
+subnet_id: ${oci_core_subnet.ClusterSubnet.id}
 ad_root: ${substr(
     oci_core_instance.ClusterManagement.availability_domain,
     0,
     length(oci_core_instance.ClusterManagement.availability_domain) - 1,
 )}
 ansible_branch: ${var.ansible_branch}
+cluster_id: ${local.cluster_id}
 EOF
 
 

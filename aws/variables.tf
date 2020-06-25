@@ -26,11 +26,7 @@ variable "private_key_path" {
 }
 
 variable "ansible_branch" {
-  default = "4"
-}
-
-variable "ClusterNameTag" {
-  default = "cluster"
+  default = "5"
 }
 
 variable "aws_shared_credentials" {

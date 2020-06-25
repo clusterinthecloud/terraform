@@ -16,6 +16,10 @@ data "aws_ami" "centos7" {
   owners = ["679593333241"]
 }
 
+locals {
+  mgmt_hostname = "mgmt"
+}
+
 resource "aws_instance" "mgmt" {
   ami           = data.aws_ami.centos7.id
   instance_type = var.management_shape
@@ -52,7 +56,7 @@ resource "aws_instance" "mgmt" {
   }
 
   tags = {
-    Name = "mgmt-${local.cluster_id}"
+    Name = local.mgmt_hostname
     cluster = local.cluster_id
   }
 }
@@ -87,7 +91,7 @@ resource "aws_key_pair" "ec2-user" {
 
 resource "aws_route53_record" "mgmt" {
   zone_id = aws_route53_zone.cluster.zone_id
-  name    = "mgmt.${aws_route53_zone.cluster.name}"
+  name    = "${local.mgmt_hostname}.${aws_route53_zone.cluster.name}"
   type    = "A"
   ttl     = "300"
   records = [aws_instance.mgmt.private_ip]

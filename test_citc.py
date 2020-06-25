@@ -24,7 +24,7 @@ def ssh_key() -> str:
 
 @pytest.fixture(scope="module")
 def terraform() -> str:
-    terraform_version = "0.12.17"
+    terraform_version = "0.12.21"
     if not Path("terraform").exists():
         resp = urlopen(f"https://releases.hashicorp.com/terraform/{terraform_version}/terraform_{terraform_version}_linux_amd64.zip")
         ZipFile(BytesIO(resp.read())).extract("terraform")
@@ -101,8 +101,8 @@ def create_cluster(terraform: str, provider: str, tf_vars: str, ssh_username: st
             raise
         pkey = paramiko.RSAKey.from_private_key_file(ssh_key)
         c = Connection(mgmt_ip, user=ssh_username, connect_kwargs={"pkey": pkey})
-        c.run("while [[ ! -f /mnt/shared/finalised/mgmt ]] ; do sleep 2; done", timeout=10 * 60, in_stream=False)
-        c.run("until host mgmt &> /dev/null ; do sleep 2; done", timeout=10 * 60, in_stream=False)
+        c.run("until ls /mnt/shared/finalised/mgmt* &> /dev/null ; do sleep 2; done", timeout=20 * 60, in_stream=False)
+        c.run("until host $(basename /mnt/shared/finalised/mgmt*) &> /dev/null ; do sleep 2; done", timeout=10 * 60, in_stream=False)
         c = Connection(mgmt_ip, user="citc", connect_kwargs={"pkey": pkey})
         c.run(f"echo -ne '{limits}' > limits.yaml", in_stream=False)
         c.run("finish", timeout=10, in_stream=False)

@@ -1,5 +1,5 @@
 resource "google_filestore_instance" "instance" {
-  name = "citc-filer"
+  name = "citc-filer-${var.cluster_id}"
   zone = var.zone
   tier = var.tier
 
@@ -11,5 +11,9 @@ resource "google_filestore_instance" "instance" {
   networks {
     network = var.network
     modes   = ["MODE_IPV4"]
+  }
+
+  labels = {
+    cluster = var.cluster_id
   }
 }

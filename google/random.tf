@@ -6,6 +6,5 @@ resource "random_pet" "cluster-suffix" {
 }
 
 locals {
-  cluster_id = random_pet.cluster-suffix.id
+  cluster_id = var.cluster_id != null ? var.cluster_id : random_pet.cluster-suffix.id
 }
-

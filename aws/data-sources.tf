@@ -7,6 +7,7 @@ data "template_file" "bootstrap-script" {
     custom_block = templatefile("${path.module}/files/bootstrap_custom.sh.tpl", {
       dns_zone = aws_route53_zone.cluster.name
     })
+    mgmt_hostname: local.mgmt_hostname
   }
 }
 

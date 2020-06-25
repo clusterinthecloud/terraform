@@ -17,9 +17,10 @@ resource "aws_security_group" "mgmt" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Open high ports for applications
   ingress {
-    from_port   = 3000
-    to_port     = 3000
+    from_port   = 1024
+    to_port     = 65535
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

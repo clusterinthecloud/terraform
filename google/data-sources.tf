@@ -11,8 +11,10 @@ data "template_file" "bootstrap-script" {
   vars = {
     ansible_branch = var.ansible_branch
     cloud-platform = "google"
-    fileserver-ip  = module.filestore_shared_storage.fileserver-ip
+    fileserver-ip  = module.budget_filer_shared_storage.fileserver-ip
+    #fileserver-ip  = module.filestore_shared_storage.fileserver-ip
     custom_block = ""
+    mgmt_hostname: local.mgmt_hostname
   }
 }
 
@@ -23,7 +25,10 @@ data "template_file" "startnode-yaml" {
     project        = var.project
     zone           = var.zone
     subnet         = "regions/${var.region}/subnetworks/${google_compute_subnetwork.vpc_subnetwork.name}"
+    network_name    = google_compute_network.vpc_network.name
+    subnet_name    = google_compute_subnetwork.vpc_subnetwork.name
     ansible_branch = var.ansible_branch
     custom_block = ""
+    cluster_id: local.cluster_id
   }
 }

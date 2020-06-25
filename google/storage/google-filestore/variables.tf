@@ -10,9 +10,13 @@ variable "tier" {
 }
 
 variable "network" {
-  default = "citc-net"
+  default = null
 }
 
 variable "fs_capacity" {
   default = 1024
+}
+
+variable "cluster_id" {
+  default = null
 }
