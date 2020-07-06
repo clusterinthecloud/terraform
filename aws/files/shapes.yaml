@@ -1,4 +1,4 @@
 t3.micro:
-  memory: 900
+  memory: 780
   cores_per_socket: 1
   threads_per_core: 2

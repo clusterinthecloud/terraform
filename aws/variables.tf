@@ -26,7 +26,7 @@ variable "private_key_path" {
 }
 
 variable "ansible_branch" {
-  default = "5"
+  default = "centos8"
 }
 
 variable "aws_shared_credentials" {

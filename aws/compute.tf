@@ -1,11 +1,11 @@
-data "aws_ami" "centos7" {
+data "aws_ami" "centos8" {
   # See http://cavaliercoder.com/blog/finding-the-latest-centos-ami.html
   # https://wiki.centos.org/Cloud/AWS
   most_recent = true
 
   filter {
-    name   = "product-code"
-    values = ["aw0evgkw8e5c1q413zgy5pjce"]
+    name   = "name"
+    values = ["CentOS 8.*"]
   }
 
   filter {
@@ -13,7 +13,7 @@ data "aws_ami" "centos7" {
     values = ["x86_64"]
   }
 
-  owners = ["aws-marketplace"]
+  owners = ["125523088429"]
 }
 
 locals {
@@ -21,7 +21,7 @@ locals {
 }
 
 resource "aws_instance" "mgmt" {
-  ami           = data.aws_ami.centos7.id
+  ami           = data.aws_ami.centos8.id
   instance_type = var.management_shape
   vpc_security_group_ids = [aws_security_group.mgmt.id]
   subnet_id = aws_subnet.vpc_subnetwork.id
