@@ -3,6 +3,10 @@ variable "region" {
   default = "eu-west-1"
 }
 
+variable "availability_zone" {
+  default = null
+}
+
 variable "efs_performance_mode" {
   default = "generalPurpose"
 }
