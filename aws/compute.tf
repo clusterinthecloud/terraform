@@ -1,3 +1,4 @@
+
 data "aws_ami" "centos7" {
   # See http://cavaliercoder.com/blog/finding-the-latest-centos-ami.html
   # https://wiki.centos.org/Cloud/AWS
@@ -21,15 +22,15 @@ locals {
 }
 
 resource "aws_instance" "mgmt" {
-  ami           = data.aws_ami.centos7.id
-  instance_type = var.management_shape
-  vpc_security_group_ids = [aws_security_group.mgmt.id]
-  subnet_id = aws_subnet.vpc_subnetwork.id
+  ami                         = data.aws_ami.centos7.id
+  instance_type               = var.management_shape
+  vpc_security_group_ids      = [aws_security_group.mgmt.id]
+  subnet_id                   = aws_subnet.vpc_subnetwork.id
   associate_public_ip_address = true
-  iam_instance_profile = aws_iam_instance_profile.describe_tags.id
+  iam_instance_profile        = aws_iam_instance_profile.manage_ec2.id
 
   user_data = data.template_file.bootstrap-script.rendered
-  key_name = aws_key_pair.ec2-user.key_name
+  key_name  = aws_key_pair.ec2-user.key_name
 
   depends_on = [aws_efs_mount_target.shared, aws_key_pair.ec2-user, aws_route53_record.shared, aws_route.internet_route]
 
@@ -50,13 +51,8 @@ resource "aws_instance" "mgmt" {
     content     = data.template_file.startnode-yaml.rendered
   }
 
-  provisioner "file" {
-    destination = "/tmp/aws-credentials.csv"
-    source      = pathexpand(var.aws_shared_credentials)
-  }
-
   tags = {
-    Name = local.mgmt_hostname
+    Name    = local.mgmt_hostname
     cluster = local.cluster_id
   }
 }

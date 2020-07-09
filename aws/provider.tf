@@ -24,6 +24,5 @@ provider "null" {
 
 provider "aws" {
   version     = "2.16.0"
-  profile     = var.profile  # refer to ~/.aws/credentials
   region      = var.region
 }
