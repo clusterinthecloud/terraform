@@ -39,5 +39,5 @@ variable "ExportPathFS" {
 }
 
 variable "ansible_branch" {
-  default = "5"
+  default = "6"
 }
