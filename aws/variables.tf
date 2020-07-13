@@ -34,5 +34,5 @@ variable "profile" {
 }
 
 variable "ansible_branch" {
-  default = "centos8"
+  default = "6"
 }

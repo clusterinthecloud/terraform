@@ -63,7 +63,7 @@ variable "management_image" {
 }
 
 variable "ansible_branch" {
-  default = "centos8"
+  default = "6"
 }
 
 variable "private_key_path" {
