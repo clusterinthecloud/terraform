@@ -25,7 +25,7 @@ def ssh_key() -> str:
 
 @pytest.fixture(scope="module")
 def terraform() -> str:
-    terraform_version = "0.12.21"
+    terraform_version = "0.12.28"
     if not Path("terraform").exists():
         resp = urlopen(f"https://releases.hashicorp.com/terraform/{terraform_version}/terraform_{terraform_version}_linux_amd64.zip")
         ZipFile(BytesIO(resp.read())).extract("terraform")
