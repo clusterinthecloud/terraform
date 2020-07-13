@@ -19,20 +19,20 @@ variable "management_shape" {
   default = "t3a.medium"
 }
 
-variable "profile" {
-  default = "default"
-}
-
 variable "public_key_path" {
 }
 
 variable "private_key_path" {
 }
 
-variable "ansible_branch" {
-  default = "centos8"
-}
-
 variable "aws_shared_credentials" {
   default = "~/.aws/credentials"
+}
+
+variable "profile" {
+  default = "default"
+}
+
+variable "ansible_branch" {
+  default = "centos8"
 }
