@@ -1,3 +1,4 @@
+import io
 import os
 import re
 import stat
@@ -160,8 +161,8 @@ def terraform_apply(tf_vars, tf_state, provider, terraform):
 
 def submit_job(connection: Connection, job_script: str) -> str:
     job_script = textwrap.dedent(job_script.lstrip())
-    connection.run(f'echo -ne "{job_script}" > test.slm', in_stream=False)
-    connection.run("sudo mkdir -p --mode=777 /mnt/shared/test", in_stream=False)
+    connection.put(io.StringIO(job_script), "test.slm")
+    connection.sudo("mkdir -p --mode=777 /mnt/shared/test", in_stream=False)
     res = connection.run("sbatch --chdir=/mnt/shared/test --wait test.slm", timeout=timedelta(minutes=10).seconds, in_stream=False)
     job_id = res.stdout.split()[-1]
     return job_id
