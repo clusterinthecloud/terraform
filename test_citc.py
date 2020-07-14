@@ -205,7 +205,7 @@ def test_job(cluster):
 
 def test_create_user(cluster):
     cluster.sudo("/usr/local/sbin/add_user_ldap matt Matt Williams https://github.com/milliams.keys", timeout=timedelta(minutes=1).seconds, in_stream=False)
-    cluster.run("getent passwd matt")
+    cluster.run("getent passwd matt", in_stream=False)
 
 
 def test_ansible_finished(cluster):
