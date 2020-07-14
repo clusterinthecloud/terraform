@@ -203,6 +203,11 @@ def test_job(cluster):
     assert expected == output.strip()
 
 
+def test_create_user(cluster):
+    cluster.sudo("/usr/local/sbin/add_user_ldap matt Matt Williams https://github.com/milliams.keys", timeout=timedelta(minutes=1).seconds, in_stream=False)
+    cluster.run("getent passwd matt")
+
+
 def test_ansible_finished(cluster):
     cluster.run("until sudo grep 'PLAY RECAP' /root/ansible-pull.log ; do sleep 2; done", timeout=timedelta(minutes=10).seconds, in_stream=False)
     output = read_file(cluster, "/root/ansible-pull.log")
