@@ -13,7 +13,7 @@ EOF
 mkdir /etc/ansible/facts.d/
 echo "{\"csp\":\"${cloud-platform}\", \"fileserver_ip\":\"${fileserver-ip}\", \"mgmt_hostname\":\"${mgmt_hostname}\"}" > /etc/ansible/facts.d/citc.fact
 
-PYTHON=$(command -v python3 || command -v python)
+PYTHON=$(command -v python || command -v python3)
 time $PYTHON -u /usr/bin/ansible-pull --url=https://github.com/clusterinthecloud/ansible.git --checkout=${ansible_branch} --inventory=/root/hosts management.yml >> /root/ansible-pull.log
 
 date
