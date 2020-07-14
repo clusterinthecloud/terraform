@@ -215,3 +215,9 @@ def test_ansible_finished(cluster):
     results = {k: int(v) for k, v in (e.split("=") for e in results)}
     assert results["failed"] == 0
     assert results["unreachable"] == 0
+
+
+def test_sosreport(cluster):
+    ret = cluster.sudo("sosreport --only-plugins citc --batch", in_stream=False, hide=True)
+    sosresport_file = re.search(r"/.*sosreport-.*\.tar\.gz", ret.stdout).group()
+    assert sosresport_file
