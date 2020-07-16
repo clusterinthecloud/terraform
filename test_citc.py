@@ -105,7 +105,7 @@ def create_cluster(terraform: str, provider: str, tf_vars: str, ssh_username: st
         print(f"Connecting to {mgmt_ip} as {ssh_username}")
         c = Connection(mgmt_ip, user=ssh_username, connect_kwargs={"pkey": pkey})
         print(f" Waiting for Ansible to finalise")
-        c.run("until ls /mnt/shared/finalised/mgmt* ; do sleep 2; done", timeout=timedelta(minutes=20).seconds, in_stream=False, hide=True)
+        c.run("until ls /mnt/shared/finalised/mgmt* ; do sleep 2; done", timeout=timedelta(minutes=30).seconds, in_stream=False, hide=True)
         print(f" Waiting for DNS to propagate")
         c.run("until host $(basename /mnt/shared/finalised/mgmt*) &> /dev/null ; do sleep 2; done", timeout=timedelta(minutes=10).seconds, in_stream=False)
         print(f"Connecting to {mgmt_ip} as citc")
