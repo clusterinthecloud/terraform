@@ -1,4 +1,218 @@
 t3.micro:
-  memory: 900
+  memory: 780
   cores_per_socket: 1
   threads_per_core: 2
+t3.small:
+  memory: 1400
+  cores_per_socket: 1
+  threads_per_core: 2
+t3.medium:
+  memory: 3300
+  cores_per_socket: 1
+  threads_per_core: 2
+t3.large:
+  memory: 7300
+  cores_per_socket: 1
+  threads_per_core: 2
+t3.xlarge:
+  memory: 15200
+  cores_per_socket: 1
+  threads_per_core: 4
+t3.2xlarge:
+  2xlarge: 31100
+  cores_per_socket: 1
+  threads_per_core: 8
+
+t3a.micro:
+  memory: 780
+  cores_per_socket: 1
+  threads_per_core: 2
+t3a.small:
+  memory: 1400
+  cores_per_socket: 1
+  threads_per_core: 2
+t3a.medium:
+  memory: 3300
+  cores_per_socket: 1
+  threads_per_core: 2
+t3a.large:
+  memory: 7300
+  cores_per_socket: 1
+  threads_per_core: 2
+t3a.xlarge:
+  memory: 15200
+  cores_per_socket: 1
+  threads_per_core: 4
+t3a.2xlarge:
+  2xlarge: 31100
+  cores_per_socket: 1
+  threads_per_core: 8
+
+a1.medium:
+  memory: 1400
+  cores_per_socket: 1
+  threads_per_core: 1
+  arch: aarch64
+a1.large:
+  memory: 3300
+  cores_per_socket: 2
+  threads_per_core: 1
+  arch: aarch64
+a1.xlarge:
+  memory: 7300
+  cores_per_socket: 4
+  threads_per_core: 1
+  arch: aarch64
+a1.2xlarge:
+  memory: 15200
+  cores_per_socket: 8
+  threads_per_core: 1
+  arch: aarch64
+a1.4xlarge:
+  memory: 31100
+  cores_per_socket: 16
+  threads_per_core: 1
+  arch: aarch64
+a1.metal:
+  memory: 31100
+  cores_per_socket: 16
+  threads_per_core: 1
+  arch: aarch64
+
+m6g.medium:
+  memory: 3400
+  cores_per_socket: 1
+  threads_per_core: 1
+  arch: aarch64
+m6g.large:
+  memory: 7400
+  cores_per_socket: 2
+  threads_per_core: 1
+  arch: aarch64
+m6g.xlarge:
+  memory: 15400
+  cores_per_socket: 4
+  threads_per_core: 1
+  arch: aarch64
+m6g.2xlarge:
+  memory: 31500
+  cores_per_socket: 8
+  threads_per_core: 1
+  arch: aarch64
+m6g.4xlarge:
+  memory: 63600
+  cores_per_socket: 16
+  threads_per_core: 1
+  arch: aarch64
+m6g.8xlarge:
+  memory: 127700
+  cores_per_socket: 32
+  threads_per_core: 1
+  arch: aarch64
+m6g.12xlarge:
+  memory: 191900
+  cores_per_socket: 48
+  threads_per_core: 1
+  arch: aarch64
+m6g.16xlarge:
+  memory: 256100
+  cores_per_socket: 64
+  threads_per_core: 1
+  arch: aarch64
+m6g.metal:
+  memory: 256100
+  cores_per_socket: 64
+  threads_per_core: 1
+  arch: aarch64
+
+c6g.medium:
+  memory: 1400
+  cores_per_socket: 1
+  threads_per_core: 1
+  arch: aarch64
+c6g.large:
+  memory: 3400
+  cores_per_socket: 2
+  threads_per_core: 1
+  arch: aarch64
+c6g.xlarge:
+  memory: 7400
+  cores_per_socket: 4
+  threads_per_core: 1
+  arch: aarch64
+c6g.2xlarge:
+  memory: 15500
+  cores_per_socket: 8
+  threads_per_core: 1
+  arch: aarch64
+c6g.4xlarge:
+  memory: 31600
+  cores_per_socket: 16
+  threads_per_core: 1
+  arch: aarch64
+c6g.8xlarge:
+  memory: 63800
+  cores_per_socket: 32
+  threads_per_core: 1
+  arch: aarch64
+c6g.12xlarge:
+  memory: 96000
+  cores_per_socket: 48
+  threads_per_core: 1
+  arch: aarch64
+c6g.16xlarge:
+  memory: 128200
+  cores_per_socket: 64
+  threads_per_core: 1
+  arch: aarch64
+c6g.metal:
+  memory: 128200
+  cores_per_socket: 64
+  threads_per_core: 1
+  arch: aarch64
+
+r6g.medium:
+  memory: 7500
+  cores_per_socket: 1
+  threads_per_core: 1
+  arch: aarch64
+r6g.large:
+  memory: 15600
+  cores_per_socket: 2
+  threads_per_core: 1
+  arch: aarch64
+r6g.xlarge:
+  memory: 31800
+  cores_per_socket: 4
+  threads_per_core: 1
+  arch: aarch64
+r6g.2xlarge:
+  memory: 64200
+  cores_per_socket: 8
+  threads_per_core: 1
+  arch: aarch64
+r6g.4xlarge:
+  memory: 129000
+  cores_per_socket: 16
+  threads_per_core: 1
+  arch: aarch64
+r6g.8xlarge:
+  memory: 258700
+  cores_per_socket: 32
+  threads_per_core: 1
+  arch: aarch64
+r6g.12xlarge:
+  memory: 388300
+  cores_per_socket: 48
+  threads_per_core: 1
+  arch: aarch64
+r6g.16xlarge:
+  memory: 517900
+  cores_per_socket: 64
+  threads_per_core: 1
+  arch: aarch64
+r6g.metal:
+  memory: 517900
+  cores_per_socket: 64
+  threads_per_core: 1
+  arch: aarch64

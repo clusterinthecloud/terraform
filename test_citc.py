@@ -1,3 +1,4 @@
+import io
 import os
 import re
 import stat
@@ -25,7 +26,7 @@ def ssh_key() -> str:
 
 @pytest.fixture(scope="module")
 def terraform() -> str:
-    terraform_version = "0.12.21"
+    terraform_version = "0.12.28"
     if not Path("terraform").exists():
         resp = urlopen(f"https://releases.hashicorp.com/terraform/{terraform_version}/terraform_{terraform_version}_linux_amd64.zip")
         ZipFile(BytesIO(resp.read())).extract("terraform")
@@ -104,7 +105,7 @@ def create_cluster(terraform: str, provider: str, tf_vars: str, ssh_username: st
         print(f"Connecting to {mgmt_ip} as {ssh_username}")
         c = Connection(mgmt_ip, user=ssh_username, connect_kwargs={"pkey": pkey})
         print(f" Waiting for Ansible to finalise")
-        c.run("until ls /mnt/shared/finalised/mgmt* ; do sleep 2; done", timeout=timedelta(minutes=20).seconds, in_stream=False, hide=True)
+        c.run("until ls /mnt/shared/finalised/mgmt* ; do sleep 2; done", timeout=timedelta(minutes=30).seconds, in_stream=False, hide=True)
         print(f" Waiting for DNS to propagate")
         c.run("until host $(basename /mnt/shared/finalised/mgmt*) &> /dev/null ; do sleep 2; done", timeout=timedelta(minutes=10).seconds, in_stream=False)
         print(f"Connecting to {mgmt_ip} as citc")
@@ -160,8 +161,8 @@ def terraform_apply(tf_vars, tf_state, provider, terraform):
 
 def submit_job(connection: Connection, job_script: str) -> str:
     job_script = textwrap.dedent(job_script.lstrip())
-    connection.run(f'echo -ne "{job_script}" > test.slm', in_stream=False)
-    connection.run("sudo mkdir -p --mode=777 /mnt/shared/test", in_stream=False)
+    connection.put(io.StringIO(job_script), "test.slm")
+    connection.sudo("mkdir -p --mode=777 /mnt/shared/test", in_stream=False)
     res = connection.run("sbatch --chdir=/mnt/shared/test --wait test.slm", timeout=timedelta(minutes=10).seconds, in_stream=False)
     job_id = res.stdout.split()[-1]
     return job_id
@@ -202,6 +203,11 @@ def test_job(cluster):
     assert expected == output.strip()
 
 
+def test_create_user(cluster):
+    cluster.sudo("/usr/local/sbin/add_user_ldap matt Matt Williams https://github.com/milliams.keys", timeout=timedelta(minutes=1).seconds, in_stream=False)
+    cluster.run("getent passwd matt", in_stream=False)
+
+
 def test_ansible_finished(cluster):
     cluster.run("until sudo grep 'PLAY RECAP' /root/ansible-pull.log ; do sleep 2; done", timeout=timedelta(minutes=10).seconds, in_stream=False)
     output = read_file(cluster, "/root/ansible-pull.log")
@@ -209,3 +215,9 @@ def test_ansible_finished(cluster):
     results = {k: int(v) for k, v in (e.split("=") for e in results)}
     assert results["failed"] == 0
     assert results["unreachable"] == 0
+
+
+def test_sosreport(cluster):
+    ret = cluster.sudo("sosreport --only-plugins citc --batch", in_stream=False, hide=True)
+    sosresport_file = re.search(r"/.*sosreport-.*\.tar\.gz", ret.stdout).group()
+    assert sosresport_file

@@ -11,6 +11,7 @@ resource "aws_vpc" "vpc_network" {
 resource "aws_subnet" "vpc_subnetwork" {
   vpc_id     = aws_vpc.vpc_network.id
   cidr_block = "10.0.0.0/17"
+  availability_zone = var.availability_zone
   tags = {
     Name = "citc-subnet-${local.cluster_id}"
     cluster = local.cluster_id

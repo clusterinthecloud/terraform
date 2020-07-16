@@ -26,7 +26,7 @@ variable "nfs_budget_shape" {
 }
 
 variable "nfs_budget_image" {
-  default = "centos-cloud/centos-7"
+  default = "centos-cloud/centos-8"
 }
 
 # NFS persistent disk type (pd-ssd or pd-standard)
@@ -59,11 +59,11 @@ variable "management_shape" {
 }
 
 variable "management_image" {
-  default = "centos-cloud/centos-7"
+  default = "centos-cloud/centos-8"
 }
 
 variable "ansible_branch" {
-  default = "5"
+  default = "6"
 }
 
 variable "private_key_path" {

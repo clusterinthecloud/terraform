@@ -13,7 +13,7 @@ data "template_file" "bootstrap-script" {
     cloud-platform = "google"
     fileserver-ip  = module.budget_filer_shared_storage.fileserver-ip
     #fileserver-ip  = module.filestore_shared_storage.fileserver-ip
-    custom_block = ""
+    custom_block = templatefile("${path.module}/files/bootstrap_custom.sh.tpl", {})
     mgmt_hostname: local.mgmt_hostname
   }
 }
