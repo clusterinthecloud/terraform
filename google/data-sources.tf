@@ -15,6 +15,7 @@ data "template_file" "bootstrap-script" {
     #fileserver-ip  = module.filestore_shared_storage.fileserver-ip
     custom_block = templatefile("${path.module}/files/bootstrap_custom.sh.tpl", {})
     mgmt_hostname: local.mgmt_hostname
+    citc_keys = var.admin_public_keys
   }
 }
 

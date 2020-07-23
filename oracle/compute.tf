@@ -66,7 +66,6 @@ tenancy=${var.tenancy_ocid}
 region=${var.region}
 EOF
 
-
     connection {
       timeout     = "15m"
       host        = oci_core_instance.ClusterManagement.public_ip

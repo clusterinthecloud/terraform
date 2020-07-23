@@ -77,13 +77,16 @@ def google_config_file(config, ssh_key) -> str:
     config = config.replace("n1-standard-1", "n1-standard-1")
     with open(f"{ssh_key}.pub") as pub_key:
         pub_key_text = pub_key.read().strip()
-    config = config.replace("ssh_public_key = <<EOF", "ssh_public_key = <<EOF\n" + pub_key_text)
+    config = config.replace("admin_public_keys = <<EOF", "admin_public_keys = <<EOF\n" + pub_key_text)
 
     return config
 
 
 def aws_config_file(config, ssh_key) -> str:
     config = config.replace("~/.ssh/aws-key", ssh_key)
+    with open(f"{ssh_key}.pub") as pub_key:
+        pub_key_text = pub_key.read().strip()
+    config = config.replace("admin_public_keys = <<EOF", "admin_public_keys = <<EOF\n" + pub_key_text)
     return config
 
 

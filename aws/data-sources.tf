@@ -8,6 +8,7 @@ data "template_file" "bootstrap-script" {
       dns_zone = aws_route53_zone.cluster.name
     })
     mgmt_hostname: local.mgmt_hostname
+    citc_keys = var.admin_public_keys
   }
 }
 

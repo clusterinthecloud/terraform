@@ -20,9 +20,16 @@ variable "management_shape" {
 }
 
 variable "public_key_path" {
+  default = "~/.ssh/aws-key.pub"
 }
 
 variable "private_key_path" {
+  default = "~/.ssh/aws-key"
+}
+
+variable "admin_public_keys" {
+  type = string
+  description = "A multiline string containing the public keys used to login as the admin user"
 }
 
 variable "aws_shared_credentials" {

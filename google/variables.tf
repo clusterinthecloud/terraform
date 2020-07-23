@@ -67,7 +67,14 @@ variable "ansible_branch" {
 }
 
 variable "private_key_path" {
+  default = "~/.ssh/citc-google"
 }
 
 variable "public_key_path" {
+  default = "~/.ssh/citc-google.pub"
+}
+
+variable "admin_public_keys" {
+  type = string
+  description = "A multiline string containing the public keys used to login as the admin user"
 }

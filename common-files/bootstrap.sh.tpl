@@ -4,6 +4,10 @@ date
 
 ${custom_block}
 
+cat > /root/citc_authorized_keys <<EOF
+${citc_keys}
+EOF
+
 yum install -y ansible git
 cat > /root/hosts <<EOF
 [management]

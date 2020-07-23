@@ -15,5 +15,6 @@ data "template_file" "user_data" {
     fileserver-ip  = oci_file_storage_mount_target.ClusterFSMountTarget.hostname_label
     custom_block = ""
     mgmt_hostname: local.mgmt_hostname
+    citc_keys = var.ssh_public_key
   }
 }
