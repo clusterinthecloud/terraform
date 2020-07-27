@@ -52,7 +52,11 @@ resource "aws_instance" "mgmt" {
 
   provisioner "file" {
     destination = "/home/centos/aws-credentials.csv"
-    source      = pathexpand(var.aws_shared_credentials)
+    content     = <<EOF
+[default]
+aws_access_key_id = ${aws_iam_access_key.mgmt_sa.id}
+aws_secret_access_key = ${aws_iam_access_key.mgmt_sa.secret}
+EOF
   }
 
   tags = {
