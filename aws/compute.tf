@@ -51,7 +51,7 @@ resource "aws_instance" "mgmt" {
   }
 
   provisioner "file" {
-    destination = "/tmp/aws-credentials.csv"
+    destination = "/home/centos/aws-credentials.csv"
     source      = pathexpand(var.aws_shared_credentials)
   }
 
