@@ -86,6 +86,7 @@ data "aws_iam_policy_document" "start_stop_nodes" {
       "ec2:RunInstances",
       "ec2:StopInstances",
       "ec2:TerminateInstances",
+      "ec2:DescribeInstanceTypes",
       "route53:ChangeResourceRecordSets",
       "iam:PassRole",
     ]
