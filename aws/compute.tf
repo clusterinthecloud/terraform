@@ -41,11 +41,6 @@ resource "aws_instance" "mgmt" {
   }
 
   provisioner "file" {
-    destination = "/tmp/shapes.yaml"
-    source      = "${path.module}/files/shapes.yaml"
-  }
-
-  provisioner "file" {
     destination = "/tmp/startnode.yaml"
     content     = data.template_file.startnode-yaml.rendered
   }
