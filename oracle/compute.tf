@@ -2,7 +2,7 @@ data "oci_core_images" "ol7" {
     compartment_id = var.compartment_ocid
 
     operating_system = "Oracle Linux"
-    operating_system_version = "7.7"
+    operating_system_version = "7.8"
 
     # exclude GPU specific images
     filter {
