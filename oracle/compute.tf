@@ -1,8 +1,8 @@
-data "oci_core_images" "ol7" {
+data "oci_core_images" "ol8" {
     compartment_id = var.compartment_ocid
 
     operating_system = "Oracle Linux"
-    operating_system_version = "7.8"
+    operating_system_version = "8"
 
     # exclude GPU specific images
     filter {
@@ -38,7 +38,7 @@ resource "oci_core_instance" "ClusterManagement" {
 
   source_details {
     source_type = "image"
-    source_id   = data.oci_core_images.ol7.images.0.id
+    source_id   = data.oci_core_images.ol8.images.0.id
   }
 
   metadata = {
@@ -133,6 +133,7 @@ ad_root: ${substr(
 )}
 ansible_branch: ${var.ansible_branch}
 cluster_id: ${local.cluster_id}
+mgmt_image_id: ${data.oci_core_images.ol8.images.0.id}
 EOF
 
 
