@@ -211,6 +211,52 @@ def test_create_user(cluster):
     cluster.run("getent passwd matt", in_stream=False)
 
 
+@pytest.mark.skip
+def test_mpi_job(cluster):
+    code = r"""
+    #include <mpi.h>
+    #include <iostream>
+
+    int main()
+    {
+            // Initialize the MPI environment
+            MPI_Init(NULL, NULL);
+
+            // Get the number of processes
+            int world_size;
+            MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+
+            // Get the rank of the process
+            int world_rank;
+            MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+
+            // Get the name of the processor
+            char processor_name[MPI_MAX_PROCESSOR_NAME];
+            int name_len;
+            MPI_Get_processor_name(processor_name, &name_len);
+
+            // Print off a hello world message
+            std::cout << "Hello world from processor " << processor_name << ", rank " << world_rank << " out of " << world_size << " processors\n";
+
+            // Finalize the MPI environment.
+            MPI_Finalize();
+    }
+    """
+    cluster.run(f"echo -ne '{code}' > hello-mpi.cpp", in_stream=False)
+    cluster.run("CXX=/usr/lib64/openmpi3/bin/mpic++ make hello-mpi", in_stream=False)
+    job_id = submit_job(cluster, """
+    #! /bin/bash
+    #SBATCH --job-name="mpi_test"
+    #SBATCH --ntasks 2
+    #SBATCH --cpus-per-task 1
+
+    srun hello-mpi
+    """)
+    cluster.run("sleep 5", in_stream=False)  # Make sure that the filesystem has synchronised
+    job_state = cluster.run(f"sacct -j {job_id} -X --format=State --noheader", in_stream=False).stdout.strip()
+    assert "COMPLETED" == job_state
+
+
 def test_ansible_finished(cluster):
     cluster.run("until sudo grep 'PLAY RECAP' /root/ansible-pull.log ; do sleep 2; done", timeout=timedelta(minutes=10).seconds, in_stream=False)
     output = read_file(cluster, "/root/ansible-pull.log")
