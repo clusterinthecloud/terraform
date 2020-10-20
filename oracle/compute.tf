@@ -1,33 +1,15 @@
-data "oci_core_app_catalog_listings" "ol8" {
-  publisher_name = "Oracle Linux"
-  filter {
-    name   = "display_name"
-    values = ["^Oracle Linux 8.([\\.0-9-]+)$"]
-    regex  = true
-  }
-}
+data "oci_core_images" "ol8" {
+    compartment_id = var.compartment_ocid
 
-data "oci_core_app_catalog_listing_resource_versions" "ol8" {
-  listing_id = data.oci_core_app_catalog_listings.ol8.app_catalog_listings[0].listing_id
-}
+    operating_system = "Oracle Linux"
+    operating_system_version = "8"
 
-resource "oci_core_app_catalog_listing_resource_version_agreement" "ol8" {
-  listing_id               = data.oci_core_app_catalog_listing_resource_versions.ol8.app_catalog_listing_resource_versions[0].listing_id
-  listing_resource_version = data.oci_core_app_catalog_listing_resource_versions.ol8.app_catalog_listing_resource_versions[0].listing_resource_version
-}
-
-resource "oci_core_app_catalog_subscription" "ol8" {
-  compartment_id           = var.tenancy_ocid
-  eula_link                = oci_core_app_catalog_listing_resource_version_agreement.ol8.eula_link
-  listing_id               = oci_core_app_catalog_listing_resource_version_agreement.ol8.listing_id
-  listing_resource_version = oci_core_app_catalog_listing_resource_version_agreement.ol8.listing_resource_version
-  oracle_terms_of_use_link = oci_core_app_catalog_listing_resource_version_agreement.ol8.oracle_terms_of_use_link
-  signature                = oci_core_app_catalog_listing_resource_version_agreement.ol8.signature
-  time_retrieved           = oci_core_app_catalog_listing_resource_version_agreement.ol8.time_retrieved
-
-  timeouts {
-    create = "20m"
-  }
+    # exclude GPU specific images
+    filter {
+        name   = "display_name"
+        values = ["^([a-zA-z]+)-([a-zA-z]+)-([\\.0-9]+)-([\\.0-9-]+)$"]
+        regex  = true
+    }
 }
 
 locals {
@@ -56,7 +38,7 @@ resource "oci_core_instance" "ClusterManagement" {
 
   source_details {
     source_type = "image"
-    source_id   = oci_core_app_catalog_subscription.ol8.listing_resource_id
+    source_id   = data.oci_core_images.ol8.images.0.id
   }
 
   metadata = {
@@ -151,7 +133,7 @@ ad_root: ${substr(
 )}
 ansible_branch: ${var.ansible_branch}
 cluster_id: ${local.cluster_id}
-mgmt_image_id: ${oci_core_app_catalog_subscription.ol8.listing_resource_id}
+mgmt_image_id: ${data.oci_core_images.ol8.images.0.id}
 EOF
 
 
