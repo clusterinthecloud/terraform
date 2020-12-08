@@ -45,6 +45,8 @@ def config_file(provider, ssh_key) -> str:
         "aws": aws_config_file,
     }[provider](config, ssh_key)
 
+    if "ANSIBLE_REPO" in os.environ:
+        config = config + f'\nansible_repo = "{os.environ["ANSIBLE_REPO"]}"'
     if "ANSIBLE_BRANCH" in os.environ:
         config = config + f'\nansible_branch = "{os.environ["ANSIBLE_BRANCH"]}"'
 
