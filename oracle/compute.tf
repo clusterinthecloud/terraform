@@ -131,6 +131,7 @@ ad_root: ${substr(
     0,
     length(oci_core_instance.ClusterManagement.availability_domain) - 1,
 )}
+ansible_repo: ${var.ansible_repo}
 ansible_branch: ${var.ansible_branch}
 cluster_id: ${local.cluster_id}
 mgmt_image_id: ${data.oci_core_images.ol8.images.0.id}

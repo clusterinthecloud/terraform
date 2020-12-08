@@ -10,6 +10,7 @@ data "tls_public_key" "oci_public_key" {
 data "template_file" "user_data" {
   template = file("${path.module}/../common-files/bootstrap.sh.tpl")
   vars = {
+    ansible_repo = var.ansible_repo
     ansible_branch = var.ansible_branch
     cloud-platform = "oracle"
     fileserver-ip  = oci_file_storage_mount_target.ClusterFSMountTarget.hostname_label

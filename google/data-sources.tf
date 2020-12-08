@@ -9,6 +9,7 @@ data "local_file" "ssh_public_key" {
 data "template_file" "bootstrap-script" {
   template = file("${path.module}/../common-files/bootstrap.sh.tpl")
   vars = {
+    ansible_repo = var.ansible_repo
     ansible_branch = var.ansible_branch
     cloud-platform = "google"
     fileserver-ip  = module.budget_filer_shared_storage.fileserver-ip
@@ -28,6 +29,7 @@ data "template_file" "startnode-yaml" {
     subnet         = "regions/${var.region}/subnetworks/${google_compute_subnetwork.vpc_subnetwork.name}"
     network_name    = google_compute_network.vpc_network.name
     subnet_name    = google_compute_subnetwork.vpc_subnetwork.name
+    ansible_repo = var.ansible_repo
     ansible_branch = var.ansible_branch
     custom_block = ""
     cluster_id: local.cluster_id

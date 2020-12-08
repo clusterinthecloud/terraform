@@ -1,4 +1,5 @@
 csp: ${cloud-platform}
+ansible_repo: ${ansible_repo}
 ansible_branch: ${ansible_branch}
 region: ${region}
 subnet: ${subnet}

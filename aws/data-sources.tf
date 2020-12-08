@@ -1,6 +1,7 @@
 data "template_file" "bootstrap-script" {
   template = file("${path.module}/../common-files/bootstrap.sh.tpl")
   vars = {
+    ansible_repo = var.ansible_repo
     ansible_branch = var.ansible_branch
     cloud-platform = "aws"
     fileserver-ip  = aws_efs_mount_target.shared.dns_name
@@ -16,6 +17,7 @@ data "template_file" "startnode-yaml" {
   template = file("${path.module}/files/startnode.yaml.tpl")
   vars = {
     cloud-platform = "aws"
+    ansible_repo = var.ansible_repo
     ansible_branch = var.ansible_branch
     region = var.region
     subnet = aws_subnet.vpc_subnetwork.id
