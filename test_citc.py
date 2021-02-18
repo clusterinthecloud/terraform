@@ -264,7 +264,7 @@ def test_ansible_finished(cluster):
     output = read_file(cluster, "/root/ansible-pull.log")
     results = re.search(r"PLAY RECAP \**\n.*:\s*(.*)\n", output).groups()[0].split()
     results = {k: int(v) for k, v in (e.split("=") for e in results)}
-    assert results["failed"] == 0
+    assert results["failed"] == 0, f"{results['failed']} Ansible tasks failed"
     assert results["unreachable"] == 0
 
 
