@@ -14,7 +14,7 @@ resource "google_compute_instance" "mgmt" {
 
   # add an ssh key that can be used to provision the instance once it's started
   metadata = {
-    ssh-keys = "provisioner:${file("citc-provisioning-key-google.pub").content}"
+    ssh-keys = "provisioner:${file("citc-provisioning-key-google.pub")}"
   }
 
   boot_disk {
