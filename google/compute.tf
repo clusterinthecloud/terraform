@@ -14,7 +14,7 @@ resource "google_compute_instance" "mgmt" {
 
   # add an ssh key that can be used to provision the instance once it's started
   metadata = {
-    ssh-keys = "provisioner:${data.local_file.ssh_public_key.content}"
+    ssh-keys = "provisioner:${file("citc-provisioning-key-google.pub").content}"
   }
 
   boot_disk {
@@ -44,8 +44,8 @@ resource "google_compute_instance" "mgmt" {
   connection {
     type        = "ssh"
     user        = "provisioner"
-    private_key = data.local_file.ssh_private_key.content
-    host        = google_compute_instance.mgmt.network_interface[0].access_config[0].nat_ip
+    private_key = file("citc-provisioning-key-google")
+    host        = self.network_interface[0].access_config[0].nat_ip
   }
 
   provisioner "file" {
@@ -66,12 +66,8 @@ resource "google_compute_instance" "mgmt" {
   provisioner "remote-exec" {
     when = destroy
     inline = [
-      "echo Terminating any remaining compute nodes",
-      "if systemctl status slurmctld >> /dev/null; then",
-      "sudo -u slurm /usr/local/bin/stopnode \"$(sinfo --noheader --Format=nodelist:10000 | tr -d '[:space:]')\" || true",
-      "fi",
-      "sleep 5",
-      "echo Node termination request completed",
+      "sudo -u citc /usr/local/bin/kill_all_nodes --force",
+      "sudo -u citc /usr/local/bin/cleanup_images --force",
     ]
   }
 }
