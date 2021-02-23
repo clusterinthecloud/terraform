@@ -2,6 +2,10 @@ locals {
   mgmt_hostname = "mgmt-${local.cluster_id}"
 }
 
+resource "tls_private_key" "provisioner_key" {
+  algorithm   = "ECDSA"
+}
+
 # Management node instance
 resource "google_compute_instance" "mgmt" {
   name                    = local.mgmt_hostname
@@ -14,7 +18,7 @@ resource "google_compute_instance" "mgmt" {
 
   # add an ssh key that can be used to provision the instance once it's started
   metadata = {
-    ssh-keys = "provisioner:${file("citc-provisioning-key-google.pub")}"
+    ssh-keys = "provisioner:${tls_private_key.provisioner_key.public_key_openssh}"
   }
 
   boot_disk {
@@ -44,7 +48,7 @@ resource "google_compute_instance" "mgmt" {
   connection {
     type        = "ssh"
     user        = "provisioner"
-    private_key = file("citc-provisioning-key-google")
+    private_key = tls_private_key.provisioner_key.private_key_pem
     host        = self.network_interface[0].access_config[0].nat_ip
   }
 
