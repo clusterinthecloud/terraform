@@ -67,11 +67,11 @@ resource "google_compute_instance" "mgmt" {
     content     = base64decode(google_service_account_key.mgmt-sa-key.private_key)
   }
 
-  provisioner "remote-exec" {
+  provisioner "local-exec" {
     when = destroy
-    inline = [
-      "sudo -u citc /usr/local/bin/kill_all_nodes --force",
-      "sudo -u citc /usr/local/bin/cleanup_images --force",
-    ]
+    command = "files/cleanup.sh"
+    environment = {
+      CLUSTERID = self.labels.cluster
+    }
   }
 }
