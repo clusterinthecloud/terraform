@@ -1,9 +1,12 @@
 locals {
   mgmt_hostname = "mgmt-${local.cluster_id}"
+  # These are the user's admin keys, prepared for use with the provisioner user
+  provisioner_public_keys = join("\n", [for key in split("\n", var.admin_public_keys) : "provisioner:${key}"])
 }
 
 resource "tls_private_key" "provisioner_key" {
   algorithm   = "ECDSA"
+  ecdsa_curve = "P521"
 }
 
 # Management node instance
@@ -18,7 +21,7 @@ resource "google_compute_instance" "mgmt" {
 
   # add an ssh key that can be used to provision the instance once it's started
   metadata = {
-    ssh-keys = "provisioner:${tls_private_key.provisioner_key.public_key_openssh}"
+    ssh-keys = "provisioner:${tls_private_key.provisioner_key.public_key_openssh}\n${local.provisioner_public_keys}"
   }
 
   boot_disk {
