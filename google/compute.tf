@@ -48,26 +48,29 @@ resource "google_compute_instance" "mgmt" {
   }
 
   # ssh connection information for provisioning
-  connection {
-    type        = "ssh"
-    user        = "provisioner"
-    private_key = tls_private_key.provisioner_key.private_key_pem
-    host        = self.network_interface[0].access_config[0].nat_ip
-  }
-
-  provisioner "file" {
-    destination = "/tmp/shapes.yaml"
-    source      = "${path.module}/files/shapes.yaml"
-  }
 
   provisioner "file" {
     destination = "/tmp/startnode.yaml"
     content     = data.template_file.startnode-yaml.rendered
+
+    connection {
+      type        = "ssh"
+      user        = "provisioner"
+      private_key = tls_private_key.provisioner_key.private_key_pem
+      host        = self.network_interface.0.access_config.0.nat_ip
+    }
   }
 
   provisioner "file" {
     destination = "/tmp/mgmt-sa-credentials.json"
     content     = base64decode(google_service_account_key.mgmt-sa-key.private_key)
+
+    connection {
+      type        = "ssh"
+      user        = "provisioner"
+      private_key = tls_private_key.provisioner_key.private_key_pem
+      host        = self.network_interface[0].access_config[0].nat_ip
+    }
   }
 
   provisioner "local-exec" {
