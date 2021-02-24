@@ -16,8 +16,8 @@ resource "google_compute_instance" "mgmt" {
   tags                    = ["mgmt-${local.cluster_id}"]
   metadata_startup_script = data.template_file.bootstrap-script.rendered
 
-  #depends_on = [module.filestore_shared_storage]
-  depends_on = [module.budget_filer_shared_storage]
+  #depends_on = [module.filestore_shared_storage, google_service_account.mgmt-sa, google_project_iam_member.mgmt-sa-computeadmin, google_project_iam_member.mgmt-sa-serviceaccountuser]
+  depends_on = [module.budget_filer_shared_storage, google_service_account.mgmt-sa, google_project_iam_member.mgmt-sa-computeadmin, google_project_iam_member.mgmt-sa-serviceaccountuser]
 
   # add an ssh key that can be used to provision the instance once it's started
   metadata = {
