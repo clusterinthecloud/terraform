@@ -78,6 +78,8 @@ resource "google_compute_instance" "mgmt" {
     command = "files/cleanup.sh"
     environment = {
       CLUSTERID = self.labels.cluster
+      PROJECT = self.project
     }
+    working_dir = path.module
   }
 }
