@@ -16,6 +16,11 @@ locals {
   mgmt_hostname = "mgmt"
 }
 
+resource "tls_private_key" "provisioner_key" {
+  algorithm   = "ECDSA"
+  ecdsa_curve = "P521"
+}
+
 resource "oci_core_instance" "ClusterManagement" {
   availability_domain = data.oci_identity_availability_domains.ADs.availability_domains[var.ManagementAD - 1]["name"]
   compartment_id      = var.compartment_ocid
@@ -42,7 +47,7 @@ resource "oci_core_instance" "ClusterManagement" {
   }
 
   metadata = {
-    ssh_authorized_keys = "${var.ssh_public_key}${data.tls_public_key.oci_public_key.public_key_openssh}"
+    ssh_authorized_keys = "${var.ssh_public_key}${data.tls_public_key.oci_public_key.public_key_openssh}${tls_private_key.provisioner_key.public_key_openssh}"
     user_data           = base64encode(data.template_file.user_data.rendered)
   }
 
@@ -68,9 +73,9 @@ EOF
 
     connection {
       timeout     = "15m"
-      host        = oci_core_instance.ClusterManagement.public_ip
+      host        = self.public_ip
       user        = "opc"
-      private_key = file(var.private_key_path)
+      private_key = tls_private_key.provisioner_key.private_key_pem
       agent       = false
     }
   }
@@ -81,9 +86,9 @@ EOF
 
     connection {
       timeout     = "15m"
-      host        = oci_core_instance.ClusterManagement.public_ip
+      host        = self.public_ip
       user        = "opc"
-      private_key = file(var.private_key_path)
+      private_key = tls_private_key.provisioner_key.private_key_pem
       agent       = false
     }
   }
@@ -94,9 +99,9 @@ EOF
 
     connection {
       timeout     = "15m"
-      host        = oci_core_instance.ClusterManagement.public_ip
+      host        = self.public_ip
       user        = "opc"
-      private_key = file(var.private_key_path)
+      private_key = tls_private_key.provisioner_key.private_key_pem
       agent       = false
     }
   }
@@ -111,9 +116,9 @@ EOF
 
     connection {
       timeout     = "15m"
-      host        = oci_core_instance.ClusterManagement.public_ip
+      host        = self.public_ip
       user        = "opc"
-      private_key = file(var.private_key_path)
+      private_key = tls_private_key.provisioner_key.private_key_pem
       agent       = false
     }
   }
@@ -137,12 +142,11 @@ cluster_id: ${local.cluster_id}
 mgmt_image_id: ${data.oci_core_images.ol8.images.0.id}
 EOF
 
-
 connection {
   timeout     = "15m"
-  host        = oci_core_instance.ClusterManagement.public_ip
+  host        = self.public_ip
   user        = "opc"
-  private_key = file(var.private_key_path)
+  private_key = tls_private_key.provisioner_key.private_key_pem
   agent       = false
 }
 }
