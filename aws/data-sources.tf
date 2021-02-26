@@ -27,11 +27,3 @@ data "template_file" "startnode-yaml" {
     cluster_id: local.cluster_id
   }
 }
-
-data "local_file" "ssh_public_key" {
-  filename = pathexpand(var.public_key_path)
-}
-
-data "local_file" "ssh_private_key" {
-  filename = pathexpand(var.private_key_path)
-}

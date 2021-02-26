@@ -19,14 +19,6 @@ variable "management_shape" {
   default = "t3a.medium"
 }
 
-variable "public_key_path" {
-  default = "~/.ssh/aws-key.pub"
-}
-
-variable "private_key_path" {
-  default = "~/.ssh/aws-key"
-}
-
 variable "admin_public_keys" {
   type = string
   description = "A multiline string containing the public keys used to login as the admin user"

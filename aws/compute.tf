@@ -20,6 +20,11 @@ locals {
   mgmt_hostname = "mgmt"
 }
 
+resource "tls_private_key" "provisioner_key" {
+  algorithm   = "RSA"  # AWS only supports RSE, not ECDSA
+  ecdsa_curve = "4096"
+}
+
 resource "aws_instance" "mgmt" {
   ami           = data.aws_ami.centos8.id
   instance_type = var.management_shape
@@ -33,16 +38,16 @@ resource "aws_instance" "mgmt" {
 
   depends_on = [aws_efs_mount_target.shared, aws_key_pair.ec2-user, aws_route53_record.shared, aws_route.internet_route]
 
-  connection {
-    type        = "ssh"
-    user        = "centos"
-    private_key = data.local_file.ssh_private_key.content
-    host        = aws_instance.mgmt.public_ip
-  }
-
   provisioner "file" {
     destination = "/tmp/startnode.yaml"
     content     = data.template_file.startnode-yaml.rendered
+
+    connection {
+      type        = "ssh"
+      user        = "centos"
+      private_key = tls_private_key.provisioner_key.private_key_pem
+      host        = self.public_ip
+    }
   }
 
   provisioner "file" {
@@ -52,6 +57,13 @@ resource "aws_instance" "mgmt" {
 aws_access_key_id = ${aws_iam_access_key.mgmt_sa.id}
 aws_secret_access_key = ${aws_iam_access_key.mgmt_sa.secret}
 EOF
+
+    connection {
+      type        = "ssh"
+      user        = "centos"
+      private_key = tls_private_key.provisioner_key.private_key_pem
+      host        = self.public_ip
+    }
   }
 
   tags = {
@@ -85,7 +97,7 @@ resource "null_resource" "tear_down" {
 
 resource "aws_key_pair" "ec2-user" {
   key_name   = "ec2-user-${local.cluster_id}"
-  public_key = data.local_file.ssh_public_key.content
+  public_key = tls_private_key.provisioner_key.public_key_openssh
 }
 
 resource "aws_route53_record" "mgmt" {
