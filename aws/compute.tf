@@ -66,32 +66,18 @@ EOF
     }
   }
 
+  provisioner "local-exec" {
+    when = destroy
+    command = "files/cleanup.sh"
+    environment = {
+      CLUSTERID = self.tags.cluster
+    }
+    working_dir = path.module
+  }
+
   tags = {
     Name = local.mgmt_hostname
     cluster = local.cluster_id
-  }
-}
-
-resource "null_resource" "tear_down" {
-  depends_on = [aws_route53_record.mgmt]
-
-  connection {
-    type        = "ssh"
-    user        = "centos"
-    private_key = data.local_file.ssh_private_key.content
-    host        = aws_instance.mgmt.public_ip
-  }
-
-  provisioner "remote-exec" {
-    when = destroy
-    inline = [
-      "echo Terminating any remaining compute nodes",
-      "if systemctl status slurmctld >> /dev/null; then",
-      "sudo -u slurm /usr/local/bin/stopnode \"$(sinfo --noheader --Format=nodelist:10000 | tr -d '[:space:]')\" || true",
-      "fi",
-      "sleep 5",
-      "echo Node termination request completed",
-    ]
   }
 }
 
