@@ -147,23 +147,13 @@ connection {
 }
 }
 
-provisioner "remote-exec" {
-  when = destroy
-  inline = [
-    "echo Terminating any remaining compute nodes",
-    "if systemctl status slurmctld >> /dev/null; then",
-    "sudo -u slurm /usr/local/bin/stopnode \"$(sinfo --noheader --Format=nodelist:10000 | tr -d '[:space:]')\" || true",
-    "fi",
-    "sleep 5",
-    "echo Node termination request completed",
-  ]
-
-  connection {
-    timeout     = "15m"
-    host        = self.public_ip
-    user        = "opc"
-    private_key = file(var.private_key_path)
-    agent       = false
+  provisioner "local-exec" {
+    when = destroy
+    command = "files/cleanup.sh"
+    environment = {
+      CLUSTERID = self.freeform_tags.cluster
+      COMPARTMENT = self.compartment_id
+    }
+    working_dir = path.module
   }
-}
 }
