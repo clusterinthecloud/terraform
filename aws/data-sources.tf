@@ -7,6 +7,7 @@ data "template_file" "bootstrap-script" {
     fileserver-ip  = aws_efs_mount_target.shared.dns_name
     custom_block = templatefile("${path.module}/files/bootstrap_custom.sh.tpl", {
       dns_zone = aws_route53_zone.cluster.name
+      citc_keys = var.admin_public_keys
     })
     mgmt_hostname: local.mgmt_hostname
     citc_keys = var.admin_public_keys
