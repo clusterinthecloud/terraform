@@ -20,13 +20,13 @@ from fabric import Connection
 def ssh_key() -> str:
     key_filename = "test_ssh_key"
     if not Path(key_filename).exists():
-        subprocess.run(["ssh-keygen", "-N", "", "-b", "4096", "-t", "rsa", "-f", key_filename], check=True)
+        subprocess.run(["ssh-keygen", "-N", "", "-t", "ed25519", "-f", key_filename], check=True)
     return key_filename
 
 
 @pytest.fixture(scope="module")
 def terraform() -> str:
-    terraform_version = "0.12.30"
+    terraform_version = "0.14.7"
     if not Path("terraform").exists():
         resp = urlopen(f"https://releases.hashicorp.com/terraform/{terraform_version}/terraform_{terraform_version}_linux_amd64.zip")
         ZipFile(BytesIO(resp.read())).extract("terraform")
@@ -98,7 +98,7 @@ def create_cluster(terraform: str, provider: str, tf_vars: str, ssh_username: st
     subprocess.run([terraform, "plan", f"-var-file={tf_vars}", f"-state={tf_state}", provider], check=True)
 
     with terraform_apply(tf_vars, tf_state, provider, terraform):
-        terraform_output = subprocess.run([terraform, "output", "-no-color", f"-state={tf_state}", "ManagementPublicIP"], capture_output=True)
+        terraform_output = subprocess.run([terraform, "output", "-no-color", f"-state={tf_state}", "-raw", "ManagementPublicIP"], capture_output=True)
         try:
             mgmt_ip = terraform_output.stdout.decode().strip()
         except subprocess.CalledProcessError as e:
