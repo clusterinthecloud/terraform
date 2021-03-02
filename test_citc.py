@@ -74,7 +74,6 @@ def google_config_file(config, ssh_key) -> str:
     config = config.replace("myproj-123456", os.environ["PROJECT"])
     config = config.replace("europe-west4-a", os.environ["ZONE"])
     config = config.replace("myproj-123456-01234567890a.json", os.environ["CREDENTIALS"])
-    config = config.replace("~/.ssh/citc-google", ssh_key)
     config = config.replace("n1-standard-1", "n1-standard-1")
     with open(f"{ssh_key}.pub") as pub_key:
         pub_key_text = pub_key.read().strip()
@@ -84,7 +83,6 @@ def google_config_file(config, ssh_key) -> str:
 
 
 def aws_config_file(config, ssh_key) -> str:
-    config = config.replace("~/.ssh/aws-key", ssh_key)
     with open(f"{ssh_key}.pub") as pub_key:
         pub_key_text = pub_key.read().strip()
     config = config.replace("admin_public_keys = <<EOF", "admin_public_keys = <<EOF\n" + pub_key_text)
