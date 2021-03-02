@@ -118,8 +118,6 @@ def create_cluster(terraform: str, provider: str, tf_vars: str, ssh_username: st
         c.run("finish", timeout=timedelta(seconds=10).seconds, in_stream=False)
         print(f" Handing over to tests...")
         yield c
-        c.run("/usr/local/bin/kill_all_nodes --force", timeout=timedelta(seconds=30).seconds, in_stream=False)
-        c.run("/usr/local/bin/cleanup_images --force", timeout=timedelta(seconds=30).seconds, in_stream=False)
 
 
 @pytest.fixture(scope="module", params=["oracle", "google", "aws"])
