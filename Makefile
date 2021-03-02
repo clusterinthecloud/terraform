@@ -6,7 +6,7 @@
 #	env REGION=europe-west4 PROJECT=myproj-123456 ZONE=europe-west4-a CREDENTIALS=myproj....json make google-test
 # Can also set ANSIBLE_BRANCH if wanted
 
-TF_VERSION := 0.12.9
+TF_VERSION := 0.14.7
 TF_VARS := terraform.*.tfvars
 TF_STATE := terraform.*.tfstate
 
