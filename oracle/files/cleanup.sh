@@ -1,4 +1,5 @@
 #! /bin/bash
+set -euo pipefail
 
 # This script is run on cluster destruction to shut down any remaining nodes
 # and delete any lingering images
