@@ -40,6 +40,12 @@ variable "profile" {
   default = "default"
 }
 
+variable "running_in_test_suite" {
+  default = false
+  type = bool
+  description = "Is the current cluster being created as part of the test suite"
+}
+
 variable "ansible_repo" {
   default = "https://github.com/clusterinthecloud/ansible.git"
 }

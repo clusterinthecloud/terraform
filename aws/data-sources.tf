@@ -4,6 +4,8 @@ data "template_file" "bootstrap-script" {
     ansible_repo = var.ansible_repo
     ansible_branch = var.ansible_branch
     cloud-platform = "aws"
+    cluster_id = local.cluster_id
+    running_in_test_suite = var.running_in_test_suite
     fileserver-ip  = aws_efs_mount_target.shared.dns_name
     custom_block = templatefile("${path.module}/files/bootstrap_custom.sh.tpl", {
       dns_zone = aws_route53_zone.cluster.name

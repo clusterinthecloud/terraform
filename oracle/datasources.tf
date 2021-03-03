@@ -13,6 +13,8 @@ data "template_file" "user_data" {
     ansible_repo = var.ansible_repo
     ansible_branch = var.ansible_branch
     cloud-platform = "oracle"
+    cluster_id = local.cluster_id
+    running_in_test_suite = var.running_in_test_suite
     fileserver-ip  = oci_file_storage_mount_target.ClusterFSMountTarget.hostname_label
     custom_block = templatefile("${path.module}/files/bootstrap_custom.sh.tpl", {})
     mgmt_hostname: local.mgmt_hostname

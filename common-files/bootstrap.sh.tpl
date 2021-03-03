@@ -8,6 +8,13 @@ cat > /root/citc_authorized_keys <<EOF
 ${citc_keys}
 EOF
 
+%{ if !running_in_test_suite }
+# Notify the CitC developers that a cluster has been installed.
+# Only the cloud platform used (Google, AWS etc) and the randomly-generated cluster id are sent.
+# See https://... for more information
+curl --silent "https://europe-west2-citc-logging.cloudfunctions.net/new-cluster-v1?csp=${cloud-platform}&cluster_id=${cluster_id}"
+%{ endif }
+
 yum install -y ansible git
 cat > /root/hosts <<EOF
 [management]
