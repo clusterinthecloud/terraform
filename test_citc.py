@@ -271,6 +271,6 @@ def test_ansible_finished(cluster):
 
 
 def test_sosreport(cluster):
-    ret = cluster.sudo("sosreport --only-plugins citc --batch", in_stream=False, hide=True)
-    sosresport_file = re.search(r"/.*sosreport-.*\.tar\.gz", ret.stdout).group()
+    ret = cluster.sudo("sos report --only-plugins citc --batch", in_stream=False, hide=True)
+    sosresport_file = re.search(r"/.*sosreport-.*\.tar\.xz", ret.stdout).group()
     assert sosresport_file
