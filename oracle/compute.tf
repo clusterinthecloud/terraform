@@ -22,7 +22,7 @@ resource "oci_core_instance" "ClusterManagement" {
   display_name        = local.mgmt_hostname
   shape               = var.ManagementShape
 
-  # Make sure that the manangement node depands on the filesystem so that when
+  # Make sure that the management node depands on the filesystem so that when
   # destroying, the filesystem is still running in order to perform cleanup of
   # any compute nodes.
   depends_on = [oci_file_storage_export.ClusterFSExport]
