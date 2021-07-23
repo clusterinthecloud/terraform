@@ -3,6 +3,3 @@ admin_public_keys = <<EOF
 ssh-rsa UmFuZG9tIGtleSBjb250ZW50cy4gUHV0IHlvdXIgb3duIGtleSBpbiBoZXJlIG9idmlvdXNseS4= user@computer
 ssh-rsa QW5vdGhlciBwdWJsaWMga2V5IGhlcmUuIEkgY2FuJ3QgYmVsaWV2ZSB5b3UgYm90aGVyZWQgdG8gZGVjb2RlIHRoaXMh user@anothercomputer
 EOF
-
-private_key_path                    = "~/.ssh/aws-key"
-public_key_path                     = "~/.ssh/aws-key.pub"

@@ -11,7 +11,6 @@ from pathlib import Path
 from urllib.request import urlopen
 from zipfile import ZipFile
 
-import paramiko
 import pytest
 from fabric import Connection
 
@@ -20,13 +19,13 @@ from fabric import Connection
 def ssh_key() -> str:
     key_filename = "test_ssh_key"
     if not Path(key_filename).exists():
-        subprocess.run(["ssh-keygen", "-N", "", "-b", "4096", "-t", "rsa", "-f", key_filename], check=True)
+        subprocess.run(["ssh-keygen", "-N", "", "-t", "ed25519", "-f", key_filename], check=True)
     return key_filename
 
 
 @pytest.fixture(scope="module")
 def terraform() -> str:
-    terraform_version = "0.12.30"
+    terraform_version = "0.14.7"
     if not Path("terraform").exists():
         resp = urlopen(f"https://releases.hashicorp.com/terraform/{terraform_version}/terraform_{terraform_version}_linux_amd64.zip")
         ZipFile(BytesIO(resp.read())).extract("terraform")
@@ -75,7 +74,6 @@ def google_config_file(config, ssh_key) -> str:
     config = config.replace("myproj-123456", os.environ["PROJECT"])
     config = config.replace("europe-west4-a", os.environ["ZONE"])
     config = config.replace("myproj-123456-01234567890a.json", os.environ["CREDENTIALS"])
-    config = config.replace("~/.ssh/citc-google", ssh_key)
     config = config.replace("n1-standard-1", "n1-standard-1")
     with open(f"{ssh_key}.pub") as pub_key:
         pub_key_text = pub_key.read().strip()
@@ -85,7 +83,6 @@ def google_config_file(config, ssh_key) -> str:
 
 
 def aws_config_file(config, ssh_key) -> str:
-    config = config.replace("~/.ssh/aws-key", ssh_key)
     with open(f"{ssh_key}.pub") as pub_key:
         pub_key_text = pub_key.read().strip()
     config = config.replace("admin_public_keys = <<EOF", "admin_public_keys = <<EOF\n" + pub_key_text)
@@ -98,7 +95,7 @@ def create_cluster(terraform: str, provider: str, tf_vars: str, ssh_username: st
     subprocess.run([terraform, "plan", f"-var-file={tf_vars}", f"-state={tf_state}", provider], check=True)
 
     with terraform_apply(tf_vars, tf_state, provider, terraform):
-        terraform_output = subprocess.run([terraform, "output", "-no-color", f"-state={tf_state}", "ManagementPublicIP"], capture_output=True)
+        terraform_output = subprocess.run([terraform, "output", "-no-color", f"-state={tf_state}", "-raw", "ManagementPublicIP"], capture_output=True)
         try:
             mgmt_ip = terraform_output.stdout.decode().strip()
         except subprocess.CalledProcessError as e:
@@ -106,23 +103,21 @@ def create_cluster(terraform: str, provider: str, tf_vars: str, ssh_username: st
             print(terraform_output.stdout.decode())
             print(terraform_output.stderr.decode())
             raise
-        pkey = paramiko.RSAKey.from_private_key_file(ssh_key)
         print(f"Connecting to {mgmt_ip} as {ssh_username}")
-        c = Connection(mgmt_ip, user=ssh_username, connect_kwargs={"pkey": pkey})
+        c = Connection(mgmt_ip, user=ssh_username, connect_kwargs={"key_filename": ssh_key})
         print(f" Waiting for Ansible to finalise")
         c.run("until ls /mnt/shared/finalised/mgmt* ; do sleep 2; done", timeout=timedelta(minutes=30).seconds, in_stream=False, hide=True)
         print(f" Waiting for DNS to propagate")
         c.run("until host $(basename /mnt/shared/finalised/mgmt*) &> /dev/null ; do sleep 2; done", timeout=timedelta(minutes=10).seconds, in_stream=False)
         print(f"Connecting to {mgmt_ip} as citc")
-        c = Connection(mgmt_ip, user="citc", connect_kwargs={"pkey": pkey})
+
+        c = Connection(mgmt_ip, user="citc", connect_kwargs={"key_filename": ssh_key})
         print(f" Writing limits file")
         c.run(f"echo -ne '{limits}' > limits.yaml", in_stream=False)
         print(f" Finishing Slurm config")
         c.run("finish", timeout=timedelta(seconds=10).seconds, in_stream=False)
         print(f" Handing over to tests...")
         yield c
-        c.run("/usr/local/bin/kill_all_nodes --force", timeout=timedelta(seconds=30).seconds, in_stream=False)
-        c.run("/usr/local/bin/cleanup_images --force", timeout=timedelta(seconds=30).seconds, in_stream=False)
 
 
 @pytest.fixture(scope="module", params=["oracle", "google", "aws"])

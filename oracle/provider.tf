@@ -1,21 +1,21 @@
 terraform {
-  required_version = "~> 0.12"
+  required_version = "~> 0.14"
 }
 
 provider "template" {
-  version = "~> 2.1"
+  version = "~> 2"
 }
 
 provider "tls" {
-  version = "~> 2.0"
+  version = "~> 3"
 }
 
 provider "random" {
-  version = "~> 2.2"
+  version = "~> 2"
 }
 
 provider "oci" {
-  version          = ">= 3.23.0"
+  version          = ">= 4.14.0"
 
   tenancy_ocid     = var.tenancy_ocid
   user_ocid        = var.user_ocid

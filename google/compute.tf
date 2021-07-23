@@ -1,5 +1,12 @@
 locals {
   mgmt_hostname = "mgmt-${local.cluster_id}"
+  # These are the user's admin keys, prepared for use with the provisioner user
+  provisioner_public_keys = join("\n", [for key in split("\n", var.admin_public_keys) : "provisioner:${key}"])
+}
+
+resource "tls_private_key" "provisioner_key" {
+  algorithm   = "ECDSA"
+  ecdsa_curve = "P521"
 }
 
 # Management node instance
@@ -9,12 +16,12 @@ resource "google_compute_instance" "mgmt" {
   tags                    = ["mgmt-${local.cluster_id}"]
   metadata_startup_script = data.template_file.bootstrap-script.rendered
 
-  #depends_on = [module.filestore_shared_storage]
-  depends_on = [module.budget_filer_shared_storage]
+  #depends_on = [module.filestore_shared_storage, google_service_account.mgmt-sa, google_project_iam_member.mgmt-sa-computeadmin, google_project_iam_member.mgmt-sa-serviceaccountuser]
+  depends_on = [module.budget_filer_shared_storage, google_service_account.mgmt-sa, google_project_iam_member.mgmt-sa-computeadmin, google_project_iam_member.mgmt-sa-serviceaccountuser]
 
   # add an ssh key that can be used to provision the instance once it's started
   metadata = {
-    ssh-keys = "provisioner:${data.local_file.ssh_public_key.content}"
+    ssh-keys = "provisioner:${tls_private_key.provisioner_key.public_key_openssh}\n${local.provisioner_public_keys}"
   }
 
   boot_disk {
@@ -41,37 +48,38 @@ resource "google_compute_instance" "mgmt" {
   }
 
   # ssh connection information for provisioning
-  connection {
-    type        = "ssh"
-    user        = "provisioner"
-    private_key = data.local_file.ssh_private_key.content
-    host        = google_compute_instance.mgmt.network_interface[0].access_config[0].nat_ip
-  }
-
-  provisioner "file" {
-    destination = "/tmp/shapes.yaml"
-    source      = "${path.module}/files/shapes.yaml"
-  }
 
   provisioner "file" {
     destination = "/tmp/startnode.yaml"
     content     = data.template_file.startnode-yaml.rendered
+
+    connection {
+      type        = "ssh"
+      user        = "provisioner"
+      private_key = tls_private_key.provisioner_key.private_key_pem
+      host        = self.network_interface.0.access_config.0.nat_ip
+    }
   }
 
   provisioner "file" {
     destination = "/tmp/mgmt-sa-credentials.json"
     content     = base64decode(google_service_account_key.mgmt-sa-key.private_key)
+
+    connection {
+      type        = "ssh"
+      user        = "provisioner"
+      private_key = tls_private_key.provisioner_key.private_key_pem
+      host        = self.network_interface[0].access_config[0].nat_ip
+    }
   }
 
-  provisioner "remote-exec" {
+  provisioner "local-exec" {
     when = destroy
-    inline = [
-      "echo Terminating any remaining compute nodes",
-      "if systemctl status slurmctld >> /dev/null; then",
-      "sudo -u slurm /usr/local/bin/stopnode \"$(sinfo --noheader --Format=nodelist:10000 | tr -d '[:space:]')\" || true",
-      "fi",
-      "sleep 5",
-      "echo Node termination request completed",
-    ]
+    command = "files/cleanup.sh"
+    environment = {
+      CLUSTERID = self.labels.cluster
+      PROJECT = self.project
+    }
+    working_dir = path.module
   }
 }

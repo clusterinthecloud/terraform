@@ -6,7 +6,7 @@
 #	env REGION=europe-west4 PROJECT=myproj-123456 ZONE=europe-west4-a CREDENTIALS=myproj....json make google-test
 # Can also set ANSIBLE_BRANCH if wanted
 
-TF_VERSION := 0.12.9
+TF_VERSION := 0.14.7
 TF_VARS := terraform.*.tfvars
 TF_STATE := terraform.*.tfstate
 
@@ -27,7 +27,7 @@ azure-test.pub:
 test: oracle-test google-test
 
 validate-oracle: check-tf-version
-	./terraform init oracle
+	./terraform init -upgrade oracle
 	./terraform validate oracle
 
 oracle-config: validate-oracle
@@ -37,7 +37,7 @@ oracle-test: check-tf-version azure-test.pub oci_api_key.pem oracle-config
 
 
 validate-google: check-tf-version
-	./terraform init google
+	./terraform init -upgrade  google
 	./terraform validate google
 
 google-config: validate-google

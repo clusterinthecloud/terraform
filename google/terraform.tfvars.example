@@ -11,6 +11,3 @@ admin_public_keys = <<EOF
 ssh-rsa UmFuZG9tIGtleSBjb250ZW50cy4gUHV0IHlvdXIgb3duIGtleSBpbiBoZXJlIG9idmlvdXNseS4= user@computer
 ssh-rsa QW5vdGhlciBwdWJsaWMga2V5LiBUaGVyZSByZWFsbHkgaXMgbm8gaGlkZGVuIG1lc3NhZ2UgaW4gaGVyZQ== user@anothercomputer
 EOF
-
-private_key_path                    = "~/.ssh/citc-google"
-public_key_path                     = "~/.ssh/citc-google.pub"
