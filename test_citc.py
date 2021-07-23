@@ -25,7 +25,7 @@ def ssh_key() -> str:
 
 @pytest.fixture(scope="module")
 def terraform() -> str:
-    terraform_version = "0.14.7"
+    terraform_version = "1.0.3"
     if not Path("terraform").exists():
         resp = urlopen(f"https://releases.hashicorp.com/terraform/{terraform_version}/terraform_{terraform_version}_linux_amd64.zip")
         ZipFile(BytesIO(resp.read())).extract("terraform")
@@ -33,8 +33,8 @@ def terraform() -> str:
     return "./terraform"
 
 
-def config_file(provider, ssh_key) -> str:
-    config_filename = f"terraform.{provider}.tfvars"
+def config_file(provider, ssh_key) -> Path:
+    config_filename = Path(provider) / f"terraform.{provider}.tfvars"
     with open(f"{provider}/terraform.tfvars.example") as f:
         config = f.read()
 
@@ -50,13 +50,14 @@ def config_file(provider, ssh_key) -> str:
         config = config + f'\nansible_branch = "{os.environ["ANSIBLE_BRANCH"]}"'
 
     with open(config_filename, "w") as f:
+        print("Writing file", config_filename)
         f.write(config)
 
     return config_filename
 
 
 def oracle_config_file(config, ssh_key) -> str:
-    config = config.replace("/home/user/.oci", ".")
+    config = config.replace("/home/user/.oci", "..")
     config = config.replace("ocid1.tenancy.oc1...", os.environ["TENANCY_OCID"])
     config = config.replace("ocid1.user.oc1...", os.environ["USER_OCID"])
     config = config.replace("11:22:33:44:55:66:77:88:99:00:aa:bb:cc:dd:ee:ff", os.environ["FINGERPRINT"])
@@ -89,10 +90,11 @@ def aws_config_file(config, ssh_key) -> str:
     return config
 
 
-def create_cluster(terraform: str, provider: str, tf_vars: str, ssh_username: str, limits: str, ssh_key: str):
-    tf_state = f"terraform.{provider}.tfstate"
-    subprocess.run([terraform, "init", provider], check=True)
-    subprocess.run([terraform, "plan", f"-var-file={tf_vars}", f"-state={tf_state}", provider], check=True)
+def create_cluster(terraform: str, provider: str, tf_vars: Path, ssh_username: str, limits: str, ssh_key: str):
+    provider_dir = Path(provider)
+    tf_state = provider_dir / f"terraform.{provider}.tfstate"
+    subprocess.run([terraform, f"-chdir={provider_dir}", "init"], check=True)
+    subprocess.run([terraform, f"-chdir={provider_dir}", "plan", f"-var-file={tf_vars.relative_to(provider_dir)}", f"-state={tf_state.relative_to(provider_dir)}"], check=True)
 
     with terraform_apply(tf_vars, tf_state, provider, terraform):
         terraform_output = subprocess.run([terraform, "output", "-no-color", f"-state={tf_state}", "-raw", "ManagementPublicIP"], capture_output=True)
@@ -153,12 +155,13 @@ def cluster(request, ssh_key, terraform):
 
 
 @contextmanager
-def terraform_apply(tf_vars, tf_state, provider, terraform):
+def terraform_apply(tf_vars: Path, tf_state: Path, provider: str, terraform: str):
+    provider_dir = Path(provider)
     try:
-        subprocess.run([terraform, "apply", f"-var-file={tf_vars}", f"-state={tf_state}", "-auto-approve", provider], check=True)
+        subprocess.run([terraform, f"-chdir={provider_dir}", "apply", f"-var-file={tf_vars.relative_to(provider_dir)}", f"-state={tf_state.relative_to(provider_dir)}", "-auto-approve"], check=True)
         yield
     finally:
-        subprocess.run([terraform, "destroy", f"-var-file={tf_vars}", f"-state={tf_state}", "-auto-approve", provider], check=True)
+        subprocess.run([terraform, f"-chdir={provider_dir}", "apply", "-destroy", f"-var-file={tf_vars.relative_to(provider_dir)}", f"-state={tf_state.relative_to(provider_dir)}", "-auto-approve"], check=True)
 
 
 def submit_job(connection: Connection, job_script: str) -> str:
@@ -184,8 +187,8 @@ def read_file(connection: Connection, file: str) -> str:
     "aws",
 ])
 def test_validate(terraform, provider):
-    subprocess.run([terraform, "init", provider], check=True)
-    subprocess.run([terraform, "validate", provider], check=True)
+    subprocess.run([terraform, f"-chdir={provider}", "init"], check=True)
+    subprocess.run([terraform, f"-chdir={provider}", "validate"], check=True)
     pass
 
 

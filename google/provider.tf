@@ -1,27 +1,35 @@
-# Pin the terraform and provider versions to avoid issues if the 
-
 terraform {
-  required_version = "~> 0.12"
-}
+  required_version = "~> 1.0"
 
-provider "template" {
-  version = "2.1"
-}
+  required_providers {
+    template = {
+      source = "hashicorp/template"
+      version = " >= 2.2"
+    }
 
-provider "external" {
-  version = "1.2"
-}
+    external = {
+      source = "hashicorp/external"
+      version = " >= 2.1"
+    }
 
-provider "local" {
-  version = "1.3"
-}
+    local = {
+      source = "hashicorp/local"
+      version = " >= 2.1"
+    }
 
-provider "random" {
-  version = "~> 2.2"
+    random = {
+      source = "hashicorp/random"
+      version = " >= 3.1"
+    }
+
+    google = {
+      source = "hashicorp/google"
+      version = " >= 2.10"
+    }
+  }
 }
 
 provider "google" {
-  version     = "2.10"
   credentials = file(var.credentials)
   region      = var.region
   zone        = var.zone
