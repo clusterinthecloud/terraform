@@ -1,22 +1,30 @@
 terraform {
-  required_version = "~> 0.14"
-}
+  required_version = "~> 1.0"
 
-provider "template" {
-  version = "~> 2"
-}
+  required_providers {
+    template = {
+      source = "hashicorp/template"
+      version = " >= 2.2"
+    }
 
-provider "tls" {
-  version = "~> 3"
-}
+    tls = {
+      source = "hashicorp/tls"
+      version = " >= 3.1"
+    }
 
-provider "random" {
-  version = "~> 2"
+    random = {
+      source = "hashicorp/random"
+      version = " >= 3.1"
+    }
+
+    oci = {
+      source = "hashicorp/oci"
+      version = " >= 4.36.0"
+    }
+  }
 }
 
 provider "oci" {
-  version          = ">= 4.14.0"
-
   tenancy_ocid     = var.tenancy_ocid
   user_ocid        = var.user_ocid
   fingerprint      = var.fingerprint

@@ -1,29 +1,40 @@
 terraform {
-  required_version = "~> 0.12"
-}
+  required_version = "~> 1.0"
 
-provider "template" {
-  version = "2.1"
-}
+  required_providers {
+    template = {
+      source = "hashicorp/template"
+      version = " >= 2.2"
+    }
 
-provider "external" {
-  version = "1.2"
-}
+    external = {
+      source = "hashicorp/external"
+      version = " >= 2.1"
+    }
 
-provider "local" {
-  version = "1.3"
-}
+    local = {
+      source = "hashicorp/local"
+      version = " >= 2.1"
+    }
 
-provider "random" {
-  version = "~> 2.2"
-}
+    random = {
+      source = "hashicorp/random"
+      version = " >= 3.1"
+    }
 
-provider "null" {
-  version = "~> 2.1"
+    null = {
+      source = "hashicorp/null"
+      version = " >= 3.1"
+    }
+
+    aws = {
+      source = "hashicorp/aws"
+      version = " >= 3.51.0"
+    }
+  }
 }
 
 provider "aws" {
-  version     = "3.30.0"
   profile     = var.profile  # refer to ~/.aws/credentials
   region      = var.region
 }
