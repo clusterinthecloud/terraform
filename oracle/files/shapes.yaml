@@ -130,7 +130,7 @@ BM.GPU2.2:
 BM.GPU3.8:
   memory: 760000
   sockets: 2
-  cores_per_socket: 28
+  cores_per_socket: 26
   threads_per_core: 2
 
 BM.GPU4.8:
