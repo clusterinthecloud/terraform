@@ -6,11 +6,13 @@ resource "google_service_account" "mgmt-sa" {
 
 # add IAM roles to the service account
 resource "google_project_iam_member" "mgmt-sa-serviceaccountuser" {
+  project = var.project
   role   = "roles/iam.serviceAccountUser"
   member = "serviceAccount:${google_service_account.mgmt-sa.email}"
 }
 
 resource "google_project_iam_member" "mgmt-sa-computeadmin" {
+  project = var.project
   role   = "roles/compute.instanceAdmin.v1"
   member = "serviceAccount:${google_service_account.mgmt-sa.email}"
 }
