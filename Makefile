@@ -6,7 +6,7 @@
 #	env REGION=europe-west4 PROJECT=myproj-123456 ZONE=europe-west4-a CREDENTIALS=myproj....json make google-test
 # Can also set ANSIBLE_BRANCH if wanted
 
-TF_VERSION := 1.0.3
+TF_VERSION := 1.1.3
 TF_VARS := terraform.*.tfvars
 TF_STATE := terraform.*.tfstate
 
@@ -16,24 +16,21 @@ terraform_${TF_VERSION}_linux_amd64.zip:
 	wget --no-verbose https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
 
 terraform: terraform_${TF_VERSION}_linux_amd64.zip
-	unzip -u terraform_${TF_VERSION}_linux_amd64.zip
+	unzip -o terraform_${TF_VERSION}_linux_amd64.zip
 
 check-tf-version: terraform
 	./terraform version
 
-azure-test.pub:
-	ssh-keygen -N "" -f azure-test
-
 test: oracle-test google-test
 
-validate-oracle: check-tf-version
-	./terraform -chdir=oracle init -upgrade
-	./terraform -chdir=oracle validate
 
-oracle-config: validate-oracle
+validate-aws: check-tf-version
+	./terraform -chdir=aws init -upgrade
+	./terraform -chdir=aws validate
 
+aws-config: validate-aws
 
-oracle-test: check-tf-version azure-test.pub oci_api_key.pem oracle-config
+aws-test: check-tf-version $(CREDENTIALS) aws-config
 
 
 validate-google: check-tf-version
@@ -42,8 +39,16 @@ validate-google: check-tf-version
 
 google-config: validate-google
 
+google-test: check-tf-version $(CREDENTIALS) google-config
 
-google-test: check-tf-version azure-test.pub $(CREDENTIALS) google-config
+
+validate-oracle: check-tf-version
+	./terraform -chdir=oracle init -upgrade
+	./terraform -chdir=oracle validate
+
+oracle-config: validate-oracle
+
+oracle-test: check-tf-version  oci_api_key.pem oracle-config
 
 
 clean:
