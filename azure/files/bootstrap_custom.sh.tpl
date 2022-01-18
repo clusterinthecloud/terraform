@@ -9,4 +9,7 @@ dnf install -y epel-release
 dnf config-manager --set-enabled PowerTools
 hostnamectl set-hostname mgmt.${dns_zone}
 
+echo "* hard memlock unlimited" | sudo tee -a /etc/security/limits.conf
+echo "* soft memlock unlimited" | sudo tee -a /etc/security/limits.conf
+
 chmod 777 /mnt/shared
