@@ -83,6 +83,43 @@ VM.DenseIO2.24:
   cores_per_socket: 24
   threads_per_core: 2
 
+
+# VM Flex
+VM.Standard.E4.Flex.1.16:
+  memory: 15700
+  cores_per_socket: 1
+  threads_per_core: 2
+
+VM.Standard.E4.Flex.2.32:
+  memory: 31700
+  cores_per_socket: 2
+  threads_per_core: 2
+
+VM.Standard.E4.Flex.4.64:
+  memory: 63700
+  cores_per_socket: 4
+  threads_per_core: 2
+
+VM.Standard.E4.Flex.8.128:
+  memory: 127700
+  cores_per_socket: 8
+  threads_per_core: 2
+
+VM.Standard.E4.Flex.16.256:
+  memory: 255700
+  cores_per_socket: 16
+  threads_per_core: 2
+
+VM.Standard.E4.Flex.32.512:
+  memory: 511700
+  cores_per_socket: 32
+  threads_per_core: 2
+
+VM.Standard.E4.Flex.64.1024:
+  memory: 1023700
+  cores_per_socket: 64
+  threads_per_core: 2
+
 # VM GPU
 
 VM.GPU2.1: 
