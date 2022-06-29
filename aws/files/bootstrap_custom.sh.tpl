@@ -6,5 +6,5 @@ ${citc_keys}
 EOF
 
 dnf install -y epel-release
-dnf config-manager --set-enabled PowerTools
+dnf config-manager --set-enabled powertools
 hostnamectl set-hostname mgmt.${dns_zone}
