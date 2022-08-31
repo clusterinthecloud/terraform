@@ -1,11 +1,11 @@
-data "aws_ami" "centos8" {
+data "aws_ami" "rocky8" {
   # See http://cavaliercoder.com/blog/finding-the-latest-centos-ami.html
   # https://wiki.centos.org/Cloud/AWS
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["CentOS 8.*"]
+    values = ["Rocky-8*"]
   }
 
   filter {
@@ -13,7 +13,7 @@ data "aws_ami" "centos8" {
     values = ["x86_64"]
   }
 
-  owners = ["125523088429"]
+  owners = ["792107900819"] #Owner ID as stated from https://forums.rockylinux.org/t/rocky-linux-official-aws-ami/3049/25
 }
 
 locals {
@@ -26,7 +26,7 @@ resource "tls_private_key" "provisioner_key" {
 }
 
 resource "aws_instance" "mgmt" {
-  ami           = data.aws_ami.centos8.id
+  ami           = data.aws_ami.rocky8.id
   instance_type = var.management_shape
   vpc_security_group_ids = [aws_security_group.mgmt.id]
   subnet_id = aws_subnet.vpc_subnetwork.id
@@ -44,14 +44,14 @@ resource "aws_instance" "mgmt" {
 
     connection {
       type        = "ssh"
-      user        = "centos"
+      user        = "rocky"
       private_key = tls_private_key.provisioner_key.private_key_pem
       host        = self.public_ip
     }
   }
 
   provisioner "file" {
-    destination = "/home/centos/aws-credentials.csv"
+    destination = "/home/rocky/aws-credentials.csv"
     content     = <<EOF
 [default]
 aws_access_key_id = ${aws_iam_access_key.mgmt_sa.id}
@@ -60,7 +60,7 @@ EOF
 
     connection {
       type        = "ssh"
-      user        = "centos"
+      user        = "rocky"
       private_key = tls_private_key.provisioner_key.private_key_pem
       host        = self.public_ip
     }
