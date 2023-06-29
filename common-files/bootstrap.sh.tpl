@@ -8,7 +8,12 @@ cat > /root/citc_authorized_keys <<EOF
 ${citc_keys}
 EOF
 
-yum install -y ansible git
+# Don't install ansible from a repo - instead
+# install into the system python
+# (eventually move this into a python venv that
+#  we control)
+yum install -y git
+pip3.6 install ansible
 cat > /root/hosts <<EOF
 [management]
 $(hostname -f) ansible_connection=local
@@ -30,7 +35,7 @@ chmod +x /root/update_ansible_repo
 cat > /root/run_ansible <<EOF
 #! /bin/bash
 cd /root/citc-ansible
-/usr/bin/ansible-playbook --inventory=/root/hosts "\$@" management.yml 2>&1 | tee -a /root/ansible-pull.log
+/usr/local/bin/ansible-playbook --inventory=/root/hosts "\$@" management.yml 2>&1 | tee -a /root/ansible-pull.log
 EOF
 chmod +x /root/run_ansible
 
