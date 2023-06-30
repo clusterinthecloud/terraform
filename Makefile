@@ -6,8 +6,6 @@
 #	env REGION=europe-west4 PROJECT=myproj-123456 ZONE=europe-west4-a CREDENTIALS=myproj....json make google-test
 # Can also set ANSIBLE_BRANCH if wanted
 
-ANSIBLE_BRANCH := fix_oracle_ansible
-
 TF_VERSION := 1.1.3
 TF_VARS := terraform.*.tfvars
 TF_STATE := terraform.*.tfstate
