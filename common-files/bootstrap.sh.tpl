@@ -19,7 +19,7 @@ cat > /root/hosts <<EOF
 $(hostname -f) ansible_connection=local
 EOF
 
-mkdir /etc/ansible/facts.d/
+mkdir -p /etc/ansible/facts.d/
 echo "{\"csp\":\"${cloud-platform}\", \"fileserver_ip\":\"${fileserver-ip}\", \"mgmt_hostname\":\"${mgmt_hostname}\"}" > /etc/ansible/facts.d/citc.fact
 
 PYTHON=$(command -v python || command -v python3)
