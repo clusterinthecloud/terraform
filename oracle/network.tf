@@ -2,7 +2,7 @@ resource "oci_core_virtual_network" "ClusterVCN" {
   cidr_block     = "10.1.0.0/16"
   compartment_id = var.compartment_ocid
   display_name   = "ClusterVCN-${local.cluster_id}"
-  dns_label      = replace(local.cluster_id, "-", "")
+  dns_label      = substr(replace(local.cluster_id, "-", ""), 0, 15)
 
   freeform_tags = {
     "cluster" = local.cluster_id
