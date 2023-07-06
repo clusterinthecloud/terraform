@@ -1,0 +1,13 @@
+---
+
+# VMs
+
+Standard_D4s_v3:
+  memory: 14000
+  cores_per_socket: 2
+  threads_per_core: 2
+Standard_HC44rs:
+  memory: 320000 
+  cores_per_socket: 22
+  threads_per_core: 1
+  sockets: 2

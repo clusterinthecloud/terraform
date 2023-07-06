@@ -1,0 +1,11 @@
+csp: ${cloud-platform}
+ansible_repo: ${ansible_repo}
+ansible_branch: ${ansible_branch}
+region: ${region}
+resource_group: ${resource_group}
+subnet: ${subnet}
+virtual_network: ${virtual_network}
+virtual_network_subnet: ${virtual_network_subnet}
+subscription: ${subscription}
+dns_zone: ${dns_zone}
+cluster_id: ${cluster_id}
