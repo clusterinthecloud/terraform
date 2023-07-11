@@ -148,7 +148,7 @@ def cluster(request, ssh_key, terraform):
             terraform,
             provider="aws",
             tf_vars=tfvars,
-            ssh_username="centos",
+            ssh_username="rocky",
             limits="t3.micro: 1\n",
             ssh_key=ssh_key,
         )
