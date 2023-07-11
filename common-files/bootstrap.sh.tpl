@@ -8,7 +8,7 @@ cat > /root/citc_authorized_keys <<EOF
 ${citc_keys}
 EOF
 
-yum install -y git python3.11
+yum install -y git python36 python3.11
 
 # Install Ansible
 mkdir -p /opt/venvs/
@@ -17,7 +17,7 @@ python3.11 -m venv /opt/venvs/ansible
 
 cat > /root/hosts <<EOF
 [management]
-$(hostname -f) ansible_connection=local ansible_python_interpreter=/usr/bin/python3
+$(hostname -f) ansible_connection=local ansible_python_interpreter=/usr/bin/python3.6
 EOF
 
 mkdir -p /etc/ansible/facts.d/
