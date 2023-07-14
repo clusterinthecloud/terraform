@@ -8,7 +8,7 @@ cat > /root/citc_authorized_keys <<EOF
 ${citc_keys}
 EOF
 
-yum install -y git python3.11
+yum install -y git python3.11 python3-devel
 
 # Install Ansible
 mkdir -p /opt/venvs/
