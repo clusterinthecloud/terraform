@@ -1,0 +1,48 @@
+data "openstack_images_image_v2" "rocky_8" {
+  name = "Rocky-8.8"
+  most_recent = true
+}
+
+data "openstack_compute_flavor_v2" "m1_medium" {
+  name = "m1.medium"
+}
+
+locals {
+  mgmt_hostname = "mgmt"
+}
+
+resource "openstack_compute_instance_v2" "mgmt" {
+  name = local.mgmt_hostname
+  flavor_id = data.openstack_compute_flavor_v2.m1_medium.id
+  security_groups = [openstack_compute_secgroup_v2.secgroup_1.name]
+  key_pair = "matt HEX"
+
+  user_data = base64encode(data.template_file.user_data.rendered)
+
+  block_device {
+    uuid = data.openstack_images_image_v2.rocky_8.id
+    source_type = "image"
+    volume_size = 40
+    boot_index = 0
+    destination_type = "volume"
+    delete_on_termination = true
+  }
+
+  #network {
+    #uuid = openstack_networking_network_v2.ClusterVCN.id
+    #port = openstack_networking_port_v2.port_1.id
+  #}
+
+  network {
+    name = "demo-vxlan"
+  }
+}
+
+resource "openstack_compute_floatingip_v2" "floatip_1" {
+  pool = "external"
+}
+
+resource "openstack_compute_floatingip_associate_v2" "fip_1" {
+  floating_ip = openstack_compute_floatingip_v2.floatip_1.address
+  instance_id = openstack_compute_instance_v2.mgmt.id
+}
