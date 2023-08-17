@@ -3,10 +3,6 @@ data "openstack_images_image_v2" "rocky_8" {
   most_recent = true
 }
 
-data "openstack_compute_flavor_v2" "m1_medium" {
-  name = "m1.medium"
-}
-
 locals {
   mgmt_hostname = "mgmt"
 }
@@ -29,7 +25,7 @@ resource "openstack_compute_secgroup_v2" "secgroup_1" {
 
 resource "openstack_compute_instance_v2" "mgmt" {
   name = local.mgmt_hostname
-  flavor_id = data.openstack_compute_flavor_v2.m1_medium.id
+  flavor_name = var.mgmt_flavor
   security_groups = [openstack_compute_secgroup_v2.secgroup_1.name]
   key_pair = openstack_compute_keypair_v2.keypair.name
 
@@ -48,12 +44,12 @@ resource "openstack_compute_instance_v2" "mgmt" {
   }
 
   network {
-    uuid = openstack_networking_network_v2.ClusterVCN.id
+    uuid = openstack_networking_network_v2.cluster_network.id
   }
 }
 
 resource "openstack_compute_floatingip_v2" "floatip_1" {
-  pool = "external"
+  pool = var.external_network_name
 }
 
 resource "openstack_compute_floatingip_associate_v2" "fip_1" {
