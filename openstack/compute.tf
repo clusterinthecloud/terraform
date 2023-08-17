@@ -16,6 +16,17 @@ resource "openstack_compute_keypair_v2" "keypair" {
   public_key = var.ssh_public_key
 }
 
+resource "openstack_compute_secgroup_v2" "secgroup_1" {
+  name = "secgroup-${local.cluster_id}"
+  description = "a security group"
+  rule {
+    from_port = 22
+    to_port = 22
+    ip_protocol = "tcp"
+    cidr = "0.0.0.0/0"
+  }
+}
+
 resource "openstack_compute_instance_v2" "mgmt" {
   name = local.mgmt_hostname
   flavor_id = data.openstack_compute_flavor_v2.m1_medium.id
@@ -36,13 +47,8 @@ resource "openstack_compute_instance_v2" "mgmt" {
     delete_on_termination = true
   }
 
-  #network {
-    #uuid = openstack_networking_network_v2.ClusterVCN.id
-    #port = openstack_networking_port_v2.port_1.id
-  #}
-
   network {
-    name = "demo-vxlan"
+    uuid = openstack_networking_network_v2.ClusterVCN.id
   }
 }
 
