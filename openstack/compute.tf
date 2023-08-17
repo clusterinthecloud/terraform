@@ -23,6 +23,9 @@ resource "openstack_compute_instance_v2" "mgmt" {
   key_pair = openstack_compute_keypair_v2.keypair.name
 
   user_data = base64encode(data.template_file.user_data.rendered)
+  metadata = {
+    "cluster" = local.cluster_id
+  }
 
   block_device {
     uuid = data.openstack_images_image_v2.rocky_8.id
