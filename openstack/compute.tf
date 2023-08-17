@@ -11,11 +11,16 @@ locals {
   mgmt_hostname = "mgmt"
 }
 
+resource "openstack_compute_keypair_v2" "keypair" {
+  name       = "citc-keypair-${local.cluster_id}"
+  public_key = var.ssh_public_key
+}
+
 resource "openstack_compute_instance_v2" "mgmt" {
   name = local.mgmt_hostname
   flavor_id = data.openstack_compute_flavor_v2.m1_medium.id
   security_groups = [openstack_compute_secgroup_v2.secgroup_1.name]
-  key_pair = "matt HEX"
+  key_pair = openstack_compute_keypair_v2.keypair.name
 
   user_data = base64encode(data.template_file.user_data.rendered)
 
