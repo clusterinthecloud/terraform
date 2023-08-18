@@ -7,32 +7,37 @@ locals {
   mgmt_hostname = "mgmt"
 }
 
-resource "openstack_compute_keypair_v2" "keypair" {
+resource "openstack_compute_keypair_v2" "citc_admin" {
   name       = "citc-keypair-${local.cluster_id}"
   public_key = var.ssh_public_key
 }
 
-resource "openstack_compute_secgroup_v2" "secgroup_1" {
+resource "openstack_networking_secgroup_v2" "mgmt" {
   name = "secgroup-${local.cluster_id}"
-  description = "a security group"
-  rule {
-    from_port = 22
-    to_port = 22
-    ip_protocol = "tcp"
-    cidr = "0.0.0.0/0"
-  }
+  description = "Access to the mgmt node of ${local.cluster_id}"
+}
+
+resource "openstack_networking_secgroup_rule_v2" "external_ssh_all" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 22
+  port_range_max    = 22
+  remote_ip_prefix  = "0.0.0.0/0"
+  security_group_id = openstack_networking_secgroup_v2.mgmt.id
 }
 
 resource "openstack_compute_instance_v2" "mgmt" {
   name = local.mgmt_hostname
   flavor_name = var.mgmt_flavor
-  security_groups = [openstack_compute_secgroup_v2.secgroup_1.name]
-  key_pair = openstack_compute_keypair_v2.keypair.name
+  security_groups = [openstack_networking_secgroup_v2.mgmt.name]
+  key_pair = openstack_compute_keypair_v2.citc_admin.name
 
   user_data = base64encode(data.template_file.user_data.rendered)
   metadata = {
     "cluster" = local.cluster_id
   }
+  tags = ["mgmt"]
 
   block_device {
     uuid = data.openstack_images_image_v2.rocky_8.id
@@ -44,15 +49,15 @@ resource "openstack_compute_instance_v2" "mgmt" {
   }
 
   network {
-    uuid = openstack_networking_network_v2.cluster_network.id
+    uuid = openstack_networking_network_v2.cluster.id
   }
 }
 
-resource "openstack_compute_floatingip_v2" "floatip_1" {
+resource "openstack_compute_floatingip_v2" "mgmt" {
   pool = var.external_network_name
 }
 
-resource "openstack_compute_floatingip_associate_v2" "fip_1" {
-  floating_ip = openstack_compute_floatingip_v2.floatip_1.address
+resource "openstack_compute_floatingip_associate_v2" "mgmt" {
+  floating_ip = openstack_compute_floatingip_v2.mgmt.address
   instance_id = openstack_compute_instance_v2.mgmt.id
 }
