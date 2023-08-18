@@ -8,7 +8,9 @@ cat > /root/citc_authorized_keys <<EOF
 ${citc_keys}
 EOF
 
-yum install -y git python36 python3.11
+dnf install -y git python36 python3.11 glibc-langpack-en.x86_64
+localectl set-locale en_GB.utf8
+localectl set-keymap gb
 
 # Install Ansible
 mkdir -p /opt/venvs/

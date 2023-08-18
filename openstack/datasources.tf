@@ -5,7 +5,7 @@ data "template_file" "user_data" {
     ansible_branch = var.ansible_branch
     cluster_id = local.cluster_id
     cloud-platform = "openstack"
-    fileserver-ip  = ""  # TODO openstack_sharedfilesystem_share_v2.ClusterFS.host
+    fileserver-ip  = "mgmt"  # TODO openstack_sharedfilesystem_share_v2.ClusterFS.host
     custom_block = templatefile(
       "${path.module}/files/bootstrap_custom.sh.tpl", {
         cluster_id = local.cluster_id
