@@ -5,8 +5,10 @@ EOF
 
 cat <<EOF > /tmp/startnode.yaml
 csp: openstack
-network_id: ... # TODO
-cluster_id: ${cluster_id} # TODO
+network_id: ${network_id}
+network_name: ${network_name}
+security_group: ${security_group}
+cluster_id: ${cluster_id}
 ansible_repo: ${ansible_repo}
 ansible_branch: ${ansible_branch}
 EOF
