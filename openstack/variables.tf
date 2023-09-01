@@ -1,4 +1,4 @@
-variable "ssh_public_key" {
+variable "admin_public_keys" {
   type = string
   nullable = false
   sensitive = false

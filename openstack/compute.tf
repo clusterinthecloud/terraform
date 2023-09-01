@@ -9,7 +9,7 @@ locals {
 
 resource "openstack_compute_keypair_v2" "citc_admin" {
   name       = "citc-admin-${local.cluster_id}"
-  public_key = var.ssh_public_key
+  public_key = var.admin_public_keys
 }
 
 resource "openstack_networking_secgroup_v2" "external" {

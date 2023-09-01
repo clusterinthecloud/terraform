@@ -1,4 +1,4 @@
-output "ip" {
+output "ManagementPublicIP" {
  value = openstack_compute_floatingip_v2.mgmt.address
 }
 

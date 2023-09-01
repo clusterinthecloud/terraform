@@ -17,6 +17,6 @@ data "template_file" "user_data" {
       }
     )
     mgmt_hostname: local.mgmt_hostname
-    citc_keys = var.ssh_public_key
+    citc_keys = var.admin_public_keys
   }
 }
