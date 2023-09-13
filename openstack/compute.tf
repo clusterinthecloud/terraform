@@ -75,4 +75,9 @@ resource "openstack_compute_floatingip_v2" "mgmt" {
 resource "openstack_compute_floatingip_associate_v2" "mgmt" {
   floating_ip = openstack_compute_floatingip_v2.mgmt.address
   instance_id = openstack_compute_instance_v2.mgmt.id
+
+  provisioner "local-exec" {
+    # TODO HACK This is a temporary solution I hope
+    command = "for i in {1..60}; do echo Attempt $i; scp -A -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null clouds.yaml cloud-user@${openstack_compute_floatingip_v2.mgmt.address}:. && break || sleep 1; done"
+  }
 }
