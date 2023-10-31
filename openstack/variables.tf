@@ -18,6 +18,13 @@ variable "external_network_name" {
   sensitive = false
 }
 
+variable "ceph_network_name" {
+  default = "external-ceph"
+  type = string
+  nullable = false
+  sensitive = false
+}
+
 variable "ansible_repo" {
   default = "https://github.com/clusterinthecloud/ansible.git"
   type = string

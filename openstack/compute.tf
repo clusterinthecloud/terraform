@@ -66,6 +66,9 @@ resource "openstack_compute_instance_v2" "mgmt" {
   network {
     uuid = openstack_networking_network_v2.cluster.id
   }
+  network {
+    uuid = data.openstack_networking_network_v2.external_ceph.id
+  }
 }
 
 resource "openstack_compute_floatingip_v2" "mgmt" {

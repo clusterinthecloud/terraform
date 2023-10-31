@@ -1,5 +1,5 @@
 cat <<EOF > /etc/hosts
-$(ip route get 1.1.1.1 | grep -oP 'src \K\S+') mgmt fileserver
+$(ip route get 1.1.1.1 | grep -oP 'src \K\S+') mgmt
 127.0.0.1 localhost
 EOF
 
@@ -12,3 +12,8 @@ cluster_id: ${cluster_id}
 ansible_repo: ${ansible_repo}
 ansible_branch: ${ansible_branch}
 EOF
+
+mkdir -p /etc/ansible/facts.d/
+echo "{\"secret\":\"${ceph_secret}\"}" > /etc/ansible/facts.d/citc_ceph.fact
+chown root:root /etc/ansible/facts.d/citc.fact
+chmod u=rw,g=,o= /etc/ansible/facts.d/citc.fact

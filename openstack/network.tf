@@ -2,6 +2,10 @@ data "openstack_networking_network_v2" "external" {
   name = var.external_network_name
 }
 
+data "openstack_networking_network_v2" "external_ceph" {
+  name = var.ceph_network_name
+}
+
 resource "openstack_networking_network_v2" "cluster" {
   name = "network-${local.cluster_id}"
   admin_state_up = "true"

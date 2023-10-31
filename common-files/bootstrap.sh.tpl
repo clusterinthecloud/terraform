@@ -23,7 +23,7 @@ $(hostname -f) ansible_connection=local ansible_python_interpreter=/usr/bin/pyth
 EOF
 
 mkdir -p /etc/ansible/facts.d/
-echo "{\"csp\":\"${cloud-platform}\", \"fileserver_ip\":\"${fileserver-ip}\", \"mgmt_hostname\":\"${mgmt_hostname}\"}" > /etc/ansible/facts.d/citc.fact
+echo "{\"csp\":\"${cloud-platform}\", \"fileserver_ip\":\"${fileserver-ip}\", \"mgmt_hostname\":\"${mgmt_hostname}\", \"cluster_id\":\"${cluster_id}\"}" > /etc/ansible/facts.d/citc.fact
 
 
 git clone --branch "${ansible_branch}" "${ansible_repo}" /root/citc-ansible
