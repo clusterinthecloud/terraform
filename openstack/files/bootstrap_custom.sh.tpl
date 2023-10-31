@@ -11,6 +11,7 @@ security_group: ${security_group}
 cluster_id: ${cluster_id}
 ansible_repo: ${ansible_repo}
 ansible_branch: ${ansible_branch}
+ceph_network: ${ceph_network}
 EOF
 
 mkdir -p /etc/ansible/facts.d/

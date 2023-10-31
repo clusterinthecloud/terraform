@@ -14,6 +14,7 @@ data "template_file" "user_data" {
         network_id = openstack_networking_network_v2.cluster.id
         network_name = openstack_networking_network_v2.cluster.name
         security_group = openstack_networking_secgroup_v2.cluster.name
+        ceph_network = data.openstack_networking_network_v2.external_ceph.id
         ceph_secret = openstack_sharedfilesystem_share_access_v2.cluster_fs_access.access_key
       }
     )
